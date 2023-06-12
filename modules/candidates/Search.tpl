@@ -29,13 +29,24 @@
 
                             <label id="searchModeLabel" for="searchMode">Search By:</label>&nbsp;
                             <select id="searchMode" name="mode" onclick="advancedSearchConsider();" class="selectBox">
+                                <option value="">Select Keywords</option>
+                                <option value="searchBySource" >Source</option>
                                 <option value="searchByFullName"<?php if ($this->mode == "searchByFullName"): ?> selected<?php endif; ?>>Candidate Name</option>
                                 <option value="searchByResume"<?php if ($this->mode == "searchByResume" || empty($this->mode)): ?> selected<?php endif; ?>>Resume Keywords</option>
                                 <option value="searchByKeySkills"<?php if ($this->mode == "searchByKeySkills"): ?> selected<?php endif; ?>>Key Skills</option>
                                 <option value="searchByCity"<?php if ($this->mode == "searchByCity"): ?> selected<?php endif; ?>>City</option>
                                 <option value="phoneNumber"<?php if ($this->mode == "phoneNumber"): ?> selected<?php endif; ?>>Phone Number</option>
                             </select>&nbsp;
-                            <input type="text" class="inputbox" id="searchText" name="wildCardString" value="<?php if (!empty($this->wildCardString)) $this->_($this->wildCardString); ?>" style="width:250px" />&nbsp;*&nbsp;
+
+                           <select id="sourceSelect" name="source" style="display: none;" >
+                                <option value="">Select Source</option>
+                                <?php foreach ($this->sourcesRS AS $index => $source): ?>
+                                    <option value="<?php $this->_($source['sourceID']); ?>"><?php $this->_($source['name']); ?></option>
+                                <?php endforeach; ?>
+                            </select>&nbsp; 
+                            <input type="hidden" id="sourceCSV" name="sourceCSV" value="<?php $this->_($this->sourcesString); ?>" />
+
+                             <input type="text" class="inputbox" id="searchText" name="wildCardString" value="<?php if (!empty($this->wildCardString)) $this->_($this->wildCardString); ?>" style="width:250px" >&nbsp;*&nbsp;  
                             <input type="submit" class="button" id="searchCandidates" name="searchCandidates" value="Search" />
                             <?php TemplateUtility::printAdvancedSearch('searchByKeySkills,searchByResume'); ?>
                         </form>

@@ -169,3 +169,16 @@ function advancedSearchConsider()
         document.getElementById('advancedSearchField').style.display = 'none';
     }
 }
+
+$(document).ready(function(){
+    $('#searchMode').change( function () {
+        var optionId = $(this).find(":selected").val();
+        if(optionId == 'searchBySource'){
+            $('#sourceSelect').removeAttr("style");
+            $('#searchText').hide();
+        }else{
+            $('#sourceSelect').attr("style", "display: none");
+            $('#searchText').show();
+        }
+    });
+})
