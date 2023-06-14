@@ -49,6 +49,7 @@ include_once(LEGACY_ROOT . '/lib/ParseUtility.php');
 include_once(LEGACY_ROOT . '/lib/Questionnaire.php');
 include_once(LEGACY_ROOT . '/lib/Tags.php');
 include_once(LEGACY_ROOT . '/lib/Search.php');
+include_once(LEGACY_ROOT . '/lib/Mailer.php');
 
 class CandidatesUI extends UserInterface
 {
@@ -1697,7 +1698,7 @@ class CandidatesUI extends UserInterface
         {
             $selectedStatusID = -1;
         }
-
+        
         /* Get the change status email template. */
         $emailTemplates = new EmailTemplates($this->_siteID);
         $statusChangeTemplateRS = $emailTemplates->getByTag(
@@ -2870,7 +2871,7 @@ class CandidatesUI extends UserInterface
 
         $pipelines = new Pipelines($this->_siteID);
         $statusRS = $pipelines->getStatusesForPicking();
-
+        
         /* Module directory override for fatal() calls. */
         if ($directoryOverride != '')
         {
@@ -2972,7 +2973,6 @@ class CandidatesUI extends UserInterface
         else
         {
             $data = $pipelines->get($candidateID, $regardingID);
-
             /* Bail out if we got an empty result set. */
             if (empty($data))
             {
@@ -3007,6 +3007,13 @@ class CandidatesUI extends UserInterface
                 {
                     $statusChanged = false;
                 }
+            }
+
+            if($statusChanged){
+                $candidates = new Candidates($this->_siteID);
+                $candidateData = $candidates->get($candidateID);
+                $oldStatus = $data['status'];
+                $this->sendStatusChangeEmail($candidateData,$activityNote,$oldStatus);
             }
 
             if ($statusChanged && $this->isChecked('triggerEmail', $_POST))
@@ -3263,6 +3270,19 @@ class CandidatesUI extends UserInterface
         $this->_template->display(
             './modules/candidates/AddActivityChangeStatusModal.tpl'
         );
+    }
+
+    /*
+    * Sends email to HR when candidate status will change
+    */
+    private function sendStatusChangeEmail($candidateData,$activityNote,$oldStatus){
+        $subject = "Job Application Status Change";
+        
+        $body = "Hello HR, \r\n " . "This E-Mail is a notification that \r\n ". "The candidate " . $candidateData['candidateFullName'] . " status has been changed. \r\n " . " Old Status - " . $oldStatus ." \r\n " . $activityNote . " \r\n ";
+
+        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],["susilbehera06@gmail.com", "HR ADMIN"]];
+        $mailer = new Mailer($this->_siteID, $this->_userID);
+        $mailer->sendToMany($recipient, $subject, $body, true);
     }
 
     /*

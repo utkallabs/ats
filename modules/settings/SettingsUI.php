@@ -1137,7 +1137,7 @@ class SettingsUI extends UserInterface
 
         $firstName      = $this->getTrimmedInput('firstName', $_POST);
         $lastName       = $this->getTrimmedInput('lastName', $_POST);
-        $email          = $this->getTrimmedInput('email', $_POST);
+        $email          = $this->getTrimmedInput('username', $_POST);
         $username       = $this->getTrimmedInput('username', $_POST);
         $accessLevel    = $this->getTrimmedInput('accessLevel', $_POST);
         $password       = $this->getTrimmedInput('password', $_POST);
@@ -1341,7 +1341,7 @@ class SettingsUI extends UserInterface
 
         $firstName   = $this->getTrimmedInput('firstName', $_POST);
         $lastName    = $this->getTrimmedInput('lastName', $_POST);
-        $email       = $this->getTrimmedInput('email', $_POST);
+        $email       = $this->getTrimmedInput('username', $_POST);
         $username    = $this->getTrimmedInput('username', $_POST);
         $password1   = $this->getTrimmedInput('password1', $_POST);
         $password2   = $this->getTrimmedInput('password2', $_POST);

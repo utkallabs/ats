@@ -37,7 +37,7 @@ if (!defined('LEGACY_ROOT')) {
 
 /* Database configuration. */
 define('DATABASE_USER', 'root');
-define('DATABASE_PASS', '1205@Arun');
+define('DATABASE_PASS', '');
 define('DATABASE_HOST', 'localhost');
 define('DATABASE_NAME', 'epiz_32310217_ats');
 
@@ -58,26 +58,26 @@ define('SSL_ENABLED', false);
  * 'C:\\antiword\\antiword.exe'. Windows Antiword will have problems locating
  * mapping files if you install it anywhere but C:\antiword\.
  */
-define('ANTIWORD_PATH', "/usr/bin/antiword");
+define('ANTIWORD_PATH', "");
 define('ANTIWORD_MAP', '8859-1.txt');
 
 /* XPDF / pdftotext settings. Remember to use double backslashes (\) to represent
  * one backslash (\).
  * http://www.foolabs.com/xpdf/
  */
-define('PDFTOTEXT_PATH', "/usr/bin/pdftotext");
+define('PDFTOTEXT_PATH', "");
 
 /* html2text settings. Remember to use double backslashes (\) to represent
  * one backslash (\). 'html2text' can be found at:
  * http://www.mbayer.de/html2text/
  */
-define('HTML2TEXT_PATH', "/usr/bin/html2text");
+define('HTML2TEXT_PATH', "");
 
 /* UnRTF settings. Remember to use double backslashes (\) to represent
  * one backslash (\). 'unrtf' can be found at:
  * http://www.gnu.org/software/unrtf/unrtf.html
  */
-define('UNRTF_PATH', "/usr/bin/unrtf");
+define('UNRTF_PATH', "");
 
 /* Temporary directory. Set this to a directory that is writable by the
  * web server. The default should be fine for most systems. Remember to
@@ -176,7 +176,7 @@ define('FORGOT_PASSWORD_BODY',      'You recently requested that your OpenCATS: 
 define('ENABLE_DEMO_MODE', false);
 
 /* Offset to GMT Time. */
-define('OFFSET_GMT', 5);
+define('OFFSET_GMT', 5.5);
 
 /* Should we enforce only one session per user (excluding demo)? */
 define('ENABLE_SINGLE_SESSION', false);
@@ -204,7 +204,7 @@ define('DEMO_PASSWORD',  'john99');
  * 2: Sendmail
  * 3: SMTP
  */
-define('MAIL_MAILER', 0);
+define('MAIL_MAILER', 3);
 
 /* Sendmail Settings. You don't need to worry about this unless MAIL_MAILER
  * is set to 2.
@@ -216,12 +216,12 @@ define('MAIL_SENDMAIL_PATH', "/usr/sbin/sendmail");
  * true and configure MAIL_SMTP_USER and MAIL_SMTP_PASS.
  */
 define('MAIL_SMTP_HOST', "smtp.gmail.com");
-define('MAIL_SMTP_PORT', 587);
-define('MAIL_SMTP_AUTH', false);
-define('MAIL_SMTP_USER', "noreply.utkallabs");
-define('MAIL_SMTP_PASS', "Nr12345**0");
+define('MAIL_SMTP_PORT', 465);
+define('MAIL_SMTP_AUTH', true);
+define('MAIL_SMTP_USER', "vaibhavbanerjee@gmail.com");
+define('MAIL_SMTP_PASS', "rpvrrmvizzedljmw");
 //Options: '', 'ssl' or 'tls'
-define('MAIL_SMTP_SECURE', "tls");
+define('MAIL_SMTP_SECURE', "ssl");
 
 /* Event reminder E-Mail Template. */
 $GLOBALS['eventReminderEmail'] = <<<EOF
@@ -258,7 +258,7 @@ define('CACHE_MODULES', false);
  * by distance from a zipcode.
  */
 
-define('US_ZIPS_ENABLED', true);
+define('US_ZIPS_ENABLED', false);
 
 /* LDAP Configuration
  */
