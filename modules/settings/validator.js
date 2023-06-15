@@ -54,15 +54,13 @@ function checkAddUserForm(form)
 
     errorMessage += checkUserFirstName();
     errorMessage += checkUserLastName();
-    errorMessage += checkUserEmail();
-    // errorMessage += checkUserUsername();
+    errorMessage += checkUserUsername();
     errorMessage += checkUserPassword();
     errorMessage += checkUserRetypePassword();
 
     if (errorMessage == '')
     {
         errorMessage += checkUserPasswordsMatch();
-        // errorMessage += checkUsernameMatch();
     }
 
     if (errorMessage != '')
@@ -80,7 +78,7 @@ function checkEditUserForm(form)
 
     errorMessage += checkUserFirstName();
     errorMessage += checkUserLastName();
-    // errorMessage += checkUserUsername();
+    errorMessage += checkUserUsername();
 
     if (errorMessage != '')
     {
@@ -147,14 +145,15 @@ function checkUserLastName()
     return errorMessage;
 }
 
-function checkUserEmail() {
+function checkUserUsername()
+{
     var errorMessage = '';
 
-    fieldValue = document.getElementById('email').value;
-    fieldLabel = document.getElementById('emailLabel');
+    fieldValue = document.getElementById('username').value;
+    fieldLabel = document.getElementById('usernameLabel');
     if (fieldValue == '')
     {
-        errorMessage = "    - You must enter a valid email.\n";
+        errorMessage = "    - You must enter a username.\n";
 
         fieldLabel.style.color = '#ff0000';
     }
@@ -165,52 +164,6 @@ function checkUserEmail() {
 
     return errorMessage;
 }
-
-
-// function checkUserUsername()
-// {
-//     var errorMessage = '';
-
-//     fieldValue = document.getElementById('username').value;
-//     fieldLabel = document.getElementById('usernameLabel');
-//     if (fieldValue == '')
-//     {
-//         errorMessage = "    - You must enter a username.\n";
-
-//         fieldLabel.style.color = '#ff0000';
-//     }
-//     else
-//     {
-//         fieldLabel.style.color = '#000';
-//     }
-
-//     return errorMessage;
-// }
-// function checkUsernameMatch()
-// {
-//     var errorMessage = '';
-
-//     fieldValue1 = document.getElementById('username').value;
-//     fieldValue2 = document.getElementById('email').value;
-
-//     fieldLabel1 = document.getElementById('usernameLabel');
-//     fieldLabel2 = document.getElementById('emailLabel');
-
-//     if (fieldValue1 != fieldValue2)
-//     {
-//         errorMessage = "    - Username must be match with email.\n";
-
-//         fieldLabel1.style.color = '#ff0000';
-//         fieldLabel2.style.color = '#ff0000';
-//     }
-//     else
-//     {
-//         fieldLabel1.style.color = '#000';
-//         fieldLabel2.style.color = '#000';
-//     }
-
-//     return errorMessage;
-// }
 
 function checkUserPassword()
 {

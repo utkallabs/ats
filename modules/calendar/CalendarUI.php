@@ -656,7 +656,7 @@ class CalendarUI extends UserInterface
 
         /* Update the event. */
         $calendar = new Calendar($this->_siteID);
-        echo $interviewer_id ; exit;
+        
         if (!$calendar->updateEvent($eventID, $type, $date, $description,
             $allDay, $dataItemID, $dataItemType, 'NULL', $title, $duration,
             $reminderEnabled, $reminderEmail, $reminderTime, $publicEntry,

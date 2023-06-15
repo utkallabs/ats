@@ -525,7 +525,7 @@
                     </td>
                     <td class="tdData">
                         <script type="text/javascript">
-                            DateInput('dateAvailable', false, 'MM-DD-YY', '', < ? php echo($tabIndex++); ? > );
+                            DateInput('dateAvailable', false, 'MM-DD-YY', '', <?php echo($tabIndex++); ?> );
                         </script>
 
                         <?php /* DateInput()s take up 3 tabindexes. */ ?>
@@ -637,41 +637,32 @@
         </form>
 
         <script type="text/javascript">
-            document.addCandidateForm.firstName.focus(); <
-            ? php
-            if (isset($this - > preassignedFields['email']) || isset($this - > preassignedFields['email1'])): ? >
+            document.addCandidateForm.firstName.focus(); 
+            <?php
+             if  (isset($this->preassignedFields['email']) || isset($this->preassignedFields['email1'])){ ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['email'])) echo(urlencode($this->preassignedFields['email'])); else if(isset($this->preassignedFields['email1'])) echo(urlencode($this->preassignedFields['email1'])); ?>"
-                    )); <
-            ? php endif; ? >
-            <
-            ? php
-            if (isset($this - > preassignedFields['email2']) || isset($this - > preassignedFields['email2'])): ? >
+                    )); <?php } ?>
+            <?php
+            if (isset($this->preassignedFields['email2']) || isset($this->preassignedFields['email2'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['email2'])) echo(urlencode($this->preassignedFields['email2'])); else if(isset($this->preassignedFields['email2'])) echo(urlencode($this->preassignedFields['email2'])); ?>"
-                    )); <
-            ? php endif; ? >
-            <
-            ? php
-            if (isset($this - > preassignedFields['phoneCell']) || isset($this - > preassignedFields['phoneCell'])): ? >
+                    )); <?php } ?>
+            <?php
+            if (isset($this->preassignedFields['phoneCell']) || isset($this-> preassignedFields['phoneCell'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['phoneCell'])) echo(urlencode($this->preassignedFields['phoneCell'])); else if(isset($this->preassignedFields['phoneCell'])) echo(urlencode($this->preassignedFields['phoneCell'])); ?>"
-                    )); <
-            ? php endif; ? >
-            <
-            ? php
-            if (isset($this - > preassignedFields['phoneWork']) || isset($this - > preassignedFields['phoneWork'])): ? >
+                    )); <? php } ?>
+            <?php
+            if (isset($this-> preassignedFields['phoneWork']) || isset($this-> preassignedFields['phoneWork'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['phoneWork'])) echo(urlencode($this->preassignedFields['phoneWork'])); else if(isset($this->preassignedFields['phoneWork'])) echo(urlencode($this->preassignedFields['phoneWork'])); ?>"
-                    )); <
-            ? php endif; ? >
-            <
-            ? php
-            if (isset($this - > preassignedFields['phoneHome']) || isset($this - > preassignedFields['phoneHome'])): ? >
+                    )); <?php } ?>
+            <?php
+            if (isset($this->preassignedFields['phoneHome']) || isset($this->preassignedFields['phoneHome'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['phoneHome'])) echo(urlencode($this->preassignedFields['phoneHome'])); else if(isset($this->preassignedFields['phoneHome'])) echo(urlencode($this->preassignedFields['phoneHome'])); ?>"
-                    )); <
-            ? php endif; ? >
+                    )); <?php } ?>
         </script>
 
         <?php if ($this->isModal): ?>

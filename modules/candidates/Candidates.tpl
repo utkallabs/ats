@@ -82,7 +82,6 @@
 										<span style="display:none;" id="ajaxTableIndicator<?= $md5InstanceName ?>"><img src="images/indicator_small.gif" alt="" /></span>
                                     </td>
                                 </tr>
-                                tr
                             </table>
                         </form>
                     </td>

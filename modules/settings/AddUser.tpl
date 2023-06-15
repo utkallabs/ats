@@ -50,13 +50,13 @@
                                         <label id="emailLabel" for="email">Email:</label>
                                     </td>
                                     <td class="tdData">
-                                        <input type="email" class="inputbox" id="email" name="email" style="width: 150px;" />&nbsp;*
+                                        <input type="text" class="inputbox" id="email" name="email" style="width: 150px;" />
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <td class="tdVertical">
-                                        <label id="usernameLabel" for="username">Username/Email:</label>
+                                        <label id="usernameLabel" for="username">Username:</label>
                                     </td>
                                     <td class="tdData">
                                         <input type="text" class="inputbox" id="username" name="username" style="width: 150px;" />&nbsp;*

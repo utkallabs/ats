@@ -2625,7 +2625,6 @@ class CandidatesUI extends UserInterface
         $notes           = $this->getTrimmedInput('notes', $_POST);
         $webSite         = $this->getTrimmedInput('webSite', $_POST);
         $bestTimeToCall  = $this->getTrimmedInput('bestTimeToCall', $_POST);
-        $interviewer_id  = $this->getTrimmedInput('interviewer_id', $_POST);
         $gender          = $this->getTrimmedInput('gender', $_POST);
         $race            = $this->getTrimmedInput('race', $_POST);
         $veteran         = $this->getTrimmedInput('veteran', $_POST);
@@ -2683,8 +2682,7 @@ class CandidatesUI extends UserInterface
             $gender,
             $race,
             $veteran,
-            $disability,
-            $interviewer_id,
+            $disability
         );
 
         

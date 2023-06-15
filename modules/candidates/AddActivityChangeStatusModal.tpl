@@ -10,62 +10,36 @@
 <?php if (!$this->isFinishedMode): ?>
 
 <script type="text/javascript">
-    < ? php
-    if ($this - > isJobOrdersMode): ? >
+    <?php if ($this->isJobOrdersMode): ?>
         statusesArray = new Array(1);
-    jobOrdersArray = new Array(1);
-    statusesArrayString = new Array(1);
-    jobOrdersArrayStringTitle = new Array(1);
-    jobOrdersArrayStringCompany = new Array(1);
-    statusesArray[0] = < ? php echo($this - > pipelineData['statusID']); ? > ;
-    statusesArrayString[0] = '<?php echo($this->pipelineData['
-    status ']); ?>';
-    jobOrdersArray[0] = < ? php echo($this - > pipelineData['jobOrderID']); ? > ;
-    jobOrdersArrayStringTitle[0] = '<?php echo(str_replace("'
-    ", "\\
-    '", $this->pipelineData['
-    title '])); ?>';
-    jobOrdersArrayStringCompany[0] = '<?php echo(str_replace("'
-    ", "\\
-    '", $this->pipelineData['
-    companyName '])); ?>'; <
-    ?
-    php
-    else : ? >
-        <
-        ?
-        php $count = count($this - > pipelineRS); ? >
-    statusesArray = new Array( < ? php echo($count); ? > );
-    jobOrdersArray = new Array( < ? php echo($count); ? > );
-    statusesArrayString = new Array( < ? php echo($count); ? > );
-    jobOrdersArrayStringTitle = new Array( < ? php echo($count); ? > );
-    jobOrdersArrayStringCompany = new Array( < ? php echo($count); ? > ); <
-    ?
-    php
-    for ($i = 0; $i < $count; ++$i): ? >
-        statusesArray[ < ? php echo($i); ? > ] = < ? php echo($this - > pipelineRS[$i]['statusID']); ? > ;
-    statusesArrayString[ < ? php echo($i); ? > ] = '<?php echo($this->pipelineRS[$i]['
-    status ']); ?>';
-    jobOrdersArray[ < ? php echo($i); ? > ] = < ? php echo($this - > pipelineRS[$i]['jobOrderID']); ? > ;
-    jobOrdersArrayStringTitle[ < ? php echo($i); ? > ] = '<?php echo(str_replace("'
-    ", "\\
-    '", $this->pipelineRS[$i]['
-    title '])); ?>';
-    jobOrdersArrayStringCompany[ < ? php echo($i); ? > ] = '<?php echo(str_replace("'
-    ", "\\
-    '", $this->pipelineRS[$i]['
-    companyName '])); ?>'; <
-    ?
-    php endfor; ? >
-    <
-    ?
-    php endif; ? >
-    statusTriggersEmailArray = new Array( < ? php echo(count($this - > statusRS)); ? > ); <
-    ?
-    php foreach($this - > statusRS as $rowNumber => $statusData): ? >
-        statusTriggersEmailArray[ < ? php echo($rowNumber); ? > ] = < ? php echo($statusData['triggersEmail']); ? > ; <
-    ?
-    php endforeach; ? >
+        jobOrdersArray = new Array(1);
+        statusesArrayString = new Array(1);
+        jobOrdersArrayStringTitle = new Array(1);
+        jobOrdersArrayStringCompany = new Array(1);
+        statusesArray[0] = <?php echo($this->pipelineData['statusID']); ?>;
+        statusesArrayString[0] = '<?php echo($this->pipelineData['status']); ?>';
+        jobOrdersArray[0] = <?php echo($this->pipelineData['jobOrderID']); ?>;
+        jobOrdersArrayStringTitle[0] = '<?php echo(str_replace("'", "\\'", $this->pipelineData['title'])); ?>';
+        jobOrdersArrayStringCompany[0] = '<?php echo(str_replace("'", "\\'", $this->pipelineData['companyName'])); ?>';
+    <?php else: ?>
+        <?php $count = count($this->pipelineRS); ?>
+        statusesArray = new Array(<?php echo($count); ?>);
+        jobOrdersArray = new Array(<?php echo($count); ?>);
+        statusesArrayString = new Array(<?php echo($count); ?>);
+        jobOrdersArrayStringTitle = new Array(<?php echo($count); ?>);
+        jobOrdersArrayStringCompany = new Array(<?php echo($count); ?>);
+        <?php for ($i = 0; $i < $count; ++$i): ?>
+            statusesArray[<?php echo($i); ?>] = <?php echo($this->pipelineRS[$i]['statusID']); ?>;
+            statusesArrayString[<?php echo($i); ?>] = '<?php echo($this->pipelineRS[$i]['status']); ?>';
+            jobOrdersArray[<?php echo($i); ?>] = <?php echo($this->pipelineRS[$i]['jobOrderID']); ?>;
+            jobOrdersArrayStringTitle[<?php echo($i); ?>] = '<?php echo(str_replace("'", "\\'", $this->pipelineRS[$i]['title'])); ?>';
+            jobOrdersArrayStringCompany[<?php echo($i); ?>] = '<?php echo(str_replace("'", "\\'", $this->pipelineRS[$i]['companyName'])); ?>';
+        <?php endfor; ?>
+    <?php endif; ?>
+    statusTriggersEmailArray = new Array(<?php echo(count($this->statusRS)); ?>);
+    <?php foreach ($this->statusRS as $rowNumber => $statusData): ?>
+       statusTriggersEmailArray[<?php echo($rowNumber); ?>] = <?php echo($statusData['triggersEmail']); ?>;
+    <?php endforeach; ?>
 </script>
 
 <form name="changePipelineStatusForm" id="changePipelineStatusForm"
