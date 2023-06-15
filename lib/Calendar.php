@@ -200,6 +200,26 @@ class Calendar
         return $array;
     }
 
+
+    public function getInterviewer(){
+        $sql = sprintf(
+            "SELECT
+                user.first_name,
+                user.last_name,
+                user.user_id
+            FROM
+                user
+            WHERE
+                user.is_interviewer = 1
+            ORDER BY
+                user.user_id ASC",
+            $this->_siteID
+        );
+
+        return $this->_db->getAllAssoc($sql);
+
+    }
+
     /**
      * Returns all events which are due for every site.
      *
@@ -291,13 +311,14 @@ class Calendar
      * @param integer Minutes before event occurrs to send reminders.
      * @param boolean Is this a public event entry?
      * @param integer Time zone offset from GMT.
+     * @param integer Interviewer_id is a UserId
      * @return integer New Calendar Event ID, or -1 on failure.
      */
     // FIXME: Time Zone Offset probably shouldn't be paramaterized.
     public function addEvent($type, $date, $description, $allDay, $enteredBy,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset)
+        $timeZoneOffset, $interviewer_id)
     {
         $sql = sprintf(
             "INSERT INTO calendar_event (
@@ -317,7 +338,8 @@ class Calendar
                 reminder_enabled,
                 reminder_email,
                 reminder_time,
-                public
+                public,
+                interviewer_id
             )
             VALUES (
                 %s,
@@ -331,6 +353,7 @@ class Calendar
                 %s,
                 NOW(),
                 NOW(),
+                %s,
                 %s,
                 %s,
                 %s,
@@ -353,9 +376,10 @@ class Calendar
             ($reminderEnabled ? '1' : '0'),
             $this->_db->makeQueryString($reminderEmail),
             $this->_db->makeQueryInteger($reminderTime),
-            ($isPublic ? '1' : '0')
+            ($isPublic ? '1' : '0'),
+            $this->_db->makeQueryInteger($interviewer_id)
         );
-
+        
         $queryResult = $this->_db->query($sql);
         if (!$queryResult)
         {
@@ -392,7 +416,7 @@ class Calendar
     public function updateEvent($eventID, $type, $date, $description, $allDay,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset)
+        $timeZoneOffset,$interviewer_id)
     {
         $sql = sprintf(
             "UPDATE
@@ -411,7 +435,8 @@ class Calendar
                 reminder_enabled = %s,
                 reminder_email   = %s,
                 reminder_time    = %s,
-                public           = %s
+                public           = %s,
+                interviewer_id   = %s
             WHERE
                 calendar_event_id = %s
             AND
@@ -431,6 +456,8 @@ class Calendar
             $this->_db->makeQueryInteger($reminderTime),
             ($isPublic ? '1' : '0'),
             $this->_db->makeQueryInteger($eventID),
+            $this->_db->makeQueryInteger($interviewer_id),
+
             $this->_siteID
         );
 

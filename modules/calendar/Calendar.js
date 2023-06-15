@@ -1383,6 +1383,51 @@ function goToToday()
     setCalendarViewDay(todayYear, todayMonth, todayDay);
 }
 
+$(document).ready(function() {
+
+    var selectedOption = $('#type').find(":selected").val();
+    if (selectedOption == 400) {
+      $('#interviewerCalendar').removeAttr("style");
+      $('#interviewerCalTr').removeAttr("style");
+    } else {
+      $('#interviewerCalendar').attr("style", "display: none");
+      $('#interviewerCalTr').attr("style", "display: none");
+    }
+  
+    $('#type').change(function() {
+      var optionSelect = $(this).find(":selected").val();
+      if (optionSelect == 400) {
+        $('#interviewerCalendar').removeAttr("style");
+        $('#interviewerCalTr').removeAttr("style");
+      } else {
+        $('#interviewerCalendar').attr("style", "display: none");
+        $('#interviewerCalTr').attr("style", "display: none");
+      }
+    });
+  
+    var selectedEditOption= $('#typeEdit').find(":selected").val();
+    if (selectedEditOption== 400) {
+      $('#interviewerCalendar').removeAttr("style");
+      $('#interviewerCalTr').removeAttr("style");
+    } else {
+      $('#interviewerCalendar').attr("style", "display: none");
+      $('#interviewerCalTr').attr("style", "display: none");
+    }
+  
+    $('#typeEdit').change(function() {
+      var optionSelectEdit = $(this).find(":selected").val();
+      if (optionSelectEdit == 400) {
+        $('#interviewerCalendar').removeAttr("style");
+        $('#interviewerCalTr').removeAttr("style");
+      } else {
+        $('#interviewerCalendar').attr("style", "display: none");
+        $('#interviewerCalTr').attr("style", "display: none");
+      }
+    });
+  });
+  
+  
+
 
 
 

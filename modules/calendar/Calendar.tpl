@@ -70,6 +70,21 @@
                                                 </td>
                                             </tr>
 
+                                            <tr id="interviewerCalendar" style="display: none;">
+                                            <td class="tdVertical">
+                                             <label id="InterviewerLabel" for="Interviewertype">Interviewer:</label>
+                                            </td>
+                                                <td>
+                                                <select id="interviewerIdCal" name="interviewerId">
+                                                <option>(Select a Field)</option>
+                                                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
+                                                    <option value="<?php $this->_($interviewer['user_id']); ?> ">
+                                                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>&nbsp;*
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
@@ -206,7 +221,7 @@
                                                 </td>
                                             </tr>
 
-                                            <tr>
+                                            <tr id="calEventType">
                                                 <td class="tdVertical">
                                                     <label id="eventTypeLabelEdit" for="type">Type:</label>
                                                 </td>
@@ -220,6 +235,21 @@
                                                 </td>
                                             </tr>
 
+                                            <tr id="interviewerCalTr" style="display: none;">
+                                            <td class="tdVertical">
+                                             <label id="interviewerLabel" for="interviewerType">Interviewer:</label>
+                                            </td>
+                                                <td>
+                                                <select id="interviewerEventId" name="interviewerEventId">
+                                                <option>(Select a Field)</option>
+                                                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
+                                                    <option value="<?php $this->_($interviewer['user_id']); ?> ">
+                                                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>&nbsp;*
+                                                </td>
+                                            </tr>
                                              <tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
@@ -348,6 +378,7 @@
                                     <span id="viewEventTitle" style="font-weight:bold"></span><br />
                                     Entered By: <span id="viewEventOwner"></span><br />
                                     Event Type: <span id="viewEventType"></span><br />
+                                    Interviewer: <span id="InterviewerName"></span><br />
                                     <span id="viewEventLink"></span><br />
                                     <br />
                                     Date: <span id="viewEventDate"></span><br />

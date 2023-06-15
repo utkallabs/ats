@@ -93,7 +93,7 @@ class Candidates
      */
     public function add($firstName, $middleName, $lastName, $email1, $email2,
         $phoneHome, $phoneCell, $phoneWork, $address, $city, $state, $zip,
-        $source, $keySkills, $dateAvailable, $currentEmployer, $canRelocate,
+        $source, $keySkills, $interviewer_id ,$dateAvailable, $currentEmployer, $canRelocate,
         $currentPay, $desiredPay, $notes, $webSite, $bestTimeToCall, $enteredBy, $owner,
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
@@ -114,6 +114,7 @@ class Candidates
                 zip,
                 source,
                 key_skills,
+                interviewer_id,
                 date_available,
                 current_employer,
                 can_relocate,
@@ -134,6 +135,7 @@ class Candidates
                 eeo_gender
             )
             VALUES (
+                %s,
                 %s,
                 %s,
                 %s,
@@ -181,6 +183,7 @@ class Candidates
             $this->_db->makeQueryString($zip),
             $this->_db->makeQueryString($source),
             $this->_db->makeQueryString($keySkills),
+            $this->_db->makeQueryString($interviewer_id),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
             $this->_db->makeQueryString($currentEmployer),
             ($canRelocate ? '1' : '0'),
@@ -251,7 +254,7 @@ class Candidates
         $city, $state, $zip, $source, $keySkills, $dateAvailable,
         $currentEmployer, $canRelocate, $currentPay, $desiredPay,
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
-        $gender = '', $race = '', $veteran = '', $disability = '')
+        $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
     {
         $sql = sprintf(
             "UPDATE
@@ -286,7 +289,8 @@ class Candidates
                 eeo_ethnic_type_id    = %s,
                 eeo_veteran_type_id   = %s,
                 eeo_disability_status = %s,
-                eeo_gender            = %s
+                eeo_gender            = %s,
+                interviewer_id        = %s
             WHERE
                 candidate_id = %s
             AND
@@ -320,10 +324,11 @@ class Candidates
             $this->_db->makeQueryInteger($veteran),
             $this->_db->makeQueryString($disability),
             $this->_db->makeQueryString($gender),
+            $this->_db->makeQueryInteger($interviewer_id),
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
-
+        
         $preHistory = $this->get($candidateID);
         $queryResult = $this->_db->query($sql);
         $postHistory = $this->get($candidateID);
@@ -528,7 +533,9 @@ class Candidates
                     IF (candidate.eeo_gender = 'f',
                         'Female',
                         ''))
-                     AS eeoGenderText
+                     AS eeoGenderText,
+                candidate.interviewer_id AS interviewerId   
+                     
             FROM
                 candidate
             LEFT JOIN user AS entered_by_user
@@ -556,11 +563,29 @@ class Candidates
 
         return $this->_db->getAssoc($sql);
     }
-    
+
+    public function getInterviewer(){
+        $sql = sprintf(
+            "SELECT
+                user.first_name,
+                user.last_name,
+                user.user_id
+            FROM
+                user
+            WHERE
+                user.is_interviewer = 1
+            ORDER BY
+                user.user_id ASC",
+            $this->_siteID
+        );
+
+        return $this->_db->getAllAssoc($sql);
+
+    }    
     public function getWithDuplicity($candidateID)
     {
         $data = $this->get($candidateID);
-        
+
         $sql = sprintf(
             "SELECT
                 candidate_duplicates.old_candidate_id AS duplicateTo
@@ -627,7 +652,9 @@ class Candidates
                 candidate.is_admin_hidden AS isAdminHidden,
                 DATE_FORMAT(
                     candidate.date_available, '%%m-%%d-%%y'
-                ) AS dateAvailable
+                ) AS dateAvailable,
+                candidate.interviewer_id AS interviewerId
+
             FROM
                 candidate
             WHERE
@@ -637,7 +664,6 @@ class Candidates
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
-
         return $this->_db->getAssoc($sql);
     }
 
