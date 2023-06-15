@@ -1183,7 +1183,7 @@ class SettingsUI extends UserInterface
         }
 
         /* Bail out if the specified username already exists. */
-        if ($users->usernameExists($username))
+        if ($users->userNameExist($username))
         {
             CommonErrors::fatal(COMMONERROR_BADFIELDS, $this, 'The specified username already exists.');
         }
