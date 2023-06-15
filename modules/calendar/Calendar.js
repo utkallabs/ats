@@ -1383,16 +1383,20 @@ function goToToday()
     setCalendarViewDay(todayYear, todayMonth, todayDay);
 }
 
-$(document).ready(function() {
-
+ function showInterviewerDropdown(){
     var selectedOption = $('#type').find(":selected").val();
     if (selectedOption == 400) {
+        alert("hello");
       $('#interviewerCalendar').removeAttr("style");
       $('#interviewerCalTr').removeAttr("style");
     } else {
       $('#interviewerCalendar').attr("style", "display: none");
       $('#interviewerCalTr').attr("style", "display: none");
     }
+ }
+$(document).ready(function() {
+    showInterviewerDropdown();
+    
   
     $('#type').change(function() {
       var optionSelect = $(this).find(":selected").val();

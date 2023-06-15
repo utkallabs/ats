@@ -718,7 +718,8 @@ class CandidatesUI extends UserInterface
         $questionnaires = $questionnaire->getCandidateQuestionnaires($candidateID);
 
         $lists = $candidates->getListsForCandidate($candidateID);
-        
+        $interviewers = $candidates->getInterviewer();
+
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
         $this->_template->assign('data', $data);
@@ -3212,6 +3213,7 @@ class CandidatesUI extends UserInterface
                 $eventJobOrderID = -1;
             }
 
+            $interviewer_id = $_POST['interviewerId'];
             $calendar = new Calendar($this->_siteID);
             $eventID = $calendar->addEvent(
                 $eventTypeID, $date, $description, $allDay, $this->_userID,

@@ -247,7 +247,21 @@ function calendarEditEvent(entry)
 
     considerCheckBox('reminderToggleEdit', 'sendEmailTDEdit');
     //cleanUpUI();
+    showInterviewerDropdown();
 }
+
+function showInterviewerDropdown(){
+    var selectedOption = $('#typeEdit').find(":selected").val();
+    alert(selectedOption);
+    if (selectedOption == 400) {
+    
+      $('#interviewerCalendar').removeAttr("style");
+      $('#interviewerCalTr').removeAttr("style");
+    } else {
+      $('#interviewerCalendar').attr("style", "display: none");
+      $('#interviewerCalTr').attr("style", "display: none");
+    }
+ }
 
 function calendarViewEvent(entry)
 {

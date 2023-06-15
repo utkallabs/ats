@@ -649,12 +649,12 @@
                     "<?php if(isset($this->preassignedFields['email2'])) echo(urlencode($this->preassignedFields['email2'])); else if(isset($this->preassignedFields['email2'])) echo(urlencode($this->preassignedFields['email2'])); ?>"
                     )); <?php } ?>
             <?php
-            if (isset($this->preassignedFields['phoneCell']) || isset($this-> preassignedFields['phoneCell'])) { ?>
+            if (isset($this->preassignedFields['phoneCell']) || isset($this->preassignedFields['phoneCell'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['phoneCell'])) echo(urlencode($this->preassignedFields['phoneCell'])); else if(isset($this->preassignedFields['phoneCell'])) echo(urlencode($this->preassignedFields['phoneCell'])); ?>"
-                    )); <? php } ?>
+                    )); <?php } ?>
             <?php
-            if (isset($this-> preassignedFields['phoneWork']) || isset($this-> preassignedFields['phoneWork'])) { ?>
+            if (isset($this-> preassignedFields['phoneWork']) || isset($this->preassignedFields['phoneWork'])) { ?>
                 checkEmailAlreadyInSystem(urlDecode(
                     "<?php if(isset($this->preassignedFields['phoneWork'])) echo(urlencode($this->preassignedFields['phoneWork'])); else if(isset($this->preassignedFields['phoneWork'])) echo(urlencode($this->preassignedFields['phoneWork'])); ?>"
                     )); <?php } ?>
@@ -667,7 +667,6 @@
 
         <?php if ($this->isModal): ?>
         </body>
-
         </html>
         <?php else: ?>
     </div>
