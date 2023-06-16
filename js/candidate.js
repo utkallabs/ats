@@ -170,4 +170,11 @@ function onSubmitPhoneInSystem()
     }
 }
 
+$(document).ready(function(){
+    $('#sourceSelect').change(function (){
+        var optionName = $(this).find(":selected").text();
+        $('#sourceName').val(optionName);
+    });
+})
+
 

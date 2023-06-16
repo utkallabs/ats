@@ -93,7 +93,7 @@ class Candidates
      */
     public function add($firstName, $middleName, $lastName, $email1, $email2,
         $phoneHome, $phoneCell, $phoneWork, $address, $city, $state, $zip,
-        $source, $keySkills, $dateAvailable, $currentEmployer, $canRelocate,
+        $source, $sourceId, $keySkills, $dateAvailable, $currentEmployer, $canRelocate,
         $currentPay, $desiredPay, $notes, $webSite, $bestTimeToCall, $enteredBy, $owner,
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
@@ -113,6 +113,7 @@ class Candidates
                 state,
                 zip,
                 source,
+                sourceId,
                 key_skills,
                 date_available,
                 current_employer,
@@ -134,6 +135,7 @@ class Candidates
                 eeo_gender
             )
             VALUES (
+                %s,
                 %s,
                 %s,
                 %s,
@@ -180,6 +182,7 @@ class Candidates
             $this->_db->makeQueryString($state),
             $this->_db->makeQueryString($zip),
             $this->_db->makeQueryString($source),
+            $this->_db->makeQueryString($sourceId),
             $this->_db->makeQueryString($keySkills),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
             $this->_db->makeQueryString($currentEmployer),

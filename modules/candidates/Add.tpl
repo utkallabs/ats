@@ -456,9 +456,9 @@
                         </td>
                         <td class="tdData">
 <?php if ($this->isModal): ?>
-                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="source" class="inputbox" style="width: 150px;">
+                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="sourceId" class="inputbox" style="width: 150px;">
 <?php else: ?>
-                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="source" class="inputbox" style="width: 150px;" onchange="if (this.value == 'edit') { listEditor('Sources', 'sourceSelect', 'sourceCSV', false); this.value = '(none)'; } if (this.value == 'nullline') { this.value = '(none)'; }">
+                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="sourceId" class="inputbox" style="width: 150px;" onchange="if (this.value == 'edit') { listEditor('Sources', 'sourceSelect', 'sourceCSV', false); this.value = '(none)'; } if (this.value == 'nullline') { this.value = '(none)'; }">
                                 <option value="edit">(Edit Sources)</option>
                                 <option value="nullline">-------------------------------</option>
 <?php endif; ?>
@@ -467,9 +467,12 @@
                                         <option value="<?php $this->_($this->_($this->preassignedFields['source'])); ?>" selected="selected"><?php $this->_($this->_($this->preassignedFields['source'])); ?></option>
                                     <?php endif; ?>
                                 <?php foreach ($this->sourcesRS AS $index => $source): ?>
-                                    <option value="<?php $this->_($source['name']); ?>"><?php $this->_($source['name']); ?></option>
+                                    <option value="<?php $this->_($source['sourceID']); ?>"><?php $this->_($source['name']); ?></option>
                                 <?php endforeach; ?>
                             </select>
+
+                            <input type="hidden" id="sourceName" name="source" value="" />
+
                             <input type="hidden" id="sourceCSV" name="sourceCSV" value="<?php $this->_($this->sourcesString); ?>" />
                         </td>
                     </tr>

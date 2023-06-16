@@ -757,7 +757,7 @@ class CandidatesUI extends UserInterface
         /* Get possible sources. */
         $sourcesRS = $candidates->getPossibleSources();
         $sourcesString = ListEditor::getStringFromList($sourcesRS, 'name');
-
+        $sourceId = ListEditor::getStringFromList($sourcesRS, 'sourceID');
         /* Get extra fields. */
         $extraFieldRS = $candidates->extraFields->getValuesForAdd();
 
@@ -896,7 +896,6 @@ class CandidatesUI extends UserInterface
         {
             if (isset($_POST['documentText'])) $contents = $_POST['documentText'];
             else $contents = '';
-
             // Retain all field data since this isn't done over AJAX (yet)
             $fields = array(
                 'firstName'       => $this->getTrimmedInput('firstName', $_POST),
@@ -911,6 +910,7 @@ class CandidatesUI extends UserInterface
                 'city'            => $this->getTrimmedInput('city', $_POST),
                 'state'           => $this->getTrimmedInput('state', $_POST),
                 'zip'             => $this->getTrimmedInput('zip', $_POST),
+                'sourceId'          => $this->getTrimmedInput('sourceId', $_POST),
                 'source'          => $this->getTrimmedInput('source', $_POST),
                 'keySkills'       => $this->getTrimmedInput('keySkills', $_POST),
                 'currentEmployer' => $this->getTrimmedInput('currentEmployer', $_POST),
@@ -1035,7 +1035,8 @@ class CandidatesUI extends UserInterface
     {
         if (is_array($mp = $this->checkParsingFunctions()))
         {
-            return $this->add($mp[0], $mp[1]);
+             $this->add($mp[0], $mp[1]);
+             exit;
         }
 
         $candidateID = $this->_addCandidate(false);
@@ -1320,6 +1321,7 @@ class CandidatesUI extends UserInterface
         $state           = $this->getTrimmedInput('state', $_POST);
         $zip             = $this->getTrimmedInput('zip', $_POST);
         $source          = $this->getTrimmedInput('source', $_POST);
+        $sourceId          = $this->getTrimmedInput('sourceId', $_POST);
         $keySkills       = $this->getTrimmedInput('keySkills', $_POST);
         $currentEmployer = $this->getTrimmedInput('currentEmployer', $_POST);
         $currentPay      = $this->getTrimmedInput('currentPay', $_POST);
@@ -1360,6 +1362,7 @@ class CandidatesUI extends UserInterface
             $state,
             $zip,
             $source,
+            $sourceId,
             $keySkills,
             $dateAvailable,
             $currentEmployer,
@@ -1893,6 +1896,12 @@ class CandidatesUI extends UserInterface
         $savedSearchRS = $savedSearches->get(DATA_ITEM_CANDIDATE);
 
         if (!eval(Hooks::get('CANDIDATE_SEARCH'))) return;
+        
+        $candidates = new Candidates($this->_siteID);
+        $sourcesRS = $candidates->getPossibleSources();
+        $sourcesString = ListEditor::getStringFromList($sourcesRS, 'name');
+        $this->_template->assign('sourcesRS', $sourcesRS);
+        $this->_template->assign('sourcesString', $sourcesString);
 
         $this->_template->assign('wildCardString', '');
         $this->_template->assign('savedSearchRS', $savedSearchRS);
@@ -1905,6 +1914,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('fullNameWildCardString', '');
         $this->_template->assign('phoneNumberWildCardString', '');
         $this->_template->assign('mode', '');
+        $this->_template->assign('soruce', '');
         $this->_template->display('./modules/candidates/Search.tpl');
     }
 
@@ -1916,6 +1926,8 @@ class CandidatesUI extends UserInterface
         /* Bail out to prevent an error if the GET string doesn't even contain
          * a field named 'wildCardString' at all.
          */
+
+        /* Susil commented wildCardString */
         if (!isset($_GET['wildCardString']))
         {
             $this->listByView('No wild card string specified.');
@@ -1923,12 +1935,14 @@ class CandidatesUI extends UserInterface
         }
 
         $query = trim($_GET['wildCardString']);
+        $sourceQuery = trim($_GET['source']);
 
         /* Initialize stored wildcard strings to safe default values. */
         $resumeWildCardString      = '';
         $keySkillsWildCardString   = '';
         $phoneNumberWildCardString = '';
         $fullNameWildCardString    = '';
+        $sourceString    = '';
 
         /* Set up sorting. */
         if ($this->isRequiredIDValid('page', $_GET))
@@ -1971,9 +1985,11 @@ class CandidatesUI extends UserInterface
 
         /* Get our current searching mode. */
         $mode = $this->getTrimmedInput('mode', $_GET);
+        $source = $this->getTrimmedInput('source', $_GET);
 
         /* Execute the search. */
         $search = new SearchCandidates($this->_siteID);
+
         switch ($mode)
         {
             case 'searchByFullName':
@@ -2137,6 +2153,37 @@ class CandidatesUI extends UserInterface
                 $phoneNumberWildCardString = $query;
                 break;
 
+            case 'searchBySource':
+                $rs = $search->bySource($sourceQuery, $sortBy, $sortDirection);
+
+                foreach ($rs as $rowIndex => $row)
+                {
+                    if (!empty($row['ownerFirstName']))
+                    {
+                        $rs[$rowIndex]['ownerAbbrName'] = StringUtility::makeInitialName(
+                            $row['ownerFirstName'],
+                            $row['ownerLastName'],
+                            false,
+                            LAST_NAME_MAXLEN
+                        );
+                    }
+                    else
+                    {
+                        $rs[$rowIndex]['ownerAbbrName'] = 'None';
+                    }
+
+                    $rsResume = $candidates->getResumes($row['candidateID']);
+                    if (isset($rsResume[0]))
+                    {
+                        $rs[$rowIndex]['resumeID'] = $rsResume[0]['attachmentID'];
+                    }
+                }
+
+                $isResumeMode = false;
+
+                $fullNameWildCardString = $query;
+            break;
+
             default:
                 $this->listByView('Invalid search mode.');
                 return;
@@ -2160,6 +2207,12 @@ class CandidatesUI extends UserInterface
         );
         $savedSearchRS = $savedSearches->get(DATA_ITEM_CANDIDATE);
 
+        $candidates = new Candidates($this->_siteID);
+        $sourcesRS = $candidates->getPossibleSources();
+        $sourcesString = ListEditor::getStringFromList($sourcesRS, 'name');
+        $this->_template->assign('sourcesRS', $sourcesRS);
+        $this->_template->assign('sourcesString', $sourcesString);
+
         $this->_template->assign('savedSearchRS', $savedSearchRS);
         $this->_template->assign('exportForm', $exportForm);
         $this->_template->assign('active', $this);
@@ -2173,6 +2226,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('fullNameWildCardString', $fullNameWildCardString);
         $this->_template->assign('phoneNumberWildCardString', $phoneNumberWildCardString);
         $this->_template->assign('mode', $mode);
+        $this->_template->assign('source', $source);
         $this->_template->display('./modules/candidates/Search.tpl');
     }
 
@@ -2594,6 +2648,7 @@ class CandidatesUI extends UserInterface
         $state           = $this->getTrimmedInput('state', $_POST);
         $zip             = $this->getTrimmedInput('zip', $_POST);
         $source          = $this->getTrimmedInput('source', $_POST);
+        $sourceId          = $this->getTrimmedInput('sourceId', $_POST);
         $keySkills       = $this->getTrimmedInput('keySkills', $_POST);
         $currentEmployer = $this->getTrimmedInput('currentEmployer', $_POST);
         $currentPay      = $this->getTrimmedInput('currentPay', $_POST);
@@ -2642,6 +2697,7 @@ class CandidatesUI extends UserInterface
             $state,
             $zip,
             $source,
+            $sourceId,
             $keySkills,
             $dateAvailable,
             $currentEmployer,
