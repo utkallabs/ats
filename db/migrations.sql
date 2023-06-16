@@ -2,4 +2,4 @@
 ALTER TABLE `calendar_event` ADD `interviewer_id` INT(11) NULL DEFAULT NULL AFTER `public`;
 
 /* New column in cndidate table*/
-ALTER TABLE `candidate` ADD `is_interviewer` INT(11) NULL DEFAULT NULL AFTER `best_time_to_call`;
+ALTER TABLE `user` ADD `is_interviewer` INT(11) NULL DEFAULT NULL AFTER `best_time_to_call`;
