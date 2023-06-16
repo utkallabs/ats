@@ -361,6 +361,23 @@ class Users
         return $res['fullName'] ;
     }
 
+    public function getInterviewerId($userID)
+    {
+        $sql = sprintf(
+                "SELECT
+                 user.user_id AS interviewerId 
+                    FROM
+                    user
+                    WHERE
+                    user.user_id = %s ",
+                $this->_db->makeQueryInteger($userID)
+                    );
+
+        $res = $this->_db->getAssoc($sql);
+        
+        return $res['interviewerId'] ;
+    }
+
 
     /**
      * Returns 1 user, ignoring the user's Site ID.

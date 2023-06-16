@@ -98,6 +98,7 @@ class Calendar
                 calendar_event.reminder_email AS reminderEmail,
                 calendar_event.reminder_time AS reminderTime,
                 calendar_event.public AS public,
+                calendar_event.interviewer_id AS interviewerId,
                 DATE_FORMAT(
                     calendar_event.date, '%%d'
                 ) AS day,
@@ -127,11 +128,17 @@ class Calendar
                 calendar_event_type.short_description AS eventTypeDescription,
                 entered_by_user.user_id AS userID,
                 entered_by_user.first_name AS enteredByFirstName,
-                entered_by_user.last_name AS enteredByLastName
+                entered_by_user.last_name AS enteredByLastName,
+                CONCAT(
+                    user.first_name, ' ', user.last_name
+                ) AS interviewerFullName,
+                user.user_id as showInterviewerId
             FROM
                 calendar_event
             LEFT JOIN calendar_event_type
                 ON calendar_event.type = calendar_event_type.calendar_event_type_id
+            LEFT JOIN user
+                ON calendar_event.interviewer_id = user.user_id
             LEFT JOIN user AS entered_by_user
                 ON calendar_event.entered_by = entered_by_user.user_id
             WHERE
@@ -146,7 +153,7 @@ class Calendar
             $year,
             $this->_siteID
         );
-
+        
         $rs = $this->_db->getAllAssoc($sql);
 
         /* Build an array of result set arrays for each day of the month.
@@ -253,6 +260,7 @@ class Calendar
                 entered_by_user.first_name AS enteredByFirstName,
                 entered_by_user.last_name AS enteredByLastName,
                 entered_by_user.site_id AS siteID
+                
             FROM
                 calendar_event
             LEFT JOIN calendar_event_type
@@ -455,12 +463,10 @@ class Calendar
             $this->_db->makeQueryString($reminderEmail),
             $this->_db->makeQueryInteger($reminderTime),
             ($isPublic ? '1' : '0'),
-            $this->_db->makeQueryInteger($eventID),
             $this->_db->makeQueryInteger($interviewer_id),
-
+            $this->_db->makeQueryInteger($eventID),
             $this->_siteID
         );
-
         return (boolean) $this->_db->query($sql);
     }
 
@@ -625,7 +631,8 @@ class Calendar
                 entered_by_user.first_name AS enteredByFirstName,
                 entered_by_user.last_name AS enteredByLastName,
                 calendar_event_type.short_description AS type,
-                calendar_event_type.icon_image AS typeImage
+                calendar_event_type.icon_image AS typeImage,
+                calendar_event_type.interviewer_id AS intrerviewerId
             FROM
                 calendar_event
             LEFT JOIN user AS entered_by_user

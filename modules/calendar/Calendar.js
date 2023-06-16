@@ -1386,49 +1386,43 @@ function goToToday()
  function showInterviewerDropdown(){
     var selectedOption = $('#type').find(":selected").val();
     if (selectedOption == 400) {
-        alert("hello");
       $('#interviewerCalendar').removeAttr("style");
-      $('#interviewerCalTr').removeAttr("style");
     } else {
       $('#interviewerCalendar').attr("style", "display: none");
-      $('#interviewerCalTr').attr("style", "display: none");
     }
  }
 $(document).ready(function() {
     showInterviewerDropdown();
     
-  
     $('#type').change(function() {
       var optionSelect = $(this).find(":selected").val();
       if (optionSelect == 400) {
         $('#interviewerCalendar').removeAttr("style");
-        $('#interviewerCalTr').removeAttr("style");
       } else {
         $('#interviewerCalendar').attr("style", "display: none");
-        $('#interviewerCalTr').attr("style", "display: none");
       }
     });
   
     var selectedEditOption= $('#typeEdit').find(":selected").val();
     if (selectedEditOption== 400) {
-      $('#interviewerCalendar').removeAttr("style");
       $('#interviewerCalTr').removeAttr("style");
     } else {
-      $('#interviewerCalendar').attr("style", "display: none");
-      $('#interviewerCalTr').attr("style", "display: none");
+     $('#interviewerCalTr').attr("style", "display: none");
     }
   
     $('#typeEdit').change(function() {
       var optionSelectEdit = $(this).find(":selected").val();
       if (optionSelectEdit == 400) {
-        $('#interviewerCalendar').removeAttr("style");
         $('#interviewerCalTr').removeAttr("style");
       } else {
-        $('#interviewerCalendar').attr("style", "display: none");
         $('#interviewerCalTr').attr("style", "display: none");
       }
     });
-  });
+    
+    // if($('#selectedInterviwerId').val($('#showInterviewerId').val()) == $('#showInterviewerId').val()){
+    //     $('#interviewerEventId').attr('selected', 'selected');
+    // }
+});
   
   
 

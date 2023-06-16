@@ -495,7 +495,7 @@ class CandidatesUI extends UserInterface
         }
 
         $user = new Users($this->_siteID) ;
-       $interviewerName = $user->getUserName($data['interviewerId']);       
+       $interviewerName = $user->getUserName($data['interviewerId']);      
 
         if ($data['isAdminHidden'] == 1 && $this->getUserAccessLevel('candidates.hidden') < ACCESS_LEVEL_MULTI_SA)
         {
@@ -1109,6 +1109,7 @@ class CandidatesUI extends UserInterface
 
         $user = new Users($this->_siteID) ;
        $interviewerName = $user->getUserName($data['interviewerId']);
+       $interviewerId = $user->getInterviewerId($data['interviewerId']);
         
 
         /* Get extra fields. */
@@ -1184,6 +1185,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('emailTemplateDisabled', $emailTemplateDisabled);
         $this->_template->assign('interviewerName', $interviewerName);
+        $this->_template->assign('interviewerId', $interviewerId);
         $this->_template->display('./modules/candidates/Edit.tpl');
     }
 
