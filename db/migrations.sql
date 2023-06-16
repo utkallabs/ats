@@ -2,4 +2,9 @@
 ALTER TABLE `calendar_event` ADD `interviewer_id` INT(11) NULL DEFAULT NULL AFTER `public`;
 
 /* New column in user table*/
-ALTER TABLE `user` ADD `is_interviewer` INT(11) NULL DEFAULT NULL AFTER `can_see_eeo_info`;
+ALTER TABLE `user` CHANGE `is_interviewer` `is_interviewer` BOOLEAN NOT NULL DEFAULT TRUE COMMENT '0 - Not interviewer, 1 - interviewer';
+
+
+
+/* New column in candidate table*/
+ALTER TABLE `candidate` ADD `interviewer_id` INT(11) NULL AFTER `best_time_to_call`;
