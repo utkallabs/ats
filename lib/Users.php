@@ -989,6 +989,27 @@ class Users
         return true;
     }
 
+    public function userNameExist($username)
+    {
+        // FIXME: COUNT() not needed.
+        $sql = sprintf(
+                "SELECT
+                COUNT(user.user_name) AS userExists
+                FROM
+                user
+                WHERE
+                user.user_name = %s",
+                $this->_db->makeQueryString($username)
+                );
+        $rs = $this->_db->getAssoc($sql);
+
+        if ($rs['userExists'] == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Creates a login history entry.
      *

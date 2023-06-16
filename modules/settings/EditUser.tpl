@@ -43,21 +43,21 @@
                         </td>
                     </tr>
 
-                    <tr>
+                   <!-- <tr>
                         <td class="tdVertical">
                             <label id="emailLabel" for="email">E-Mail:</label>
                         </td>
                         <td class="tdData">
                             <input type="text" class="inputbox" id="email" name="email" value="<?php $this->_($this->data['email']); ?>" style="width: 150px;" />
                         </td>
-                    </tr>
+                    </tr> -->
 
                     <tr>
                         <td class="tdVertical">
-                            <label id="usernameLabel" for="username">Username:</label>
+                            <label id="usernameLabel" for="username">Username / Email:</label>
                         </td>
                         <td class="tdData">
-                            <input type="text" class="inputbox" id="username" name="username" value="<?php $this->_($this->data['username']); ?>" style="width: 150px;" />&nbsp;*
+                            <input type="email" class="inputbox" id="username" name="username" value="<?php $this->_($this->data['username']); ?>" style="width: 150px;" />&nbsp;*
                         </td>
                     </tr>
 
