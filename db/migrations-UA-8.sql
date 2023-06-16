@@ -1,0 +1,1 @@
+ALTER TABLE `candidate` ADD `sourceId` INT(11) NULL DEFAULT NULL AFTER `source`;

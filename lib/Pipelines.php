@@ -235,6 +235,7 @@ class Pipelines
                 ON joborder.owner = owner_user.user_id
             LEFT JOIN candidate_joborder_status
                 ON candidate_joborder.status = candidate_joborder_status.candidate_joborder_status_id
+                AND candidate_joborder.candidate_id = %s
             WHERE
                 candidate.candidate_id = %s
             AND
@@ -245,6 +246,7 @@ class Pipelines
                 joborder.site_id = %s
             AND
                 company.site_id = %s",
+            $this->_db->makeQueryInteger($candidateID),
             $this->_db->makeQueryInteger($candidateID),
             $this->_db->makeQueryInteger($jobOrderID),
             $this->_siteID,

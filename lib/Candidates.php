@@ -93,7 +93,7 @@ class Candidates
      */
     public function add($firstName, $middleName, $lastName, $email1, $email2,
         $phoneHome, $phoneCell, $phoneWork, $address, $city, $state, $zip,
-        $source, $keySkills, $interviewer_id ,$dateAvailable, $currentEmployer, $canRelocate,
+        $source, $sourceId, $keySkills, $interviewer_id, $dateAvailable, $currentEmployer, $canRelocate,
         $currentPay, $desiredPay, $notes, $webSite, $bestTimeToCall, $enteredBy, $owner,
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
@@ -113,6 +113,7 @@ class Candidates
                 state,
                 zip,
                 source,
+                sourceId,
                 key_skills,
                 interviewer_id,
                 date_available,
@@ -135,6 +136,7 @@ class Candidates
                 eeo_gender
             )
             VALUES (
+                %s,
                 %s,
                 %s,
                 %s,
@@ -182,6 +184,7 @@ class Candidates
             $this->_db->makeQueryString($state),
             $this->_db->makeQueryString($zip),
             $this->_db->makeQueryString($source),
+            $this->_db->makeQueryString($sourceId),
             $this->_db->makeQueryString($keySkills),
             $this->_db->makeQueryString($interviewer_id),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
@@ -328,7 +331,7 @@ class Candidates
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
-        
+
         $preHistory = $this->get($candidateID);
         $queryResult = $this->_db->query($sql);
         $postHistory = $this->get($candidateID);
@@ -581,7 +584,7 @@ class Candidates
 
         return $this->_db->getAllAssoc($sql);
 
-    }    
+    }
     public function getWithDuplicity($candidateID)
     {
         $data = $this->get($candidateID);
@@ -664,6 +667,7 @@ class Candidates
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
+
         return $this->_db->getAssoc($sql);
     }
 

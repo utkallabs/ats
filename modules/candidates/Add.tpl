@@ -572,10 +572,10 @@
                     </td>
                     <td class="tdData">
                         <?php if ($this->isModal): ?>
-                        <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="source" class="inputbox"
+                        <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="sourceId" class="inputbox"
                             style="width: 150px;">
                             <?php else: ?>
-                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="source"
+                            <select id="sourceSelect" tabindex="<?php echo($tabIndex++); ?>" name="sourceId"
                                 class="inputbox" style="width: 150px;"
                                 onchange="if (this.value == 'edit') { listEditor('Sources', 'sourceSelect', 'sourceCSV', false); this.value = '(none)'; } if (this.value == 'nullline') { this.value = '(none)'; }">
                                 <option value="edit">(Edit Sources)</option>
@@ -592,11 +592,14 @@
                                 </option>
                                 <?php endif; ?>
                                 <?php foreach ($this->sourcesRS AS $index => $source): ?>
-                                <option value="<?php $this->_($source['name']); ?>">
-                                    <?php $this->_($source['name']); ?>
+                                <option value="<?php $this->_($source['sourceID']); ?>">
+                                    <?php $this->_($source['sourceID']); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
+
+                            <input type="hidden" id="sourceName" name="source" value="" />
+
                             <input type="hidden" id="sourceCSV" name="sourceCSV"
                                 value="<?php $this->_($this->sourcesString); ?>" />
                     </td>
@@ -637,7 +640,7 @@
         </form>
 
         <script type="text/javascript">
-            document.addCandidateForm.firstName.focus(); 
+            document.addCandidateForm.firstName.focus();
             <?php
              if  (isset($this->preassignedFields['email']) || isset($this->preassignedFields['email1'])){ ?>
                 checkEmailAlreadyInSystem(urlDecode(
