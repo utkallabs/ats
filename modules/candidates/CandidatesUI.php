@@ -50,6 +50,7 @@ include_once(LEGACY_ROOT . '/lib/Questionnaire.php');
 include_once(LEGACY_ROOT . '/lib/Tags.php');
 include_once(LEGACY_ROOT . '/lib/Search.php');
 include_once(LEGACY_ROOT . '/lib/Mailer.php');
+include_once(LEGACY_ROOT . '/lib/Users.php');
 
 class CandidatesUI extends UserInterface
 {
@@ -494,6 +495,9 @@ class CandidatesUI extends UserInterface
             return;
         }
 
+        $user = new Users($this->_siteID) ;
+       $interviewerName = $user->getUserName($data['interviewerId']);
+
         if ($data['isAdminHidden'] == 1 && $this->getUserAccessLevel('candidates.hidden') < ACCESS_LEVEL_MULTI_SA)
         {
             $this->listByView('This candidate is hidden - only a CATS Administrator can unlock the candidate.');
@@ -716,6 +720,7 @@ class CandidatesUI extends UserInterface
         $questionnaires = $questionnaire->getCandidateQuestionnaires($candidateID);
 
         $lists = $candidates->getListsForCandidate($candidateID);
+        $interviewers = $candidates->getInterviewer();
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
@@ -725,6 +730,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('pipelinesRS', $pipelinesRS);
         $this->_template->assign('activityRS', $activityRS);
         $this->_template->assign('calendarRS', $calendarRS);
+        $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('extraFieldRS', $extraFieldRS);
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('isPopup', $isPopup);
@@ -735,6 +741,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('tagsRS', $tags->getAll());
         $this->_template->assign('assignedTags', $tags->getCandidateTagsTitle($candidateID));
         $this->_template->assign('lists', $lists);
+        $this->_template->assign('interviewerName', $interviewerName);
 
         $this->_template->display('./modules/candidates/Show.tpl');
         
@@ -759,6 +766,8 @@ class CandidatesUI extends UserInterface
         $sourcesRS = $candidates->getPossibleSources();
         $sourcesString = ListEditor::getStringFromList($sourcesRS, 'name');
         $sourceId = ListEditor::getStringFromList($sourcesRS, 'sourceID');
+
+        $interviewers = $candidates->getInterviewer();
         /* Get extra fields. */
         $extraFieldRS = $candidates->extraFields->getValuesForAdd();
 
@@ -876,6 +885,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('active', $this);
         $this->_template->assign('subActive', 'Add Candidate');
         $this->_template->assign('sourcesRS', $sourcesRS);
+        $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('sourcesString', $sourcesString);
         $this->_template->assign('preassignedFields', $preassignedFields);
         $this->_template->assign('associatedAttachment', $associatedAttachment);
@@ -897,6 +907,7 @@ class CandidatesUI extends UserInterface
         {
             if (isset($_POST['documentText'])) $contents = $_POST['documentText'];
             else $contents = '';
+
             // Retain all field data since this isn't done over AJAX (yet)
             $fields = array(
                 'firstName'       => $this->getTrimmedInput('firstName', $_POST),
@@ -926,6 +937,7 @@ class CandidatesUI extends UserInterface
                 'veteran'         => $this->getTrimmedInput('veteran', $_POST),
                 'disability'      => $this->getTrimmedInput('disability', $_POST),
                 'documentTempFile'=> $this->getTrimmedInput('documentTempFile', $_POST),
+                'interviewer_id'=> $this->getTrimmedInput('interviewer_id', $_POST),
                 'isFromParser'    => true
             );
 
@@ -1036,8 +1048,7 @@ class CandidatesUI extends UserInterface
     {
         if (is_array($mp = $this->checkParsingFunctions()))
         {
-             $this->add($mp[0], $mp[1]);
-             exit;
+            return $this->add($mp[0], $mp[1]);
         }
 
         $candidateID = $this->_addCandidate(false);
@@ -1097,6 +1108,12 @@ class CandidatesUI extends UserInterface
             DATA_ITEM_CANDIDATE, $candidateID, $data['firstName'] . ' ' . $data['lastName']
         );
 
+        // Get Interviewer
+        $user = new Users($this->_siteID) ;
+        $interviewerName = $user->getUserName($data['interviewerId']);
+        $interviewerId = $user->getInterviewerId($data['interviewerId']);
+
+
         /* Get extra fields. */
         $extraFieldRS = $candidates->extraFields->getValuesForEdit($candidateID);
 
@@ -1155,10 +1172,13 @@ class CandidatesUI extends UserInterface
         $EEOSettings = new EEOSettings($this->_siteID);
         $EEOSettingsRS = $EEOSettings->getAll();
 
+        $interviewers = $candidates->getInterviewer();
+
         $this->_template->assign('active', $this);
         $this->_template->assign('data', $data);
         $this->_template->assign('usersRS', $usersRS);
         $this->_template->assign('extraFieldRS', $extraFieldRS);
+        $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('sourcesRS', $sourcesRS);
         $this->_template->assign('sourcesString', $sourcesString);
         $this->_template->assign('sourceInRS', $sourceInRS);
@@ -1166,6 +1186,8 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('canEmail', $canEmail);
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('emailTemplateDisabled', $emailTemplateDisabled);
+        $this->_template->assign('interviewerName', $interviewerName);
+        $this->_template->assign('interviewerId', $interviewerId);
         $this->_template->display('./modules/candidates/Edit.tpl');
     }
 
@@ -1322,7 +1344,7 @@ class CandidatesUI extends UserInterface
         $state           = $this->getTrimmedInput('state', $_POST);
         $zip             = $this->getTrimmedInput('zip', $_POST);
         $source          = $this->getTrimmedInput('source', $_POST);
-        $sourceId          = $this->getTrimmedInput('sourceId', $_POST);
+        $sourceId        = $this->getTrimmedInput('sourceId', $_POST);
         $keySkills       = $this->getTrimmedInput('keySkills', $_POST);
         $currentEmployer = $this->getTrimmedInput('currentEmployer', $_POST);
         $currentPay      = $this->getTrimmedInput('currentPay', $_POST);
@@ -1334,7 +1356,7 @@ class CandidatesUI extends UserInterface
         $race            = $this->getTrimmedInput('race', $_POST);
         $veteran         = $this->getTrimmedInput('veteran', $_POST);
         $disability      = $this->getTrimmedInput('disability', $_POST);
-
+        $interviewer_id      = $this->getTrimmedInput('interviewer_id', $_POST);
         /* Candidate source list editor. */
         $sourceCSV = $this->getTrimmedInput('sourceCSV', $_POST);
 
@@ -1380,7 +1402,8 @@ class CandidatesUI extends UserInterface
             $gender,
             $race,
             $veteran,
-            $disability
+            $disability,
+            $interviewer_id,
         );
         if (!$updateSuccess)
         {
@@ -1701,7 +1724,7 @@ class CandidatesUI extends UserInterface
         {
             $selectedStatusID = -1;
         }
-        
+
         /* Get the change status email template. */
         $emailTemplates = new EmailTemplates($this->_siteID);
         $statusChangeTemplateRS = $emailTemplates->getByTag(
@@ -1757,6 +1780,10 @@ class CandidatesUI extends UserInterface
             $allowEventReminders = false;
         }
 
+        $extraFieldRS = $candidates->extraFields->getValuesForAdd($candidateID);
+        $interviewers = $candidates->getInterviewer();
+        $this->_template->assign('extraFieldRS', $extraFieldRS);
+        $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('pipelineRS', $pipelineRS);
         $this->_template->assign('statusRS', $statusRS);
@@ -1897,7 +1924,7 @@ class CandidatesUI extends UserInterface
         $savedSearchRS = $savedSearches->get(DATA_ITEM_CANDIDATE);
 
         if (!eval(Hooks::get('CANDIDATE_SEARCH'))) return;
-        
+
         $candidates = new Candidates($this->_siteID);
         $sourcesRS = $candidates->getPossibleSources();
         $sourcesString = ListEditor::getStringFromList($sourcesRS, 'name');
@@ -1927,8 +1954,6 @@ class CandidatesUI extends UserInterface
         /* Bail out to prevent an error if the GET string doesn't even contain
          * a field named 'wildCardString' at all.
          */
-
-        /* Susil commented wildCardString */
         if (!isset($_GET['wildCardString']))
         {
             $this->listByView('No wild card string specified.');
@@ -2661,6 +2686,7 @@ class CandidatesUI extends UserInterface
         $race            = $this->getTrimmedInput('race', $_POST);
         $veteran         = $this->getTrimmedInput('veteran', $_POST);
         $disability      = $this->getTrimmedInput('disability', $_POST);
+        $interviewer_id  = $this->getTrimmedInput('interviewer_id', $_POST);
 
         /* Candidate source list editor. */
         $sourceCSV = $this->getTrimmedInput('sourceCSV', $_POST);
@@ -2700,6 +2726,7 @@ class CandidatesUI extends UserInterface
             $source,
             $sourceId,
             $keySkills,
+            $interviewer_id,
             $dateAvailable,
             $currentEmployer,
             $canRelocate,
@@ -2927,7 +2954,7 @@ class CandidatesUI extends UserInterface
 
         $pipelines = new Pipelines($this->_siteID);
         $statusRS = $pipelines->getStatusesForPicking();
-        
+
         /* Module directory override for fatal() calls. */
         if ($directoryOverride != '')
         {
@@ -3029,6 +3056,7 @@ class CandidatesUI extends UserInterface
         else
         {
             $data = $pipelines->get($candidateID, $regardingID);
+
             /* Bail out if we got an empty result set. */
             if (empty($data))
             {
@@ -3133,6 +3161,7 @@ class CandidatesUI extends UserInterface
         {
             /* Bail out if we received an invalid date. */
             $trimmedDate = $this->getTrimmedInput('dateAdd', $_POST);
+
             if (empty($trimmedDate) ||
                 !DateUtility::validate('-', $trimmedDate, DATE_FORMAT_MMDDYY))
             {
@@ -3248,12 +3277,13 @@ class CandidatesUI extends UserInterface
                 $eventJobOrderID = -1;
             }
 
+            $interviewer_id = $_POST['interviewerId'];
             $calendar = new Calendar($this->_siteID);
             $eventID = $calendar->addEvent(
                 $eventTypeID, $date, $description, $allDay, $this->_userID,
                 $candidateID, DATA_ITEM_CANDIDATE, $eventJobOrderID, $title,
                 $duration, $reminderEnabled, $reminderEmail, $reminderTime,
-                $publicEntry, $_SESSION['CATS']->getTimeZoneOffset()
+                $publicEntry, $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id
             );
 
             if ($eventID <= 0)
@@ -3333,7 +3363,7 @@ class CandidatesUI extends UserInterface
     */
     private function sendStatusChangeEmail($candidateData,$activityNote,$oldStatus){
         $subject = "Job Application Status Change";
-        
+
         $body = "Hello HR, \r\n " . "This E-Mail is a notification that \r\n ". "The candidate " . $candidateData['candidateFullName'] . " status has been changed. \r\n " . " Old Status - " . $oldStatus ." \r\n " . $activityNote . " \r\n ";
 
         $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],["susilbehera06@gmail.com", "HR ADMIN"]];

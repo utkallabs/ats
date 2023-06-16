@@ -98,6 +98,7 @@ class Calendar
                 calendar_event.reminder_email AS reminderEmail,
                 calendar_event.reminder_time AS reminderTime,
                 calendar_event.public AS public,
+                calendar_event.interviewer_id AS interviewerId,
                 DATE_FORMAT(
                     calendar_event.date, '%%d'
                 ) AS day,
@@ -127,11 +128,17 @@ class Calendar
                 calendar_event_type.short_description AS eventTypeDescription,
                 entered_by_user.user_id AS userID,
                 entered_by_user.first_name AS enteredByFirstName,
-                entered_by_user.last_name AS enteredByLastName
+                entered_by_user.last_name AS enteredByLastName,
+                CONCAT(
+                    user.first_name, ' ', user.last_name
+                ) AS interviewerFullName,
+                user.user_id as showInterviewerId
             FROM
                 calendar_event
             LEFT JOIN calendar_event_type
                 ON calendar_event.type = calendar_event_type.calendar_event_type_id
+            LEFT JOIN user
+                ON calendar_event.interviewer_id = user.user_id
             LEFT JOIN user AS entered_by_user
                 ON calendar_event.entered_by = entered_by_user.user_id
             WHERE
@@ -146,7 +153,7 @@ class Calendar
             $year,
             $this->_siteID
         );
-
+        
         $rs = $this->_db->getAllAssoc($sql);
 
         /* Build an array of result set arrays for each day of the month.
@@ -200,6 +207,26 @@ class Calendar
         return $array;
     }
 
+
+    public function getInterviewer(){
+        $sql = sprintf(
+            "SELECT
+                user.first_name,
+                user.last_name,
+                user.user_id
+            FROM
+                user
+            WHERE
+                user.is_interviewer = 1
+            ORDER BY
+                user.user_id ASC",
+            $this->_siteID
+        );
+
+        return $this->_db->getAllAssoc($sql);
+
+    }
+
     /**
      * Returns all events which are due for every site.
      *
@@ -233,6 +260,7 @@ class Calendar
                 entered_by_user.first_name AS enteredByFirstName,
                 entered_by_user.last_name AS enteredByLastName,
                 entered_by_user.site_id AS siteID
+                
             FROM
                 calendar_event
             LEFT JOIN calendar_event_type
@@ -291,13 +319,14 @@ class Calendar
      * @param integer Minutes before event occurrs to send reminders.
      * @param boolean Is this a public event entry?
      * @param integer Time zone offset from GMT.
+     * @param integer Interviewer_id is a UserId
      * @return integer New Calendar Event ID, or -1 on failure.
      */
     // FIXME: Time Zone Offset probably shouldn't be paramaterized.
     public function addEvent($type, $date, $description, $allDay, $enteredBy,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset)
+        $timeZoneOffset, $interviewer_id)
     {
         $sql = sprintf(
             "INSERT INTO calendar_event (
@@ -317,7 +346,8 @@ class Calendar
                 reminder_enabled,
                 reminder_email,
                 reminder_time,
-                public
+                public,
+                interviewer_id
             )
             VALUES (
                 %s,
@@ -331,6 +361,7 @@ class Calendar
                 %s,
                 NOW(),
                 NOW(),
+                %s,
                 %s,
                 %s,
                 %s,
@@ -353,9 +384,10 @@ class Calendar
             ($reminderEnabled ? '1' : '0'),
             $this->_db->makeQueryString($reminderEmail),
             $this->_db->makeQueryInteger($reminderTime),
-            ($isPublic ? '1' : '0')
+            ($isPublic ? '1' : '0'),
+            $this->_db->makeQueryInteger($interviewer_id)
         );
-
+        
         $queryResult = $this->_db->query($sql);
         if (!$queryResult)
         {
@@ -392,7 +424,7 @@ class Calendar
     public function updateEvent($eventID, $type, $date, $description, $allDay,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset)
+        $timeZoneOffset,$interviewer_id)
     {
         $sql = sprintf(
             "UPDATE
@@ -411,7 +443,8 @@ class Calendar
                 reminder_enabled = %s,
                 reminder_email   = %s,
                 reminder_time    = %s,
-                public           = %s
+                public           = %s,
+                interviewer_id   = %s
             WHERE
                 calendar_event_id = %s
             AND
@@ -430,10 +463,10 @@ class Calendar
             $this->_db->makeQueryString($reminderEmail),
             $this->_db->makeQueryInteger($reminderTime),
             ($isPublic ? '1' : '0'),
+            $this->_db->makeQueryInteger($interviewer_id),
             $this->_db->makeQueryInteger($eventID),
             $this->_siteID
         );
-
         return (boolean) $this->_db->query($sql);
     }
 
@@ -598,7 +631,8 @@ class Calendar
                 entered_by_user.first_name AS enteredByFirstName,
                 entered_by_user.last_name AS enteredByLastName,
                 calendar_event_type.short_description AS type,
-                calendar_event_type.icon_image AS typeImage
+                calendar_event_type.icon_image AS typeImage,
+                calendar_event_type.interviewer_id AS intrerviewerId
             FROM
                 calendar_event
             LEFT JOIN user AS entered_by_user

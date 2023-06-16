@@ -13,6 +13,7 @@ function checkActivityForm(form)
     var errorMessage = '';
 
     errorMessage += checkEventTitle();
+    // errorMessage += checkInterviewerField ();
 
     if (errorMessage != '')
     {
@@ -22,6 +23,35 @@ function checkActivityForm(form)
 
     return true;
 }
+
+// function checkInterviewerField() {
+
+//     var errorMessage = '';
+
+
+//     fieldValue = document.getElementById('interviewerId').value;
+//     fieldLabel = document.getElementById('interviewerLabel');
+//     eventType = document.getElementById('eventTypeID').value;
+
+//     if (eventType == 400){
+
+    
+
+//     if (fieldValue == '')
+//     {
+//         errorMessage = "    - You must enter an event title.\n";
+
+//         fieldLabel.style.color = '#ff0000';
+//     }
+//     else
+//     {
+//         fieldLabel.style.color = '#000';
+//     }
+// }
+
+//     return errorMessage;
+// }
+
 
 function checkEventTitle()
 {
@@ -35,6 +65,7 @@ function checkEventTitle()
 
     fieldValue = document.getElementById('title').value;
     fieldLabel = document.getElementById('titleLabel');
+
     if (fieldValue == '')
     {
         errorMessage = "    - You must enter an event title.\n";

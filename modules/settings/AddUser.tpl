@@ -91,6 +91,18 @@
                                 </tr>
 
                                 <tr>
+                                <td class="tdVertical">
+                                <label id="InterviewerLabel" for="aInterviewerLabel">Interviewer:</label>
+                                  </td>
+                                  <td class="tdData">
+                                  <input type="radio" value="1" name="interviewer" checked>&nbsp;<span> Yes</span>
+
+                                  <input type="radio" value="0" name="interviewer" >&nbsp;<span> No</span>
+
+                                  </td>
+                                </tr>
+
+                                <tr>
                                     <td class="tdVertical">
                                         <label id="accessLevelLabel" for="accessLevel">Access Level:</label>
                                     </td>

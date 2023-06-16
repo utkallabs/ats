@@ -160,6 +160,7 @@ function calendarUpcomingEvents()
 
 function calendarEditEvent(entry)
 {
+    console.log(entry);
     if (accessLevel < ACCESS_LEVEL_EDIT)
     {
         return;
@@ -241,13 +242,28 @@ function calendarEditEvent(entry)
     document.getElementById('durationEdit').value     = entry.getData('duration');
     document.getElementById('sendEmailEdit').value    = entry.getData('reminderEmail');
     document.getElementById('reminderTimeEdit').value = entry.getData('reminderTime');
+    document.getElementById('interviewerEventId').value    = entry.getData('interviewerId');
+
 
     document.getElementById('reminderToggleEdit').checked = (entry.getData('reminderEnabled') == 1);
     document.getElementById('publicEntryEdit').checked    = (entry.getData('public') == 1);
 
     considerCheckBox('reminderToggleEdit', 'sendEmailTDEdit');
     //cleanUpUI();
+    showInterviewerDropdown();
 }
+
+function showInterviewerDropdown(){
+    var selectedOption = $('#typeEdit').find(":selected").val();
+    if (selectedOption == 400) {
+    
+      $('#interviewerCalendar').removeAttr("style");
+      $('#interviewerCalTr').removeAttr("style");
+    } else {
+      $('#interviewerCalendar').attr("style", "display: none");
+      $('#interviewerCalTr').attr("style", "display: none");
+    }
+ }
 
 function calendarViewEvent(entry)
 {
@@ -262,6 +278,11 @@ function calendarViewEvent(entry)
         + getImageByType(entry.getData('eventType')) + '" /> '
         + getShortDescriptionByType(entry.getData('eventType'));
 
+    document.getElementById('interviewerName').innerHTML = entry.getData('interviewerFullName');
+
+    document.getElementById('showInterviewerId').value = entry.getData('showInterviewerId');
+
+    
     document.getElementById('viewEventDate').innerHTML = entry.getData('date');
 
     document.getElementById('viewEventOwner').innerHTML = entry.getData('enteredByFirstName')
