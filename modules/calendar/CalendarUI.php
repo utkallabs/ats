@@ -400,11 +400,12 @@ class CalendarUI extends UserInterface
         $publicEntry     = $this->isChecked('publicEntry', $_POST);
         $reminderEnabled = $this->isChecked('reminderToggle', $_POST);
 
-        $description   = $this->getTrimmedInput('description', $_POST);
-        $title         = $this->getTrimmedInput('title', $_POST);
-        $reminderEmail = $this->getTrimmedInput('sendEmail', $_POST);
-        $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
+        $description     = $this->getTrimmedInput('description', $_POST);
+        $title           = $this->getTrimmedInput('title', $_POST);
+        $reminderEmail   = $this->getTrimmedInput('sendEmail', $_POST);
+        $reminderTime    = $this->getTrimmedInput('reminderTime', $_POST);
         $interviewer_id  = $this->getTrimmedInput('interviewerId', $_POST);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
 
         // FIXME: Reminder time must be an integer!
 
@@ -475,7 +476,7 @@ class CalendarUI extends UserInterface
         $eventID = $calendar->addEvent(
             $type, $date, $description, $allDay, $this->_userID, -1, -1, -1,
             $title, $duration, $reminderEnabled, $reminderEmail, $reminderTime,
-            $publicEntry, $timeZoneOffset, $interviewer_id
+            $publicEntry, $timeZoneOffset, $interviewer_id,$interview_link
         );
 
         if ($eventID <= 0)
@@ -598,6 +599,7 @@ class CalendarUI extends UserInterface
         $reminderEmail = $this->getTrimmedInput('sendEmail', $_POST);
         $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
         $interviewer_id  = $this->getTrimmedInput('interviewerEventId', $_POST);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
 
 
         // FIXME: Reminder time must be an integer!
@@ -665,11 +667,13 @@ class CalendarUI extends UserInterface
         /* Update the event. */
         $calendar = new Calendar($this->_siteID);
         $interviewerName = $calendar->getInterviewer(['interviewerId']);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+
 
         if (!$calendar->updateEvent($eventID, $type, $date, $description,
             $allDay, $dataItemID, $dataItemType, 'NULL', $title, $duration,
             $reminderEnabled, $reminderEmail, $reminderTime, $publicEntry,
-            $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id))
+            $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id,$interview_link))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update calendar event.');
         }

@@ -85,6 +85,16 @@
                                                 </select>&nbsp;*
                                                 </td>
                                             </tr>
+
+                                            <tr>
+                                              <td class="tdVertical">
+                                                <label> Link:</label>
+                                              </td>
+                                              <td class="tdData">
+                                                <input type="text" id="interviewLink" name="interviewLink" style="width: 150px">
+                                              </td>
+                                            </tr>
+
                                             <tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
@@ -250,7 +260,14 @@
                                                 </select>&nbsp;*
                                                 </td>
                                                 <input type="hidden" value="" id="showInterviewerId"  />
-                                            </tr>
+                                                <tr>
+                                                <td class="tdVertical">
+                                                  <label> Link:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                  <input type="text" id="interviewLink" name="interviewLink" style="width: 150px">
+                                                </td>
+                                              </tr>
                                             <tr>
                                             
                                              <tr>
@@ -382,6 +399,7 @@
                                     Entered By: <span id="viewEventOwner"></span><br />
                                     Event Type: <span id="viewEventType"></span><br />
                                     Interviewer: <span id="interviewerName"></span><br />
+                                    Interview Link: <span id="showinterviewLink"></span><br />
                                     <span id="viewEventLink"></span><br />
                                     <br />
                                     Date: <span id="viewEventDate"></span><br />

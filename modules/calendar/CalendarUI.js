@@ -160,7 +160,7 @@ function calendarUpcomingEvents()
 
 function calendarEditEvent(entry)
 {
-    console.log(entry);
+    
     if (accessLevel < ACCESS_LEVEL_EDIT)
     {
         return;
@@ -280,8 +280,9 @@ function calendarViewEvent(entry)
 
     document.getElementById('interviewerName').innerHTML = entry.getData('interviewerFullName');
 
-    document.getElementById('showInterviewerId').value = entry.getData('showInterviewerId');
+     document.getElementById('showinterviewLink').innerHTML = entry.getData('showInterviewLink');
 
+    document.getElementById('showInterviewerId').value = entry.getData('showInterviewerId');
     
     document.getElementById('viewEventDate').innerHTML = entry.getData('date');
 
