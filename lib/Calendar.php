@@ -100,6 +100,7 @@ class Calendar
                 calendar_event.public AS public,
                 calendar_event.interviewer_id AS interviewerId,
                 calendar_event.interview_link AS showInterviewLink,
+                calendar_event.interview_level AS showInterviewLevel,
                 DATE_FORMAT(
                     calendar_event.date, '%%d'
                 ) AS day,
@@ -327,7 +328,7 @@ class Calendar
     public function addEvent($type, $date, $description, $allDay, $enteredBy,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset, $interviewer_id, $interview_link)
+        $timeZoneOffset, $interviewer_id, $interview_link,$interview_level)
     {
         $sql = sprintf(
             "INSERT INTO calendar_event (
@@ -349,7 +350,8 @@ class Calendar
                 reminder_time,
                 public,
                 interviewer_id,
-                interview_link
+                interview_link,
+                interview_level
             )
             VALUES (
                 %s,
@@ -363,6 +365,7 @@ class Calendar
                 %s,
                 NOW(),
                 NOW(),
+                %s,
                 %s,
                 %s,
                 %s,
@@ -389,8 +392,12 @@ class Calendar
             $this->_db->makeQueryInteger($reminderTime),
             ($isPublic ? '1' : '0'),
             $this->_db->makeQueryInteger($interviewer_id),
-            $this->_db->makeQueryString($interview_link)
+            $this->_db->makeQueryString($interview_link),
+            $this->_db->makeQueryString($interview_level),
+
         );
+
+        
             
         $queryResult = $this->_db->query($sql);
         if (!$queryResult)
@@ -428,7 +435,7 @@ class Calendar
     public function updateEvent($eventID, $type, $date, $description, $allDay,
         $dataItemID, $dataItemType, $jobOrderID, $title, $duration,
         $reminderEnabled, $reminderEmail, $reminderTime, $isPublic,
-        $timeZoneOffset,$interviewer_id,$interview_link)
+        $timeZoneOffset,$interviewer_id,$interview_link,$interview_level)
     {
         $sql = sprintf(
             "UPDATE
@@ -449,7 +456,8 @@ class Calendar
                 reminder_time    = %s,
                 public           = %s,
                 interviewer_id   = %s,
-                interview_link   = %s
+                interview_link   = %s,
+                interview_level  = %s
             WHERE
                 calendar_event_id = %s
             AND
@@ -470,6 +478,7 @@ class Calendar
             ($isPublic ? '1' : '0'),
             $this->_db->makeQueryInteger($interviewer_id),
             $this->_db->makeQueryString($interview_link),
+            $this->_db->makeQueryString($interview_level),
 
             $this->_db->makeQueryInteger($eventID),
             $this->_siteID

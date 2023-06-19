@@ -883,7 +883,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('contents', $contents);
         $this->_template->assign('extraFieldRS', $extraFieldRS);
         $this->_template->assign('active', $this);
-        $this->_template->assign('subActive', 'Add Candidate');
+        $this->_template->assign('subActive','AddCandidate');
         $this->_template->assign('sourcesRS', $sourcesRS);
         $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('sourcesString', $sourcesString);
@@ -937,7 +937,7 @@ class CandidatesUI extends UserInterface
                 'veteran'         => $this->getTrimmedInput('veteran', $_POST),
                 'disability'      => $this->getTrimmedInput('disability', $_POST),
                 'documentTempFile'=> $this->getTrimmedInput('documentTempFile', $_POST),
-                'interviewer_id'=> $this->getTrimmedInput('interviewer_id', $_POST),
+                'interviewer_id  '=> $this->getTrimmedInput('interviewer_id', $_POST),
                 'isFromParser'    => true
             );
 
@@ -1487,7 +1487,7 @@ class CandidatesUI extends UserInterface
         /* Validate each ID */
         foreach ($candidateIDArray as $index => $candidateID)
         {
-            if (!$this->isRequiredIDValid($index, $candidateIDArray))
+          if (!$this->isRequiredIDValid($index, $candidateIDArray))
             {
                 echo('&'.$candidateID.'>');
 
@@ -1782,6 +1782,7 @@ class CandidatesUI extends UserInterface
 
         $extraFieldRS = $candidates->extraFields->getValuesForAdd($candidateID);
         $interviewers = $candidates->getInterviewer();
+
         $this->_template->assign('extraFieldRS', $extraFieldRS);
         $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('candidateID', $candidateID);
@@ -2588,6 +2589,7 @@ class CandidatesUI extends UserInterface
      */
     private function _addCandidate($isModal, $directoryOverride = '')
     {
+
         /* Module directory override for fatal() calls. */
         if ($directoryOverride != '')
         {
@@ -2687,6 +2689,7 @@ class CandidatesUI extends UserInterface
         $veteran         = $this->getTrimmedInput('veteran', $_POST);
         $disability      = $this->getTrimmedInput('disability', $_POST);
         $interviewer_id  = $this->getTrimmedInput('interviewer_id', $_POST);
+        
 
         /* Candidate source list editor. */
         $sourceCSV = $this->getTrimmedInput('sourceCSV', $_POST);
@@ -2707,7 +2710,7 @@ class CandidatesUI extends UserInterface
         if (!eval(Hooks::get('CANDIDATE_ON_ADD_PRE'))) return;
 
         $candidates = new Candidates($this->_siteID);
-        
+       
         $duplicatesID = $candidates->checkDuplicity($firstName, $middleName, $lastName, $email1, $email2, $phoneHome, $phoneCell, $phoneWork, $address, $city);
         
         $candidateID = $candidates->add(
@@ -2742,7 +2745,6 @@ class CandidatesUI extends UserInterface
             $veteran,
             $disability
         );
-
         
         if ($candidateID <= 0)
         {
@@ -2763,6 +2765,7 @@ class CandidatesUI extends UserInterface
             $sources, 'name', 'sourceID', $sourceCSV
         );
         $candidates->updatePossibleSources($sourcesDifferences);
+        
 
         /* Associate an exsisting resume if the user created a candidate with one. (Bulk) */
         if (isset($_POST['associatedAttachment']))
@@ -3197,7 +3200,7 @@ class CandidatesUI extends UserInterface
             $reminderEnabled = $this->isChecked('reminderToggle', $_POST);
             $reminderEmail = $this->getTrimmedInput('sendEmail', $_POST);
             $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
-            $duration = $this->getTrimmedInput('duration', $_POST);;
+            $duration = $this->getTrimmedInput('duration', $_POST);
 
             /* Is this a scheduled event or an all day event? */
             if ($allDay)
@@ -3257,7 +3260,7 @@ class CandidatesUI extends UserInterface
 
             $description = $this->getTrimmedInput('description', $_POST);
             $title       = $this->getTrimmedInput('title', $_POST);
-
+            
             /* Bail out if any of the required fields are empty. */
             if (empty($title))
             {
@@ -3278,12 +3281,16 @@ class CandidatesUI extends UserInterface
             }
 
             $interviewer_id = $_POST['interviewerId'];
+            $interview_link = $this->getTrimmedInput('interview_link', $_POST);
+            $interview_level = $_POST['interviewLevel'];
+        
             $calendar = new Calendar($this->_siteID);
             $eventID = $calendar->addEvent(
+
                 $eventTypeID, $date, $description, $allDay, $this->_userID,
                 $candidateID, DATA_ITEM_CANDIDATE, $eventJobOrderID, $title,
                 $duration, $reminderEnabled, $reminderEmail, $reminderTime,
-                $publicEntry, $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id
+                $publicEntry, $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id, $interview_link,$interview_level
             );
 
             if ($eventID <= 0)
@@ -3353,6 +3360,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('changesMade', $changesMade);
         $this->_template->assign('isFinishedMode', true);
         $this->_template->assign('isJobOrdersMode', $isJobOrdersMode);
+
         $this->_template->display(
             './modules/candidates/AddActivityChangeStatusModal.tpl'
         );
