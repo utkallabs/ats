@@ -265,7 +265,7 @@
                                                   <label> Link:</label>
                                                 </td>
                                                 <td class="tdData">
-                                                  <input type="text" id="interviewLink" name="interviewLink" style="width: 150px">
+                                                  <input type="text" id="interviewLinkEdit" name="interviewLink" style="width: 150px">
                                                 </td>
                                               </tr>
                                             <tr>
@@ -399,7 +399,7 @@
                                     Entered By: <span id="viewEventOwner"></span><br />
                                     Event Type: <span id="viewEventType"></span><br />
                                     Interviewer: <span id="interviewerName"></span><br />
-                                    Interview Link: <span id="showinterviewLink"></span><br />
+                                    Interview Link: <a href="" id="showinterviewLink" target="_blank"></a><br />
                                     <span id="viewEventLink"></span><br />
                                     <br />
                                     Date: <span id="viewEventDate"></span><br />
