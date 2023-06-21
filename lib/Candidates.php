@@ -98,6 +98,7 @@ class Candidates
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
     {
+        
         $sql = sprintf(
             "INSERT INTO candidate (
                 first_name,
@@ -198,12 +199,15 @@ class Candidates
             $this->_db->makeQueryInteger($enteredBy),
             $this->_db->makeQueryInteger($owner),
             $this->_siteID,
+            $this->_db->makeQueryString($gender),
             $this->_db->makeQueryInteger($race),
             $this->_db->makeQueryInteger($veteran),
-            $this->_db->makeQueryString($disability),
-            $this->_db->makeQueryString($gender)
+            $this->_db->makeQueryString($disability)
+            
         );
+
         $queryResult = $this->_db->query($sql);
+
         if (!$queryResult)
         {
             return -1;
@@ -218,6 +222,7 @@ class Candidates
         }
 
         return $candidateID;
+    
     }
 
     /**
@@ -259,6 +264,8 @@ class Candidates
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
         $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
     {
+        echo 1 ; exit;
+        
         $sql = sprintf(
             "UPDATE
                 candidate
@@ -563,7 +570,6 @@ class Candidates
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
-
         return $this->_db->getAssoc($sql);
     }
 
@@ -585,6 +591,7 @@ class Candidates
         return $this->_db->getAllAssoc($sql);
 
     }
+
     public function getWithDuplicity($candidateID)
     {
         $data = $this->get($candidateID);

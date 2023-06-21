@@ -406,6 +406,8 @@ class CalendarUI extends UserInterface
         $reminderTime    = $this->getTrimmedInput('reminderTime', $_POST);
         $interviewer_id  = $this->getTrimmedInput('interviewerId', $_POST);
         $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
+
 
         // FIXME: Reminder time must be an integer!
 
@@ -476,8 +478,9 @@ class CalendarUI extends UserInterface
         $eventID = $calendar->addEvent(
             $type, $date, $description, $allDay, $this->_userID, -1, -1, -1,
             $title, $duration, $reminderEnabled, $reminderEmail, $reminderTime,
-            $publicEntry, $timeZoneOffset, $interviewer_id,$interview_link
+            $publicEntry, $timeZoneOffset, $interviewer_id,$interview_link,$interview_level
         );
+
 
         if ($eventID <= 0)
         {
@@ -600,6 +603,8 @@ class CalendarUI extends UserInterface
         $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
         $interviewer_id  = $this->getTrimmedInput('interviewerEventId', $_POST);
         $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
+
 
 
         // FIXME: Reminder time must be an integer!
@@ -668,12 +673,13 @@ class CalendarUI extends UserInterface
         $calendar = new Calendar($this->_siteID);
         $interviewerName = $calendar->getInterviewer(['interviewerId']);
         $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
 
 
         if (!$calendar->updateEvent($eventID, $type, $date, $description,
             $allDay, $dataItemID, $dataItemType, 'NULL', $title, $duration,
             $reminderEnabled, $reminderEmail, $reminderTime, $publicEntry,
-            $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id,$interview_link))
+            $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id,$interview_link,$interview_level))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update calendar event.');
         }

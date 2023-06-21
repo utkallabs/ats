@@ -301,14 +301,7 @@
                 </div>
             </td>
         </tr>
-        <tr>
-         <td>
-          <label id="interviewLinkLabel" > Interview Link: </label>
-         </td>
-         <td>
-          <input type="text" id="interviewLinkField" name="interview_link" />
-         </td>
-        </tr>
+
         <tr  id="interviewer" style="display: none;">
             <td class="tdVertical">
                 <label id="interviewerLabel" for="interviewerId">Interviewer:</label>
@@ -325,8 +318,28 @@
             </td>
         </tr>
 
-
-
+        <tr id="interviewLevelTr">
+            <td>
+             Interview level: 
+            </td>
+            <td>
+              <select id="interviewLevel" name="interviewLevel">
+              <option>Select Level</option>
+              <option value="L1">L1</option>
+              <option value="L2">L2</option>
+              <option value="L3">L3</option>
+              </select>
+            </td>
+        </tr>
+        
+        <tr>
+         <td>
+          <label id="interviewLinkLabel" > Interview Link: </label>
+         </td>
+         <td>
+          <input type="text" id="interviewLinkField" name="interview_link" />
+         </td>
+        </tr>
 
     </table>
     <input type="submit" class="button" name="submit" id="submit" value="Save" />&nbsp;

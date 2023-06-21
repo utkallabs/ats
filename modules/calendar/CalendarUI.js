@@ -257,12 +257,13 @@ function calendarEditEvent(entry)
 function showInterviewerDropdown(){
     var selectedOption = $('#typeEdit').find(":selected").val();
     if (selectedOption == 400) {
-    
       $('#interviewerCalendar').removeAttr("style");
       $('#interviewerCalTr').removeAttr("style");
+      $('#editInterviewLevelTr').removeAttr("style");
     } else {
       $('#interviewerCalendar').attr("style", "display: none");
       $('#interviewerCalTr').attr("style", "display: none");
+      $('#editInterviewLevelTr').attr("style", "display: none");
     }
  }
 
@@ -283,7 +284,11 @@ function calendarViewEvent(entry)
 
      document.getElementById('showinterviewLink').innerHTML = entry.getData('showInterviewLink');
 
+
     document.getElementById('showinterviewLink').setAttribute("href", entry.getData('showInterviewLink'));
+
+    document.getElementById('showInterviewLevel').innerHTML = entry.getData('showInterviewLevel');
+
 
     document.getElementById('showInterviewerId').value = entry.getData('showInterviewerId');
     
