@@ -301,6 +301,14 @@
                 </div>
             </td>
         </tr>
+        <tr>
+         <td>
+          <label id="interviewLinkLabel" > Interview Link: </label>
+         </td>
+         <td>
+          <input type="text" id="interviewLinkField" name="interview_link" />
+         </td>
+        </tr>
         <tr  id="interviewer" style="display: none;">
             <td class="tdVertical">
                 <label id="interviewerLabel" for="interviewerId">Interviewer:</label>
