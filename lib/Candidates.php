@@ -264,7 +264,6 @@ class Candidates
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
         $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
     {
-        echo 1 ; exit;
         
         $sql = sprintf(
             "UPDATE

@@ -358,7 +358,7 @@ class Users
 
         $res = $this->_db->getAssoc($sql);
         
-        return $res['fullName'] ;
+        return $res['fullName'] ?? "";
     }
 
     public function getInterviewerId($userID)

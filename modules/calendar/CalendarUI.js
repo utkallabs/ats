@@ -244,7 +244,8 @@ function calendarEditEvent(entry)
     document.getElementById('sendEmailEdit').value    = entry.getData('reminderEmail');
     document.getElementById('reminderTimeEdit').value = entry.getData('reminderTime');
     document.getElementById('interviewerEventId').value    = entry.getData('interviewerId');
-
+    document.getElementById('editInterviewLevel').value    = entry.getData('showInterviewLevel');
+    
 
     document.getElementById('reminderToggleEdit').checked = (entry.getData('reminderEnabled') == 1);
     document.getElementById('publicEntryEdit').checked    = (entry.getData('public') == 1);
