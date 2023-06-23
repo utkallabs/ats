@@ -3296,6 +3296,15 @@ class CandidatesUI extends UserInterface
                 $publicEntry, $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id, $interview_link,$interview_level
             );
 
+            if($_POST['eventTypeID'] == 400){
+                $candidates = new Candidates($this->_siteID);
+                $candidateData = $candidates->get($candidateID);
+                $interviewer = new Users($this->_siteID);
+                $interviewerData = $interviewer->get($_POST['interviewerId']);
+                $postData = $_POST;
+                $this->sendInterviewEmail($candidateData, $interviewerData, $postData);
+            }
+
             if ($eventID <= 0)
             {
                 $this->fatalModal(
@@ -3367,6 +3376,19 @@ class CandidatesUI extends UserInterface
         $this->_template->display(
             './modules/candidates/AddActivityChangeStatusModal.tpl'
         );
+    }
+
+    /*
+    * Sends email to HR & Interviewer when interview is scheduled
+    */
+    private function sendInterviewEmail($candidateData, $interviewerData, $data){
+        $subject = "Interview Scheduled";
+
+        $body = "Hello HR Team, \r\n " . "Interview has been scheduled for the candidate . \r\n ". "Candidate Name - " . '<b>' . $candidateData['candidateFullName'] . '</b>' . " \r\n " . " Interviewer Name - " . $interviewerData['fullName'] ." \r\n " . " Interview Date - " . $data['dateAdd'] . " \r\n " . " \r\n " . " Interview Time - " . $data['hour'] .":". $data['minute'] . $data['meridiem'] . " \r\n " . " Interview Duration - " . $data['duration'] ."Minutes". " \r\n " . " Interview Link - " . $data['interview_link'] . " \r\n ";
+
+        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],[$interviewerData['email'], "Interviewer Name"]];
+        $mailer = new Mailer($this->_siteID, $this->_userID);
+        $mailer->sendToMany($recipient, $subject, $body, true);
     }
 
     /*

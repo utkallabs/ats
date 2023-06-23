@@ -475,7 +475,7 @@ class SearchCandidates
             $sortBy,
             $sortDirection
         );
-        // print_r($sql);
+       
         return $this->_db->getAllAssoc($sql);
     }
 

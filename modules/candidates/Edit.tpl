@@ -1,5 +1,5 @@
 <?php /* $Id: Edit.tpl 3695 2007-11-26 22:01:04Z brian $ */ ?>
-<?php TemplateUtility::printHeader('Candidates', array('modules/candidates/validator.js', 'js/sweetTitles.js', 'js/listEditor.js', 'js/doubleListEditor.js')); ?>
+<?php TemplateUtility::printHeader('Candidates', array('modules/candidates/validator.js', 'js/sweetTitles.js', 'js/listEditor.js', 'js/doubleListEditor.js', 'js/candidate.js')); ?>
 <?php TemplateUtility::printHeaderBlock(); ?>
 <?php TemplateUtility::printTabs($this->active); ?>
 <div id="main">
@@ -200,7 +200,7 @@
                         <label id="sourceLabel" for="source">Source:</label>
                     </td>
                     <td class="tdData">
-                        <select id="sourceSelect" name="source" class="inputbox" style="width: 150px;"
+                        <select id="sourceSelect" name="sourceId" class="inputbox" style="width: 150px;"
                             onchange="if (this.value == 'edit') { listEditor('Sources', 'sourceSelect', 'sourceCSV', false, ''); this.value = '(none)'; } if (this.value == 'nullline') { this.value = '(none)'; }">
                             <option value="edit">(Edit Sources)</option>
                             <option value="nullline">-------------------------------</option>
@@ -215,13 +215,15 @@
                             <option value="(none)">(None)</option>
                             <?php endif; ?>
                             <?php foreach ($this->sourcesRS AS $index => $source): ?>
-                            <option value="<?php $this->_($source['name']); ?>" <?php if ($source['name']==$this->
+                            <option value="<?php $this->_($source['sourceID']); ?>" <?php if ($source['name']==$this->
                                 data['source']): ?>selected
                                 <?php endif; ?>>
                                 <?php $this->_($source['name']); ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
+
+                        <input type="hidden" id="sourceName" name="source" value="" />
 
                         <input type="hidden" id="sourceCSV" name="sourceCSV"
                             value="<?php $this->_($this->sourcesString); ?>" />

@@ -185,7 +185,7 @@ class Candidates
             $this->_db->makeQueryString($state),
             $this->_db->makeQueryString($zip),
             $this->_db->makeQueryString($source),
-            $this->_db->makeQueryString($sourceId),
+            $this->_db->makeQueryInteger($sourceId),
             $this->_db->makeQueryString($keySkills),
             $this->_db->makeQueryString($interviewer_id),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
@@ -259,12 +259,11 @@ class Candidates
      */
     public function update($candidateID, $isActive, $firstName, $middleName, $lastName,
         $email1, $email2, $phoneHome, $phoneCell, $phoneWork, $address,
-        $city, $state, $zip, $source, $keySkills, $dateAvailable,
+        $city, $state, $zip, $source, $sourceId, $keySkills, $dateAvailable,
         $currentEmployer, $canRelocate, $currentPay, $desiredPay,
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
         $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
     {
-        
         $sql = sprintf(
             "UPDATE
                 candidate
@@ -283,6 +282,7 @@ class Candidates
                 state                 = %s,
                 zip                   = %s,
                 source                = %s,
+                sourceId              = %s,
                 key_skills            = %s,
                 date_available        = %s,
                 current_employer      = %s,
@@ -318,6 +318,7 @@ class Candidates
             $this->_db->makeQueryString($state),
             $this->_db->makeQueryString($zip),
             $this->_db->makeQueryString($source),
+            $this->_db->makeQueryInteger($sourceId),
             $this->_db->makeQueryString($keySkills),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
             $this->_db->makeQueryString($currentEmployer),

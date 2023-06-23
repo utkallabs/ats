@@ -171,8 +171,10 @@ function onSubmitPhoneInSystem()
 }
 
 $(document).ready(function(){
+    var editOptionName = $('#sourceSelect').val();
+    $('#sourceName').val(editOptionName);
     $('#sourceSelect').change(function (){
-        var optionName = $(this).find(":selected").text();
+        var optionName = $(this).find(":selected").text().trim();
         $('#sourceName').val(optionName);
     });
 })
