@@ -593,7 +593,7 @@
                                 <?php endif; ?>
                                 <?php foreach ($this->sourcesRS AS $index => $source): ?>
                                 <option value="<?php $this->_($source['sourceID']); ?>">
-                                    <?php $this->_($source['sourceID']); ?>
+                                    <?php $this->_($source['name']); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
