@@ -1204,12 +1204,13 @@ class CandidatesUI extends UserInterface
             CommonErrors::fatalModal(COMMONERROR_BADINDEX, $this, 'Invalid candidate ID.');
             return;
         }
-
+        
         /* Bail out if we don't have a valid owner user ID. */
         if (!$this->isOptionalIDValid('owner', $_POST))
         {
             CommonErrors::fatal(COMMONERROR_BADINDEX, $this, 'Invalid owner user ID.');
         }
+
 
         /* Bail out if we received an invalid availability date; if not, go
          * ahead and convert the date to MySQL format.
@@ -1227,6 +1228,7 @@ class CandidatesUI extends UserInterface
                 '-', $dateAvailable, DATE_FORMAT_MMDDYY, DATE_FORMAT_YYYYMMDD
             );
         }
+        
 
         $formattedPhoneHome = StringUtility::extractPhoneNumber(
             $this->getTrimmedInput('phoneHome', $_POST)
@@ -1251,7 +1253,7 @@ class CandidatesUI extends UserInterface
         {
             $phoneCell = $this->getTrimmedInput('phoneCell', $_POST);
         }
-
+         
         $formattedPhoneWork = StringUtility::extractPhoneNumber(
             $this->getTrimmedInput('phoneWork', $_POST)
         );
@@ -1263,7 +1265,7 @@ class CandidatesUI extends UserInterface
         {
             $phoneWork = $this->getTrimmedInput('phoneWork', $_POST);
         }
-
+         
         $candidateID = $_POST['candidateID'];
         $owner       = $_POST['owner'];
 
@@ -1332,7 +1334,7 @@ class CandidatesUI extends UserInterface
             $email = '';
             $emailAddress = '';
         }
-
+        
         $isActive        = $this->isChecked('isActive', $_POST);
         $firstName       = $this->getTrimmedInput('firstName', $_POST);
         $middleName      = $this->getTrimmedInput('middleName', $_POST);
@@ -1365,7 +1367,7 @@ class CandidatesUI extends UserInterface
         {
             CommonErrors::fatal(COMMONERROR_MISSINGFIELDS, $this, 'Required fields are missing.');
         }
-
+         
         if (!eval(Hooks::get('CANDIDATE_ON_EDIT_PRE'))) return;
 
         /* Update the candidate record. */
@@ -1405,11 +1407,12 @@ class CandidatesUI extends UserInterface
             $disability,
             $interviewer_id,
         );
+        
         if (!$updateSuccess)
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update candidate.');
         }
-
+        
         /* Update extra fields. */
         $candidates->extraFields->setValuesOnEdit($candidateID);
 

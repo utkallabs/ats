@@ -14,5 +14,5 @@ ALTER TABLE `calendar_event` ADD `interview_link` VARCHAR(255) NOT NULL AFTER `i
 
 /* New Interview level column in calendar_event table*/
 
-ALTER TABLE `calendar_event` ADD `interview_level` VARCHAR(10) NOT NULL AFTER `interview_link`;
+ALTER TABLE `calendar_event` ADD `interview_level` VARCHAR(2) NOT NULL AFTER `interview_link`;
 
