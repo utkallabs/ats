@@ -75,7 +75,8 @@ class CandidatesUI extends UserInterface
         $this->_moduleTabText = 'Candidates';
         $this->_subTabs = array(
             'Add Candidate'     => CATSUtility::getIndexName() . '?m=candidates&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@candidates.add',
-            'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search'
+            'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search',
+            'Interviewing Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showCandidatesForInterviewer'
         );
     }
 
@@ -357,7 +358,13 @@ class CandidatesUI extends UserInterface
                 }
                 $this->addDuplicates();
                 break;
-
+            case 'showCandidatesForInterviewer':
+                if ($this->getUserAccessLevel('candidates.duplicates') < ACCESS_LEVEL_SA)
+                {
+                    CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                }
+                $this->showCandidatesForInterviewer();
+                break;
             /* Main candidates page. */
             case 'listByView':
             default:
@@ -3681,6 +3688,17 @@ class CandidatesUI extends UserInterface
         $candidates->addDuplicates($newCandidateID, $oldCandidateID);
         $this->_template->assign('isFinishedMode', true);
         $this->_template->display('./modules/candidates/LinkDuplicity.tpl');
+    }
+
+    private function showCandidatesForInterviewer()
+    {
+        $candidates = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $candidates = $candidates->getCandidatesForInterviewer($userId);
+        
+        $this->_template->assign('isFinishedMode', true);
+        $this->_template->assign('candidates', $candidates);
+        $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
     }
 }
 
