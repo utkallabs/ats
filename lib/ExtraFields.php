@@ -77,6 +77,7 @@ class ExtraFields
         return $this->_db->getAllAssoc($sql);
     }
 
+    
     /**
      * Creates a new extra field for a record type in a site.
      *

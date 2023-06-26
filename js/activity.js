@@ -844,3 +844,24 @@ function AS_onEventAllDayChange(allDayRadioID)
     document.getElementById('meridiem').disabled = disableTime;
     document.getElementById('duration').disabled = disableTime;
 }
+
+$(document).ready(function(){
+    var selectedOption = $('#eventTypeID').find(":selected").val();
+    if(selectedOption == 400){
+        $('#interviewer').removeAttr("style");
+        $('#interviewLevelTr').removeAttr("style");
+    }else{
+        $('#interviewer').attr("style", "display: none");
+        $('#interviewLevelTr').attr("style", "display: none");
+    }
+    $('#eventTypeID').change(function (){
+        var optionSelect = $(this).find(":selected").val();
+        if(optionSelect == 400){
+            $('#interviewer').removeAttr("style");
+            $('#interviewLevelTr').removeAttr("style");
+        }else{
+            $('#interviewer').attr("style", "display: none");
+            $('#interviewLevelTr').attr("style", "display: none");
+        }
+    });
+});

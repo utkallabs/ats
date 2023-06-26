@@ -176,7 +176,7 @@ define('FORGOT_PASSWORD_BODY',      'You recently requested that your OpenCATS: 
 define('ENABLE_DEMO_MODE', false);
 
 /* Offset to GMT Time. */
-define('OFFSET_GMT', 5);
+define('OFFSET_GMT', 5.5);
 
 /* Should we enforce only one session per user (excluding demo)? */
 define('ENABLE_SINGLE_SESSION', false);
@@ -204,7 +204,7 @@ define('DEMO_PASSWORD',  'john99');
  * 2: Sendmail
  * 3: SMTP
  */
-define('MAIL_MAILER', 0);
+define('MAIL_MAILER', 3);
 
 /* Sendmail Settings. You don't need to worry about this unless MAIL_MAILER
  * is set to 2.
@@ -215,13 +215,13 @@ define('MAIL_SENDMAIL_PATH', "/usr/sbin/sendmail");
  * set to 3. If your server requires authentication, set MAIL_SMTP_AUTH to
  * true and configure MAIL_SMTP_USER and MAIL_SMTP_PASS.
  */
-define('MAIL_SMTP_HOST', "smtp.gmail.com");
-define('MAIL_SMTP_PORT', 587);
-define('MAIL_SMTP_AUTH', false);
-define('MAIL_SMTP_USER', "noreply.utkallabs");
-define('MAIL_SMTP_PASS', "Nr12345**0");
+define('MAIL_SMTP_HOST', "smtpout.secureserver.net");
+define('MAIL_SMTP_PORT', 465);
+define('MAIL_SMTP_AUTH', true);
+define('MAIL_SMTP_USER', "susil.behera@utkallabs.com");
+define('MAIL_SMTP_PASS', "Susil@9146");
 //Options: '', 'ssl' or 'tls'
-define('MAIL_SMTP_SECURE', "tls");
+define('MAIL_SMTP_SECURE', "ssl");
 
 /* Event reminder E-Mail Template. */
 $GLOBALS['eventReminderEmail'] = <<<EOF
@@ -258,7 +258,7 @@ define('CACHE_MODULES', false);
  * by distance from a zipcode.
  */
 
-define('US_ZIPS_ENABLED', true);
+define('US_ZIPS_ENABLED', false);
 
 /* LDAP Configuration
  */

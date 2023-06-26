@@ -396,6 +396,7 @@ class SearchCandidates
                 candidate.phone_cell AS phoneCell,
                 candidate.key_skills AS keySkills,
                 candidate.email1 AS email1,
+                candidate.source AS source,
                 owner_user.first_name AS ownerFirstName,
                 owner_user.last_name AS ownerLastName,
                 DATE_FORMAT(
@@ -417,6 +418,64 @@ class SearchCandidates
             $sortDirection
         );
 
+        return $this->_db->getAllAssoc($sql);
+    }
+
+    /**
+     * Returns all candidates with source matching $source.
+     *
+     * @param string source match string
+     * @return array candidates data
+     */
+    public function bySource($sourceQuery, $sortBy, $sortDirection)
+    {
+        $sourceQuery = str_replace('*', '%', $sourceQuery) . '%';
+        $sourceQuery = $this->_db->makeQueryString($sourceQuery);
+
+        $sql = sprintf(
+            "SELECT
+                candidate.candidate_id AS candidateID,
+                IF(candidate_duplicates.new_candidate_id, 1, 0) AS isDuplicateCandidate,
+                candidate.first_name AS firstName,
+                candidate.last_name AS lastName,
+                candidate.city AS city,
+                candidate.state AS state,
+                candidate.phone_home AS phoneHome,
+                candidate.phone_cell AS phoneCell,
+                candidate.key_skills AS keySkills,
+                candidate.source AS source,
+                candidate.sourceId AS sourceId,
+                candidate.email1 AS email1,
+                owner_user.first_name AS ownerFirstName,
+                owner_user.last_name AS ownerLastName,
+                DATE_FORMAT(
+                    candidate.date_created, '%%m-%%d-%%y'
+                ) AS dateCreated,
+                DATE_FORMAT(
+                    candidate.date_modified, '%%m-%%d-%%y'
+                ) AS dateModified
+            FROM
+                candidate
+            LEFT JOIN user AS owner_user
+                ON candidate.owner = owner_user.user_id
+            LEFT JOIN candidate_duplicates
+                ON candidate_duplicates.new_candidate_id = candidate.candidate_id
+            WHERE
+           
+            candidate.sourceId LIKE %s
+
+            AND
+                candidate.is_admin_hidden = 0
+            AND
+                candidate.site_id = %s
+            ORDER BY
+                %s %s",
+            $sourceQuery,
+            $this->_siteID,
+            $sortBy,
+            $sortDirection
+        );
+       
         return $this->_db->getAllAssoc($sql);
     }
 

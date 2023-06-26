@@ -70,7 +70,44 @@
                                                 </td>
                                             </tr>
 
+                                            <tr id="interviewerCalendar" style="display: none;">
+                                            <td class="tdVertical">
+                                             <label id="InterviewerLabel" for="Interviewertype">Interviewer:</label>
+                                            </td>
+                                                <td>
+                                                <select id="interviewerIdCal" name="interviewerId">
+                                                <option>(Select a Field)</option>
+                                                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
+                                                    <option value="<?php $this->_($interviewer['user_id']); ?> ">
+                                                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>&nbsp;*
+                                                </td>
+                                            </tr>
+
                                             <tr>
+                                              <td class="tdVertical">
+                                                <label> Link:</label>
+                                              </td>
+                                              <td class="tdData">
+                                                <input type="text" id="interviewLink" name="interviewLink" style="width: 150px">
+                                              </td>
+                                            </tr>
+
+                                            <tr id="interviewLevelTr" style="display: none;">
+                                              <td>
+                                               Interview level: 
+                                              </td>
+                                              <td>
+                                                <select id="interviewLevel" name="interviewLevel">
+                                                <option>Select Level</option>
+                                                <option value="L1">L1</option>
+                                                <option value="L2">L2</option>
+                                                <option value="L3">L3</option>
+                                                </select>
+                                              </td>
+                                          </tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
                                                 </td>
@@ -205,8 +242,8 @@
                                                     <input type="text" class="inputbox" name="title" id="titleEdit" style="width: 150px" />&nbsp;*
                                                 </td>
                                             </tr>
-
-                                            <tr>
+                                            
+                                            <tr id="calEventType">
                                                 <td class="tdVertical">
                                                     <label id="eventTypeLabelEdit" for="type">Type:</label>
                                                 </td>
@@ -219,7 +256,49 @@
                                                     </select>&nbsp;*
                                                 </td>
                                             </tr>
+                    
+                                            <tr id="interviewerCalTr" style="display: none;">
+                                            <td class="tdVertical">
+                                             <label id="interviewerLabel" for="interviewerType">Interviewer:</label>
+                                            </td>
+                                                <td>
+                                                <select id="interviewerEventId" name="interviewerEventId">
+                                                <option>(Select a Field)</option>
+                                                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
+                                                    <option value="<?php $this->_($interviewer['user_id']); ?>" id="selectedInterviwerId">
+                                                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>&nbsp;*
+                                                </td>
+                                                <input type="hidden" value="" id="showInterviewerId"  />
+                                                
+                                            <tr id="editInterviewLevelTr" style="display:none;">
+                                              <td>
+                                               Interview level: 
+                                              </td>
+                                              <td>
+                                                <select id="editInterviewLevel" name="interviewLevel">
+                                                <option>Select Level</option>
+                                                <option value="L1">L1</option>
+                                                <option value="L2">L2</option>
+                                                <option value="L3">L3</option>
+                                                </select>
+                                              </td>
+                                              <input type="hidden" value="" id="getInterviewLevel"  />
+                                          </tr>
 
+                                          <tr>
+                                                <td class="tdVertical">
+                                                  <label> Link:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                  <input type="text" id="interviewLinkEdit" name="interviewLink" style="width: 150px">
+                                                </td>
+                                              </tr>
+                                            <tr>
+
+                                            
                                              <tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
@@ -348,6 +427,9 @@
                                     <span id="viewEventTitle" style="font-weight:bold"></span><br />
                                     Entered By: <span id="viewEventOwner"></span><br />
                                     Event Type: <span id="viewEventType"></span><br />
+                                    Interviewer: <span id="interviewerName"></span><br />
+                                    Interview Level: <span id="showInterviewLevel"></span><br />
+                                    Interview Link: <a href="" id="showinterviewLink" target="_blank"></a><br />
                                     <span id="viewEventLink"></span><br />
                                     <br />
                                     Date: <span id="viewEventDate"></span><br />
