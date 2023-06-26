@@ -1957,6 +1957,36 @@ class Candidates
             );
         return $this->_db->getAllAssoc($sql);
     }
+
+    /**
+     * Gets all candidates for interviewer (current user).
+     * 
+     * @param integer interviewer_id (userId)
+     * 
+     * @return array Multi-dimensional associative result set array of
+     *               candidate for interviewer.
+     */
+    public function getCandidatesForInterviewer($userId)
+    {
+        $sql = sprintf(
+            "SELECT
+                c.candidate_id as candidateId, 
+                ce.interviewer_id AS interviewerId,
+                CONCAT( c.first_name, ' ', c.last_name ) AS candidateFullName, 
+                ce.date, 
+                ce.interview_level 
+            FROM
+                candidate AS c
+            JOIN calendar_event AS ce ON c.candidate_id = ce.data_item_id 
+            WHERE
+                ce.interviewer_id = %s
+            ORDER BY
+                ce.date DESC",
+            $userId
+        );
+        
+        return $this->_db->getAllAssoc($sql);
+    }
 }
 
 
