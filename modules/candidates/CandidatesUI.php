@@ -3698,6 +3698,7 @@ class CandidatesUI extends UserInterface
         
         $this->_template->assign('isFinishedMode', true);
         $this->_template->assign('candidates', $candidates);
+        $this->_template->assign('active', $this);
         $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
     }
 }

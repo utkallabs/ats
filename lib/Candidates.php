@@ -1970,16 +1970,18 @@ class Candidates
     {
         $sql = sprintf(
             "SELECT
-                candidate.interviewer_id AS interviewerId,
-                CONCAT(
-                    candidate.first_name, ' ', candidate.last_name
-                ) AS candidateFullName
+                c.candidate_id as candidateId, 
+                ce.interviewer_id AS interviewerId,
+                CONCAT( c.first_name, ' ', c.last_name ) AS candidateFullName, 
+                ce.date, 
+                ce.interview_level 
             FROM
-                candidate
+                candidate AS c
+            JOIN calendar_event AS ce ON c.candidate_id = ce.data_item_id 
             WHERE
-                candidate.interviewer_id = %s
+                ce.interviewer_id = %s
             ORDER BY
-                candidate.candidate_id DESC",
+                ce.date DESC",
             $userId
         );
         
