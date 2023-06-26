@@ -184,7 +184,8 @@ class CalendarUI extends UserInterface
         $daysInMonth     = DateUtility::getDaysInMonth($month, $year);
 
         $calendar = new Calendar($this->_siteID);
-
+    
+        
         $monthBefore = $month - 1;
         $monthAfter  = $month + 1;
         $yearBefore  = $year;
@@ -243,12 +244,13 @@ class CalendarUI extends UserInterface
 
         $calendarSettings = new CalendarSettings($this->_siteID);
         $calendarSettingsRS = $calendarSettings->getAll();
+    
 
         if ($view == 'DEFAULT_VIEW')
         {
             $view = $calendarSettingsRS['calendarView'];
         }
-
+        
         $summaryHTML = $calendar->getUpcomingEventsHTML(12, UPCOMING_FOR_CALENDAR);
 
         if (!eval(Hooks::get('CALENDAR_SHOW'))) return;
@@ -262,6 +264,9 @@ class CalendarUI extends UserInterface
             $allowEventReminders = false;
         }
 
+
+        $interviewers = $calendar->getInterviewer();
+
         /* FIXME: Configurable */
         $this->_template->assign('dayHourStart', $calendarSettingsRS['dayStart']);
         $this->_template->assign('dayHourEnd', $calendarSettingsRS['dayStop']);
@@ -269,7 +274,6 @@ class CalendarUI extends UserInterface
         $this->_template->assign('allowAjax', ($calendarSettingsRS['noAjax'] == 0 ? true : false));
         $this->_template->assign('defaultPublic', ($calendarSettingsRS['defaultPublic'] == 0 ? 'false' : 'true'));
         $this->_template->assign('militaryTime', false);
-
         $this->_template->assign('active', $this);
         $this->_template->assign('currentDateMDY', $currentDateMDY);
         $this->_template->assign('startingWeekday', $startingWeekday);
@@ -295,7 +299,10 @@ class CalendarUI extends UserInterface
         $this->_template->assign('dateString', $dateString);
         $this->_template->assign('isCurrentMonth', $isCurrentMonth);
         $this->_template->assign('eventsString', $eventsString);
+        $this->_template->assign('interviewers', $interviewers);
+        
         $this->_template->assign('allowEventReminders', $allowEventReminders);
+
         $this->_template->display('./modules/calendar/Calendar.tpl');
     }
 
@@ -393,10 +400,14 @@ class CalendarUI extends UserInterface
         $publicEntry     = $this->isChecked('publicEntry', $_POST);
         $reminderEnabled = $this->isChecked('reminderToggle', $_POST);
 
-        $description   = $this->getTrimmedInput('description', $_POST);
-        $title         = $this->getTrimmedInput('title', $_POST);
-        $reminderEmail = $this->getTrimmedInput('sendEmail', $_POST);
-        $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
+        $description     = $this->getTrimmedInput('description', $_POST);
+        $title           = $this->getTrimmedInput('title', $_POST);
+        $reminderEmail   = $this->getTrimmedInput('sendEmail', $_POST);
+        $reminderTime    = $this->getTrimmedInput('reminderTime', $_POST);
+        $interviewer_id  = $this->getTrimmedInput('interviewerId', $_POST);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
+
 
         // FIXME: Reminder time must be an integer!
 
@@ -462,11 +473,14 @@ class CalendarUI extends UserInterface
         if (!eval(Hooks::get('CALENDAR_ADD_PRE'))) return;
 
         $calendar = new Calendar($this->_siteID);
+        
+        
         $eventID = $calendar->addEvent(
             $type, $date, $description, $allDay, $this->_userID, -1, -1, -1,
             $title, $duration, $reminderEnabled, $reminderEmail, $reminderTime,
-            $publicEntry, $timeZoneOffset
+            $publicEntry, $timeZoneOffset, $interviewer_id,$interview_link,$interview_level
         );
+
 
         if ($eventID <= 0)
         {
@@ -587,6 +601,11 @@ class CalendarUI extends UserInterface
         $title         = $this->getTrimmedInput('title', $_POST);
         $reminderEmail = $this->getTrimmedInput('sendEmail', $_POST);
         $reminderTime  = $this->getTrimmedInput('reminderTime', $_POST);
+        $interviewer_id  = $this->getTrimmedInput('interviewerEventId', $_POST);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
+
+
 
         // FIXME: Reminder time must be an integer!
 
@@ -649,12 +668,18 @@ class CalendarUI extends UserInterface
 
         if (!eval(Hooks::get('CALENDAR_EDIT_PRE'))) return;
 
+
         /* Update the event. */
         $calendar = new Calendar($this->_siteID);
+        $interviewerName = $calendar->getInterviewer(['interviewerId']);
+        $interview_link  = $this->getTrimmedInput('interviewLink', $_POST);
+        $interview_level  = $this->getTrimmedInput('interviewLevel', $_POST);
+
+
         if (!$calendar->updateEvent($eventID, $type, $date, $description,
             $allDay, $dataItemID, $dataItemType, 'NULL', $title, $duration,
             $reminderEnabled, $reminderEmail, $reminderTime, $publicEntry,
-            $_SESSION['CATS']->getTimeZoneOffset()))
+            $_SESSION['CATS']->getTimeZoneOffset(),$interviewer_id,$interview_link,$interview_level))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update calendar event.');
         }

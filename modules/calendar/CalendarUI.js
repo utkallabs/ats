@@ -160,6 +160,7 @@ function calendarUpcomingEvents()
 
 function calendarEditEvent(entry)
 {
+    
     if (accessLevel < ACCESS_LEVEL_EDIT)
     {
         return;
@@ -238,16 +239,34 @@ function calendarEditEvent(entry)
     document.getElementById('eventIDEdit').value      = entry.getData('eventID');
     document.getElementById('titleEdit').value        = entry.getData('title');
     document.getElementById('descriptionEdit').value  = entry.getData('description');
+    document.getElementById('interviewLinkEdit').value  = entry.getData('showInterviewLink');
     document.getElementById('durationEdit').value     = entry.getData('duration');
     document.getElementById('sendEmailEdit').value    = entry.getData('reminderEmail');
     document.getElementById('reminderTimeEdit').value = entry.getData('reminderTime');
+    document.getElementById('interviewerEventId').value    = entry.getData('interviewerId');
+    document.getElementById('editInterviewLevel').value    = entry.getData('showInterviewLevel');
+    
 
     document.getElementById('reminderToggleEdit').checked = (entry.getData('reminderEnabled') == 1);
     document.getElementById('publicEntryEdit').checked    = (entry.getData('public') == 1);
 
     considerCheckBox('reminderToggleEdit', 'sendEmailTDEdit');
     //cleanUpUI();
+    showInterviewerDropdown();
 }
+
+function showInterviewerDropdown(){
+    var selectedOption = $('#typeEdit').find(":selected").val();
+    if (selectedOption == 400) {
+      $('#interviewerCalendar').removeAttr("style");
+      $('#interviewerCalTr').removeAttr("style");
+      $('#editInterviewLevelTr').removeAttr("style");
+    } else {
+      $('#interviewerCalendar').attr("style", "display: none");
+      $('#interviewerCalTr').attr("style", "display: none");
+      $('#editInterviewLevelTr').attr("style", "display: none");
+    }
+ }
 
 function calendarViewEvent(entry)
 {
@@ -262,6 +281,18 @@ function calendarViewEvent(entry)
         + getImageByType(entry.getData('eventType')) + '" /> '
         + getShortDescriptionByType(entry.getData('eventType'));
 
+    document.getElementById('interviewerName').innerHTML = entry.getData('interviewerFullName');
+
+     document.getElementById('showinterviewLink').innerHTML = entry.getData('showInterviewLink');
+
+
+    document.getElementById('showinterviewLink').setAttribute("href", entry.getData('showInterviewLink'));
+
+    document.getElementById('showInterviewLevel').innerHTML = entry.getData('showInterviewLevel');
+
+
+    document.getElementById('showInterviewerId').value = entry.getData('showInterviewerId');
+    
     document.getElementById('viewEventDate').innerHTML = entry.getData('date');
 
     document.getElementById('viewEventOwner').innerHTML = entry.getData('enteredByFirstName')

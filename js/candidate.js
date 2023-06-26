@@ -170,4 +170,30 @@ function onSubmitPhoneInSystem()
     }
 }
 
+$(document).ready(function(){
+    var editOptionName = $('#sourceSelect').val();
+    $('#sourceName').val(editOptionName);
+    $('#sourceSelect').change(function (){
+        var optionName = $(this).find(":selected").text().trim();
+        $('#sourceName').val(optionName);
+    });
+
+    $('.longForm').DataTable({
+        "pageLength": 10,
+        "searching": true,
+        "ordering": false,
+        "bLengthChange": false,
+        "bInfo": false,
+        responsive: true,
+        "language": {
+            "paginate": {
+                "previous": "&laquo;",
+                "next": "&raquo;"
+            },
+            "emptyTable": "No Data Found",
+            "zeroRecords": "No Matching Records Found"
+        }
+    });
+})
+
 

@@ -45,21 +45,21 @@
                                     </td>
                                 </tr>
 
-                                <tr>
+                               <!-- <tr>
                                     <td class="tdVertical">
                                         <label id="emailLabel" for="username">E-Mail:</label>
                                     </td>
                                     <td class="tdData">
                                         <input type="text" class="inputbox" id="email" name="email" style="width: 150px;" />
                                     </td>
-                                </tr>
+                                </tr> -->
 
                                 <tr>
                                     <td class="tdVertical">
-                                        <label id="usernameLabel" for="username">Username:</label>
+                                        <label id="usernameLabel" for="username">Username / Email:</label>
                                     </td>
                                     <td class="tdData">
-                                        <input type="text" class="inputbox" id="username" name="username" style="width: 150px;" />&nbsp;*
+                                        <input type="email" class="inputbox" id="username" name="username" style="width: 150px;" />&nbsp;*
                                     </td>
                                 </tr>
 
@@ -88,6 +88,18 @@
                                         <input type="password" class="inputbox" id="retypePassword" name="retypePassword" style="width: 150px;" />&nbsp;*
 					<?php endif; ?>
                                     </td>
+                                </tr>
+
+                                <tr>
+                                <td class="tdVertical">
+                                <label id="InterviewerLabel" for="aInterviewerLabel">Interviewer:</label>
+                                  </td>
+                                  <td class="tdData">
+                                  <input type="radio" value="1" name="interviewer" checked>&nbsp;<span> Yes</span>
+
+                                  <input type="radio" value="0" name="interviewer" >&nbsp;<span> No</span>
+
+                                  </td>
                                 </tr>
 
                                 <tr>

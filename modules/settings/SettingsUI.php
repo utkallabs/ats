@@ -1118,7 +1118,6 @@ class SettingsUI extends UserInterface
         $this->_template->assign('currentUser', $this->_userID);
         $this->_template->assign('categories', $categories);
         $this->_template->assign('auth_mode', AUTH_MODE);
-
         if (!eval(Hooks::get('SETTINGS_ADD_USER'))) return;
 
         $this->_template->display('./modules/settings/AddUser.tpl');
@@ -1137,9 +1136,11 @@ class SettingsUI extends UserInterface
 
         $firstName      = $this->getTrimmedInput('firstName', $_POST);
         $lastName       = $this->getTrimmedInput('lastName', $_POST);
-        $email          = $this->getTrimmedInput('email', $_POST);
+        $email          = $this->getTrimmedInput('username', $_POST);
         $username       = $this->getTrimmedInput('username', $_POST);
         $accessLevel    = $this->getTrimmedInput('accessLevel', $_POST);
+        $is_interviewer = $this->getTrimmedInput('interviewer', $_POST);
+        
         $password       = $this->getTrimmedInput('password', $_POST);
         $retypePassword = $this->getTrimmedInput('retypePassword', $_POST);
         $role           = $this->getTrimmedInput('role', $_POST);
@@ -1155,9 +1156,8 @@ class SettingsUI extends UserInterface
                 'You have no remaining user account allotments. Please upgrade your license or disable another user.'
             );
         }
-
         /* Bail out if any of the required fields are empty. */
-        if (empty($firstName) || empty($lastName) || empty($username) ||
+        if (empty($firstName) || empty($lastName) ||
             empty($accessLevel) || empty($password) || empty($retypePassword))
         {
             CommonErrors::fatal(COMMONERROR_MISSINGFIELDS, $this, 'Required fields are missing.');
@@ -1183,13 +1183,13 @@ class SettingsUI extends UserInterface
         }
 
         /* Bail out if the specified username already exists. */
-        if ($users->usernameExists($username))
+        if ($users->userNameExist($username))
         {
             CommonErrors::fatal(COMMONERROR_BADFIELDS, $this, 'The specified username already exists.');
         }
 
         $userID = $users->add(
-            $lastName, $firstName, $email, $username, $password, $accessLevel, $eeoIsVisible
+            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer
         );
 
         /* Check role (category) to make sure that the role is allowed to be set. */
@@ -1341,7 +1341,7 @@ class SettingsUI extends UserInterface
 
         $firstName   = $this->getTrimmedInput('firstName', $_POST);
         $lastName    = $this->getTrimmedInput('lastName', $_POST);
-        $email       = $this->getTrimmedInput('email', $_POST);
+        $email       = $this->getTrimmedInput('username', $_POST);
         $username    = $this->getTrimmedInput('username', $_POST);
         $password1   = $this->getTrimmedInput('password1', $_POST);
         $password2   = $this->getTrimmedInput('password2', $_POST);

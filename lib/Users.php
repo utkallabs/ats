@@ -87,7 +87,7 @@ class Users
      * @return new user ID, or -1 on failure.
      */
     public function add($lastName, $firstName, $email, $username, $password,
-            $accessLevel, $eeoIsVisible = false, $userSiteID = -1)
+            $accessLevel, $eeoIsVisible = false,$is_interviewer, $userSiteID = -1)
     {
 
         $md5pwd = $password == LDAPUSER_PASSWORD ? $password : md5($password);
@@ -103,7 +103,8 @@ class Users
         first_name,
         last_name,
         site_id,
-        can_see_eeo_info
+        can_see_eeo_info,
+        is_interviewer
             )
                 VALUES (
                     %s,
@@ -111,6 +112,7 @@ class Users
                     %s,
                     1,
                     0,
+                    %s,
                     %s,
                     %s,
                     %s,
@@ -124,7 +126,8 @@ class Users
         $this->_db->makeQueryString($firstName),
         $this->_db->makeQueryString($lastName),
         $userSiteID,
-        ($eeoIsVisible ? 1 : 0)
+        ($eeoIsVisible ? 1 : 0),
+        ($is_interviewer ? 1 : 0)
             );
 
         $queryResult = $this->_db->query($sql);
@@ -135,6 +138,7 @@ class Users
 
         return $this->_db->getLastInsertID();
     }
+
 
     /**
      * Updates a user in the database.
@@ -332,6 +336,48 @@ class Users
 
         return $this->_db->getAssoc($sql);
     }
+
+ 
+    /**
+     * Returns one user full name.
+     *
+     * @param integer user ID
+     * @return array user data
+     */
+    public function getUserName($userID)
+    {
+        $sql = sprintf(
+                "SELECT
+                CONCAT(user.first_name, ' ', user.last_name) AS fullName 
+                    FROM
+                    user
+                    WHERE
+                    user.user_id = %s ",
+                $this->_db->makeQueryInteger($userID)
+                    );
+
+        $res = $this->_db->getAssoc($sql);
+        
+        return $res['fullName'] ?? "";
+    }
+
+    public function getInterviewerId($userID)
+    {
+        $sql = sprintf(
+                "SELECT
+                 user.user_id AS interviewerId 
+                    FROM
+                    user
+                    WHERE
+                    user.user_id = %s ",
+                $this->_db->makeQueryInteger($userID)
+                    );
+
+        $res = $this->_db->getAssoc($sql);
+        
+        return $res['interviewerId'] ;
+    }
+
 
     /**
      * Returns 1 user, ignoring the user's Site ID.
@@ -943,6 +989,27 @@ class Users
         return true;
     }
 
+    public function userNameExist($username)
+    {
+        // FIXME: COUNT() not needed.
+        $sql = sprintf(
+                "SELECT
+                COUNT(user.user_name) AS userExists
+                FROM
+                user
+                WHERE
+                user.user_name = %s",
+                $this->_db->makeQueryString($username)
+                );
+        $rs = $this->_db->getAssoc($sql);
+
+        if ($rs['userExists'] == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Creates a login history entry.
      *
@@ -1253,5 +1320,8 @@ class Users
     }
     
 }
+
+
+
 
 ?>
