@@ -3406,7 +3406,7 @@ class CandidatesUI extends UserInterface
 
         $body = "Hello HR, \r\n " . "This E-Mail is a notification that \r\n ". "The candidate " . $candidateData['candidateFullName'] . " status has been changed. \r\n " . " Old Status - " . $oldStatus ." \r\n " . $activityNote . " \r\n ";
 
-        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],["susilbehera06@gmail.com", "HR ADMIN"]];
+        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"]];
         $mailer = new Mailer($this->_siteID, $this->_userID);
         $mailer->sendToMany($recipient, $subject, $body, true);
     }
