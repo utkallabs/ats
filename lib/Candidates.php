@@ -199,10 +199,10 @@ class Candidates
             $this->_db->makeQueryInteger($enteredBy),
             $this->_db->makeQueryInteger($owner),
             $this->_siteID,
-            $this->_db->makeQueryString($gender),
             $this->_db->makeQueryInteger($race),
             $this->_db->makeQueryInteger($veteran),
-            $this->_db->makeQueryString($disability)
+            $this->_db->makeQueryString($disability),
+            $this->_db->makeQueryString($gender)
             
         );
 
