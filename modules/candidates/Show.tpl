@@ -260,10 +260,7 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                         <tr >
                             <td class="tdVertical">
                                 <label id="InterviewerLabel" for="Interviewer">Interviewer:</label>
-                            </td>
-                            <td>
-                            <?php echo $this->interviewerName ; ?>
-                            </td>
+                            </td>                         
                         </tr>
                     </table>
                 </td>
