@@ -368,21 +368,7 @@
                     </table>
                     <?php endif; ?>
                     <table class="editTable" width="700">
-                        <tr>
-                            <td>
-                                <label id="interviewreLabel" for="interviewerEdit"> Interviewer: </label>
-                            </td>
-                            <td>
-                                <select name="interviewer_id">
-                                <option> Select Interviewer </option> 
-                                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
-                                    <option value="<?php $this->_($interviewer['user_id']); ?> "  <?php if ( $this->interviewerId == $interviewer['user_id']) echo 'selected="selected"';?>>
-                                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
-                                    </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
-                        </tr>
+
 
                         <tr>
                             <td class="tdVertical">

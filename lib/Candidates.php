@@ -93,7 +93,7 @@ class Candidates
      */
     public function add($firstName, $middleName, $lastName, $email1, $email2,
         $phoneHome, $phoneCell, $phoneWork, $address, $city, $state, $zip,
-        $source, $sourceId, $keySkills, $interviewer_id, $dateAvailable, $currentEmployer, $canRelocate,
+        $source, $sourceId, $keySkills, $dateAvailable, $currentEmployer, $canRelocate,
         $currentPay, $desiredPay, $notes, $webSite, $bestTimeToCall, $enteredBy, $owner,
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
@@ -116,7 +116,6 @@ class Candidates
                 source,
                 sourceId,
                 key_skills,
-                interviewer_id,
                 date_available,
                 current_employer,
                 can_relocate,
@@ -137,7 +136,6 @@ class Candidates
                 eeo_gender
             )
             VALUES (
-                %s,
                 %s,
                 %s,
                 %s,
@@ -187,7 +185,6 @@ class Candidates
             $this->_db->makeQueryString($source),
             $this->_db->makeQueryInteger($sourceId),
             $this->_db->makeQueryString($keySkills),
-            $this->_db->makeQueryString($interviewer_id),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
             $this->_db->makeQueryString($currentEmployer),
             ($canRelocate ? '1' : '0'),
@@ -262,7 +259,7 @@ class Candidates
         $city, $state, $zip, $source, $sourceId, $keySkills, $dateAvailable,
         $currentEmployer, $canRelocate, $currentPay, $desiredPay,
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
-        $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
+        $gender = '', $race = '', $veteran = '', $disability = '')
     {
         $sql = sprintf(
             "UPDATE
@@ -298,8 +295,7 @@ class Candidates
                 eeo_ethnic_type_id    = %s,
                 eeo_veteran_type_id   = %s,
                 eeo_disability_status = %s,
-                eeo_gender            = %s,
-                interviewer_id        = %s
+                eeo_gender            = %s
             WHERE
                 candidate_id = %s
             AND
@@ -334,7 +330,6 @@ class Candidates
             $this->_db->makeQueryInteger($veteran),
             $this->_db->makeQueryString($disability),
             $this->_db->makeQueryString($gender),
-            $this->_db->makeQueryInteger($interviewer_id),
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
@@ -543,8 +538,7 @@ class Candidates
                     IF (candidate.eeo_gender = 'f',
                         'Female',
                         ''))
-                     AS eeoGenderText,
-                candidate.interviewer_id AS interviewerId   
+                     AS eeoGenderText  
                      
             FROM
                 candidate

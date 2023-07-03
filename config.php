@@ -36,10 +36,10 @@ if (!defined('LEGACY_ROOT')) {
 }
 
 /* Database configuration. */
-define('DATABASE_USER', 'root');
-define('DATABASE_PASS', '');
+define('DATABASE_USER', 'ul_ats_user');
+define('DATABASE_PASS', '0F61y9zn_');
 define('DATABASE_HOST', 'localhost');
-define('DATABASE_NAME', 'epiz_32310217_ats');
+define('DATABASE_NAME', 'ul_ats');
 
 /* Authentication Configuration
  * Options are sql, ldap, sql+ldap
