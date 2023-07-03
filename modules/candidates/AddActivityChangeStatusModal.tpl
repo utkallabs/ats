@@ -342,7 +342,12 @@
         </tr>
 
     </table>
-    <input type="submit" class="button" name="submit" id="submit" value="Save" />&nbsp;
+    
+    <div id="loader" style="display: none;"></div> 
+
+    <input type="submit" class="button  eventSaveButton" name="submit" id="submit" value="Save" onclick="performAction()" />&nbsp;
+    
+
     <?php if ($this->isJobOrdersMode): ?>
     <input type="button" class="button" name="close" value="Cancel"
         onclick="parentGoToURL('<?php echo(CATSUtility::getIndexName()); ?>?m=joborders&amp;a=show&amp;jobOrderID=<?php echo($this->selectedJobOrderID); ?>');" />
@@ -354,6 +359,13 @@
 
 <script type="text/javascript">
     document.changePipelineStatusForm.activityNote.focus();
+
+    function performAction() {
+  
+  var loader = document.getElementById("loader");
+  loader.style.display = "inline-block";
+}
+
 </script>
 
 <?php else: ?>
@@ -399,7 +411,7 @@
     <input type="button" name="close" class="button" value="Close"
         onclick="parentGoToURL('<?php echo(CATSUtility::getIndexName()); ?>?m=joborders&amp;a=show&amp;jobOrderID=<?php echo($this->regardingID); ?>');" />
     <?php else: ?>
-    <input type="button" name="close" class="button" value="Close"
+    <input type="button" name="close" class="button" value="Close "
         onclick="parentGoToURL('<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=show&amp;candidateID=<?php echo($this->candidateID); ?>');" />
     <?php endif; ?>
 </form>
