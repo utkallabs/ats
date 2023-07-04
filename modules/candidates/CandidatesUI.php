@@ -359,7 +359,7 @@ class CandidatesUI extends UserInterface
                 $this->addDuplicates();
                 break;
             case 'showCandidatesForInterviewer':
-                if ($this->getUserAccessLevel('candidates.duplicates') < ACCESS_LEVEL_SA)
+                if ($this->getUserAccessLevel('candidates.duplicates') < ACCESS_LEVEL_READ)
                 {
                     CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                 }
@@ -502,7 +502,6 @@ class CandidatesUI extends UserInterface
             return;
         }
 
-        $user = new Users($this->_siteID) ;
     
         if ($data['isAdminHidden'] == 1 && $this->getUserAccessLevel('candidates.hidden') < ACCESS_LEVEL_MULTI_SA)
         {
@@ -726,7 +725,6 @@ class CandidatesUI extends UserInterface
         $questionnaires = $questionnaire->getCandidateQuestionnaires($candidateID);
 
         $lists = $candidates->getListsForCandidate($candidateID);
-        $interviewers = $candidates->getInterviewer();
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
@@ -736,7 +734,6 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('pipelinesRS', $pipelinesRS);
         $this->_template->assign('activityRS', $activityRS);
         $this->_template->assign('calendarRS', $calendarRS);
-        $this->_template->assign('interviewers', $interviewers);
         $this->_template->assign('extraFieldRS', $extraFieldRS);
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('isPopup', $isPopup);
@@ -890,7 +887,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('active', $this);
         $this->_template->assign('subActive','AddCandidate');
         $this->_template->assign('sourcesRS', $sourcesRS);
-        $this->_template->assign('interviewers', $interviewers);
+        
         $this->_template->assign('sourcesString', $sourcesString);
         $this->_template->assign('preassignedFields', $preassignedFields);
         $this->_template->assign('associatedAttachment', $associatedAttachment);
@@ -1112,10 +1109,7 @@ class CandidatesUI extends UserInterface
             DATA_ITEM_CANDIDATE, $candidateID, $data['firstName'] . ' ' . $data['lastName']
         );
 
-        // Get Interviewer
-     $user = new Users($this->_siteID) ;
-
-
+        
         /* Get extra fields. */
         $extraFieldRS = $candidates->extraFields->getValuesForEdit($candidateID);
 
