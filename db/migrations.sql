@@ -14,3 +14,5 @@ ALTER TABLE `calendar_event` ADD `interview_link` VARCHAR(255) DEFAULT NULL AFTE
 
 ALTER TABLE `calendar_event` ADD `interview_level` VARCHAR(2) DEFAULT NULL AFTER `interview_link`;
 
+ALTER TABLE `site` CHANGE `time_zone` `time_zone` FLOAT(5) NULL DEFAULT '0';
+

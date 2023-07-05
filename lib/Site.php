@@ -87,7 +87,7 @@ class Site
                 date_format_ddmmyy = %s
             WHERE
                 site_id = %s",
-            $this->_db->makeQueryInteger($timeZone),
+            $timeZone,
             ($isDMY ? 1 : 0),
             $this->_siteID
         );
