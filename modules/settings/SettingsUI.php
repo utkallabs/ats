@@ -1148,6 +1148,12 @@ class SettingsUI extends UserInterface
 
         $users = new Users($this->_siteID);
         $license = $users->getLicenseData();
+        
+        /*if the specified username not exists then email send to user. */
+        if (!$users->userNameExist($username))
+        {
+            $this->sendUserCreationEmail($email, $password, $firstName);
+        }
 
         if (!$license['canAdd'] && $accessLevel > ACCESS_LEVEL_READ)
         {
@@ -1225,6 +1231,19 @@ class SettingsUI extends UserInterface
         CATSUtility::transferRelativeURI(
             'm=settings&a=showUser&userID=' . $userID
         );
+    }
+
+    /*
+     * Called by handleRequest() to process to send email when user creation.
+     */
+    private function sendUserCreationEmail($userEmail, $userPassword, $userFirstName ){
+        $subject = "ATS User Creation";
+        
+        $body = "Dear " . $userFirstName .", \r\n " . "I hope this email finds you well. You have been added as an user in our Applicant Tracking System (ATS). This addition recognizes your expertise and valuable contributions you can make to our hiring process. \r\n \r\n To get started, please click on the following link: https://ats.utkallabs.com This link will take you to the ATS login page. \r\n Upon reaching the login page, please enter the provided username and password to access your account. \r\n \r\n ". "Username - " . '<b>' . $userEmail . '</b>' . " \r\n " . " Password - " . $userPassword ." \r\n " . " You can change your password after login with this email and password ";
+
+        $recipient = [$userEmail, "New User"];
+        $mailer = new Mailer($this->_siteID, $this->_userID);
+        $mailer->sendToOne($recipient, $subject, $body, true);
     }
 
     /*
