@@ -1298,7 +1298,6 @@ class SettingsUI extends UserInterface
                 }
             }
         }
-        // print_r($data); exit;
         $EEOSettings = new EEOSettings($this->_siteID);
         $EEOSettingsRS = $EEOSettings->getAll();
 

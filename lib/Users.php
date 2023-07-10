@@ -178,7 +178,7 @@ class Users
                 email            = %s,
                 user_name        = %s,
                 can_see_eeo_info = %s,
-                is_interviewer   = %s,
+                is_interviewer   = %s
                 %s
                 WHERE
                 user_id = %s
