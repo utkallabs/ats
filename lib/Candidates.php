@@ -656,8 +656,7 @@ class Candidates
                 candidate.is_admin_hidden AS isAdminHidden,
                 DATE_FORMAT(
                     candidate.date_available, '%%m-%%d-%%y'
-                ) AS dateAvailable,
-                candidate.interviewer_id AS interviewerId
+                ) AS dateAvailable
 
             FROM
                 candidate
@@ -671,6 +670,29 @@ class Candidates
 
         return $this->_db->getAssoc($sql);
     }
+
+    public function getCanidateInterviewer($candidateID)
+    {
+        $sql = sprintf(
+            "SELECT
+                CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName
+            FROM
+                candidate
+            LEFT JOIN calendar_event 
+                ON candidate.candidate_id = calendar_event.data_item_id
+            LEFT JOIN user
+                ON calendar_event.interviewer_id = user.user_id
+            WHERE
+                candidate.candidate_id = %s
+            AND
+                candidate.site_id = %s",
+            $this->_db->makeQueryInteger($candidateID),
+            $this->_siteID
+        );
+        
+        return $this->_db->getAssoc($sql);
+    }
+
 
     // FIXME: Document me.
     public function getExport($IDs)
