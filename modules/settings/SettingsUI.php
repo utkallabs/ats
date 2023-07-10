@@ -1298,7 +1298,7 @@ class SettingsUI extends UserInterface
                 }
             }
         }
-
+        // print_r($data); exit;
         $EEOSettings = new EEOSettings($this->_siteID);
         $EEOSettingsRS = $EEOSettings->getAll();
 
@@ -1348,6 +1348,7 @@ class SettingsUI extends UserInterface
         $passwordRst = $this->getTrimmedInput('passwordIsReset', $_POST);
         $role        = $this->getTrimmedInput('role', $_POST);
         $eeoIsVisible   = $this->isChecked('eeoIsVisible', $_POST);
+        $is_interviewer   = $this->isChecked('interviewer', $_POST);
 
         /* Bail out if any of the required fields are empty. */
         if (empty($firstName) || empty($lastName) || empty($username))
@@ -1392,7 +1393,7 @@ class SettingsUI extends UserInterface
         $users = new Users($this->_siteID);
 
         if (!$users->update($userID, $lastName, $firstName, $email, $username,
-            $accessLevel, $eeoIsVisible))
+            $accessLevel, $eeoIsVisible, $is_interviewer))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update user.');
         }

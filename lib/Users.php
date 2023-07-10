@@ -152,7 +152,7 @@ class Users
      * @return boolean True if successful; false otherwise.
      */
     public function update($userID, $lastName, $firstName, $email,
-            $username, $accessLevel = -1, $eeoIsVisible = false)
+            $username, $accessLevel = -1, $eeoIsVisible = false, $is_interviewer)
     {
         /* If an access level was specified, make sure the access level is
          * updated by the query.
@@ -177,7 +177,8 @@ class Users
                 first_name       = %s,
                 email            = %s,
                 user_name        = %s,
-                can_see_eeo_info = %s
+                can_see_eeo_info = %s,
+                is_interviewer   = %s,
                 %s
                 WHERE
                 user_id = %s
@@ -188,6 +189,7 @@ class Users
                 $this->_db->makeQueryString($email),
                 $this->_db->makeQueryString($username),
                 ($eeoIsVisible ? 1 : 0),
+                ($is_interviewer ? 1 : 0),
                 $accessLevelSQL,
                 $this->_db->makeQueryInteger($userID),
                 $this->_siteID
@@ -289,6 +291,7 @@ class Users
                 access_level.long_description AS accessLevelLongDescription,
                 user.first_name AS firstName,
                 user.last_name AS lastName,
+                user.is_interviewer AS is_interviewer,
                 CONCAT(
                     user.first_name, ' ', user.last_name
                     ) AS fullName,
