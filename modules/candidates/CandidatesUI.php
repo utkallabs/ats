@@ -494,6 +494,7 @@ class CandidatesUI extends UserInterface
         }
         
         $data = $candidates->getWithDuplicity($candidateID);
+        $candidate_interviewer = $candidates->getCanidateInterviewer($candidateID);
 
         /* Bail out if we got an empty result set. */
         if (empty($data))
@@ -728,6 +729,7 @@ class CandidatesUI extends UserInterface
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
+        $this->_template->assign('candidate_interviewer', $candidate_interviewer);
         $this->_template->assign('data', $data);
         $this->_template->assign('isShortNotes', $isShortNotes);
         $this->_template->assign('attachmentsRS', $attachmentsRS);
