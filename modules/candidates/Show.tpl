@@ -262,7 +262,9 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                                 <label id="InterviewerLabel" for="Interviewer">Interviewer:</label>
                             </td>   
                             <td>
-                            <?php $this->_($this->candidate_interviewer['interviewerFullName']); ?>
+                            <?php foreach ($this->interviewerForCandidate as $item): ?>
+                                <?php echo $item['interviewerFullName'] . "<br>" ; ?>
+                            <?php endforeach; ?>
                             </td>                    
                         </tr>
                     </table>

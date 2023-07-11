@@ -671,14 +671,23 @@ class Candidates
         return $this->_db->getAssoc($sql);
     }
 
-    public function getCanidateInterviewer($candidateID)
+    /**
+     * Returns all interviewer name relevent for the  Candidate details page
+     * for a given candidate ID.
+     *
+     * @param integer Candidate ID.
+     * @return array Associative result set array of interviewer , or array()
+     *               if no records were returned.
+     */
+
+    public function getInterviewerForCandidate($candidateID)
     {
         $sql = sprintf(
             "SELECT
                 CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName
             FROM
-                candidate
-            LEFT JOIN calendar_event 
+                calendar_event
+            LEFT JOIN candidate 
                 ON candidate.candidate_id = calendar_event.data_item_id
             LEFT JOIN user
                 ON calendar_event.interviewer_id = user.user_id
@@ -690,7 +699,8 @@ class Candidates
             $this->_siteID
         );
         
-        return $this->_db->getAssoc($sql);
+       return $this->_db->getAllAssoc($sql);
+    
     }
 
 
