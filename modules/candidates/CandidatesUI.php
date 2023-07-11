@@ -492,9 +492,10 @@ class CandidatesUI extends UserInterface
         {
             $candidateID = $candidates->getIDByEmail($_GET['email']);
         }
-        
+    
         $data = $candidates->getWithDuplicity($candidateID);
-
+        $interviewerForCandidate = $candidates->getInterviewerForCandidate($candidateID);
+        
         /* Bail out if we got an empty result set. */
         if (empty($data))
         {
@@ -728,6 +729,7 @@ class CandidatesUI extends UserInterface
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
+        $this->_template->assign('interviewerForCandidate', $interviewerForCandidate);
         $this->_template->assign('data', $data);
         $this->_template->assign('isShortNotes', $isShortNotes);
         $this->_template->assign('attachmentsRS', $attachmentsRS);

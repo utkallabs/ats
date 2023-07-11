@@ -234,7 +234,7 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                                 <?php $this->_($this->data['pipeline']); ?>
                             </td>
                         </tr>
-
+                        
                         <tr>
                             <td class="vertical">Submitted:</td>
                             <td class="data">
@@ -260,7 +260,12 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                         <tr >
                             <td class="tdVertical">
                                 <label id="InterviewerLabel" for="Interviewer">Interviewer:</label>
-                            </td>                         
+                            </td>   
+                            <td>
+                            <?php foreach ($this->interviewerForCandidate as $item): ?>
+                                <?php echo $item['interviewerFullName'] . "<br>" ; ?>
+                            <?php endforeach; ?>
+                            </td>                    
                         </tr>
                     </table>
                 </td>
