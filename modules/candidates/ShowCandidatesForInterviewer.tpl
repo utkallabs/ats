@@ -23,6 +23,8 @@
                     <th>Interview Level</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Feedback</th>
+                    <th>Show Feedback</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +35,17 @@
                         <td><?php echo  $candidate['interview_level']; ?></td>
                         <td><?php echo  explode(" ",$candidate['date'])[0]; ?></td>
                         <td><?php echo date("g:i a", strtotime(explode(" ",$candidate['date'])[1])); ?></td>
+
+                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=feedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Feedback</a></td>
+
+                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=showFeedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Show</a></td>
+ 
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </div>
+
+
 <?php TemplateUtility::printFooter(); ?>

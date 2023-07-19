@@ -374,6 +374,36 @@ class CandidatesUI extends UserInterface
                 }
                 $this->listByView();
                 break;
+                case 'feedback':
+                    if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                    {
+                        CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                    }
+                    
+                    if($this->isPostBack()){
+                        $this->onFeedback();
+
+                    }else{
+                        $this->feedback();
+                    }
+                    
+                    break; 
+
+                    case 'showFeedback':
+                        if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                        {
+                            CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                        }
+                        
+                        if($this->isPostBack()){
+                            $this->onShowFeedback();
+    
+                        }else{
+                            $this->onShowFeedback();
+                        }
+                        
+                        break; 
+                       
         }
     }
 
@@ -726,6 +756,7 @@ class CandidatesUI extends UserInterface
         $questionnaires = $questionnaire->getCandidateQuestionnaires($candidateID);
 
         $lists = $candidates->getListsForCandidate($candidateID);
+
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
@@ -1778,10 +1809,11 @@ class CandidatesUI extends UserInterface
         }
 
         $extraFieldRS = $candidates->extraFields->getValuesForAdd($candidateID);
-        $interviewers = $candidates->getInterviewer();
+       
+        $interviewersFromAtsRoll = $candidates->getInterviewerFromAtsRoll();
 
         $this->_template->assign('extraFieldRS', $extraFieldRS);
-        $this->_template->assign('interviewers', $interviewers);
+        $this->_template->assign('interviewers', $interviewersFromAtsRoll);
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('pipelineRS', $pipelineRS);
         $this->_template->assign('statusRS', $statusRS);
@@ -3685,6 +3717,63 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('active', $this);
         $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
     }
+    
+    private function feedback()
+    {
+        $eventID = $_GET['eventID'];
+
+        $candidateObj = new Candidates($this->_siteID);
+        $eventDetails = $candidateObj->getCandidatesForFeedback($eventID);
+
+        $this->_template->assign('active', $this);
+        $this->_template->assign('eventDetails', $eventDetails);
+        $this->_template->display('./modules/candidates/Feedback.tpl');
+    }  
+
+    private function onFeedback()
+    {
+        $candidateID = $_POST['candidateId'];
+        $eventID = $_POST['calendar_event_id'];
+        $feedbackText = $_POST['feedbackText'];
+
+        $candidate = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+
+        $eventDetails = $candidate->onAddFeedback($eventID,$feedbackText);
+        $candidates = $candidate->getCandidatesForInterviewer($userId);
+        
+        $this->_template->assign('active', $this);
+        $this->_template->assign('eventDetails', $eventDetails);
+        $this->_template->assign('candidates', $candidates);
+        $this->_template->assign('feedbackText', $feedbackText);
+        $this->_template->assign('candidateID', $candidateID);
+        $this->_template->assign('eventID', $eventID);
+
+        $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
+    }
+
+    private function onShowFeedback(){
+
+        $eventID = $_GET['eventID'];
+        $feedbackText = $_POST['feedbackText'];
+        $candidateObj = new Candidates($this->_siteID);
+        $candidateInfo = $candidateObj->getCandidatesForFeedback($eventID);
+        $showFeedback =  $candidateObj->onShowFeedback($eventID);
+        $updateFeedback = $candidateObj->onAddFeedback($eventID,$feedbackText);
+
+
+        $this->_template->assign('active', $this);
+        $this->_template->assign('candidateInfo', $candidateInfo);
+        $this->_template->assign('eventDetails', $updateFeedback);
+        $this->_template->assign('showFeedback', $showFeedback);
+  
+
+        $this->_template->display('./modules/candidates/showFeedback.tpl');
+
+    }
+    
+    
+
 }
 
 ?>
