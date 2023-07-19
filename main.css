@@ -1379,7 +1379,7 @@ td.contentContainerOld {
 #emailPreview * {
     padding: 5px;
 }
-  #loader {
+#loader {
     position: fixed;
     top: 0;
     left: 0;
@@ -1402,3 +1402,13 @@ td.contentContainerOld {
     0% { width: 0; }
     100% { width: 200%; }
   }
+
+/* Feedback */
+textarea {
+    width: 200%;
+}
+
+#editTextarea{
+    width: 200%;
+}
+

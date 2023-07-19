@@ -1008,7 +1008,8 @@ class SettingsUI extends UserInterface
         );
 
         $accessLevels = $users->getAccessLevels();
-
+        $atsRoll = $users->getAtsRoll($userID);
+        
         $loginAttempts = $users->getLastLoginAttempts(
             $userID, self::MAX_RECENT_LOGINS
         );
@@ -1068,6 +1069,7 @@ class SettingsUI extends UserInterface
         $this->_template->assign('data', $data);
         $this->_template->assign('categories', $categories);
         $this->_template->assign('accessLevels', $accessLevels);
+        $this->_template->assign('atsRoll', $atsRoll);
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('currentUser', $this->_userID);
         $this->_template->assign('loginDisplay', self::MAX_RECENT_LOGINS);
@@ -1140,6 +1142,8 @@ class SettingsUI extends UserInterface
         $username       = $this->getTrimmedInput('username', $_POST);
         $accessLevel    = $this->getTrimmedInput('accessLevel', $_POST);
         $is_interviewer = $this->getTrimmedInput('interviewer', $_POST);
+        $atsRoll        = $this->getTrimmedInput('atsRoll', $_POST);
+
         
         $password       = $this->getTrimmedInput('password', $_POST);
         $retypePassword = $this->getTrimmedInput('retypePassword', $_POST);
@@ -1189,7 +1193,7 @@ class SettingsUI extends UserInterface
         }
 
         $userID = $users->add(
-            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer
+            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer,$atsRoll
         );
 
         /* Check role (category) to make sure that the role is allowed to be set. */
@@ -1244,6 +1248,7 @@ class SettingsUI extends UserInterface
         $license = $users->getLicenseData();
         $accessLevels = $users->getAccessLevels();
         $data = $users->get($userID);
+        $atsRoll = $users->getAtsRoll($userID);
 
         if (empty($data))
         {
@@ -1306,6 +1311,7 @@ class SettingsUI extends UserInterface
         $this->_template->assign('subActive', '');
         $this->_template->assign('data', $data);
         $this->_template->assign('accessLevels', $accessLevels);
+        $this->_template->assign('atsRoll', $atsRoll);
         $this->_template->assign('defaultAccessLevel', ACCESS_LEVEL_DELETE);
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('license', $license);
@@ -1348,6 +1354,7 @@ class SettingsUI extends UserInterface
         $passwordRst = $this->getTrimmedInput('passwordIsReset', $_POST);
         $role        = $this->getTrimmedInput('role', $_POST);
         $eeoIsVisible   = $this->isChecked('eeoIsVisible', $_POST);
+        $atsRoll      = $this->getTrimmedInput('atsRoll', $_POST);
 
         /* Bail out if any of the required fields are empty. */
         if (empty($firstName) || empty($lastName) || empty($username))
@@ -1392,7 +1399,7 @@ class SettingsUI extends UserInterface
         $users = new Users($this->_siteID);
 
         if (!$users->update($userID, $lastName, $firstName, $email, $username,
-            $accessLevel, $eeoIsVisible))
+            $accessLevel,$atsRoll, $eeoIsVisible))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update user.');
         }

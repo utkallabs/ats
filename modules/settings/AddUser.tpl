@@ -90,14 +90,19 @@
                                     </td>
                                 </tr>
 
+                               
                                 <tr>
                                 <td class="tdVertical">
-                                <label id="InterviewerLabel" for="aInterviewerLabel">Interviewer:</label>
+                                <label id="atsRollLabel" for="aInterviewerLabel">ATS Roll:</label>
                                   </td>
                                   <td class="tdData">
-                                  <input type="radio" value="1" name="interviewer" checked>&nbsp;<span> Yes</span>
+                                  <input type="radio" value="1" name="atsRoll" checked>&nbsp;<span> New User</span><br>
 
-                                  <input type="radio" value="0" name="interviewer" >&nbsp;<span> No</span>
+                                  <input type="radio" value="2" name="atsRoll" >&nbsp;<span>Interviewer</span><br>
+
+                                  <input type="radio" value="3" name="atsRoll" >&nbsp;<span>HR</span><br>
+
+                                  <input type="radio" value="4" name="atsRoll" >&nbsp;<span>Administrator</span><br>
 
                                   </td>
                                 </tr>

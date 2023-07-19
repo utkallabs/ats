@@ -263,9 +263,16 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                             </td>   
                             <td>
                             <?php foreach ($this->interviewerForCandidate as $item): ?>
-                                <?php echo $item['interviewerFullName'] . "<br>" ; ?>
+                                <?php echo  $item['interview_level']   ; ?> - &nbsp;
+                                <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=calendar&amp;showEvent=<?php echo $item['calendar_event_id'];?>"><?php echo  $item['interviewerFullName']; ?></a><br>
                             <?php endforeach; ?>
-                            </td>                    
+                            </td> 
+                            
+                            <td>
+                            <?php foreach ($this->interviewerForCandidate as $item): ?>
+                            <?php echo  $item['date'] . "<br>" ; ?>
+                            <?php endforeach; ?>
+                            </td>                 
                         </tr>
                     </table>
                 </td>
