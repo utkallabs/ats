@@ -1,4 +1,16 @@
-<?php TemplateUtility::printHeader('Feedback on interview', array( 'js/highlightrows.js', 'js/export.js', 'js/dataGrid.js', 'js/dataGridFilters.js',  'js/candidate.js', 'https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css', 'https://code.jquery.com/jquery-3.7.0.slim.js', 'https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', 'https://cdn.datatables.net/1.13.4/js/dataTables.jqueryui.min.js')); ?>
+<?php TemplateUtility::printHeader('Feedback on interview', array( 'js/highlightrows.js', 'js/export.js', 'js/dataGrid.js', 'js/dataGridFilters.js',  'js/candidate.js',
+'admin-lte/plugins/fontawesome-free/css/all.min.css', 
+'admin-lte/dist/css/adminlte.min.css',
+'admin-lte/plugins/summernote/summernote-bs4.min.css',
+ 'https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css',
+ 'https://code.jquery.com/jquery-3.7.0.slim.js',
+  'https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js',
+  'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css',
+  'https://code.jquery.com/jquery-3.5.1.min.js',
+  'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js',
+  'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js',
+  'https://cdn.datatables.net/1.13.4/js/dataTables.jqueryui.min.js')); ?>
 <?php TemplateUtility::printHeaderBlock(); ?>
 <?php TemplateUtility::printTabs($this->active); ?>
 
@@ -16,71 +28,55 @@
             </tr>
         </table>
 
-        <table>
-            <tr>
-                <td> <span>Candidate Name: </span> </td>
-                <td> <span id="candidateInFeedbackId">
-                        <?php $this->_($this->eventDetails['candidateFullName']); ?>
-                    </span> </td>
-            </tr>
 
-            <tr>
-                <td> <span>Interview Level: </span> </td>
-                <td> <span id="interviewLevelInFeedbackId">
-                        <?php $this->_($this->eventDetails['interviewLevel']); ?>
-                    </span> </td>
-            </tr>
-            <tr>
-                <td>Feedback:</td>
-                <td>
-                    <form id="feedbackFrom" method="post" name="feedbackForm">
-                        <div class="formatting-buttons">
-                            <button type="button" name="italicFeedback" onclick="applyItalic()"><i>I</i></button>
-                            <button type="button" name="boldFeedback" onclick="applyBold()"><b>B</b></button>
-                            <button type="button" name="centerFeedback" onclick="applyTextAlignment('center')">&#x2194;
-                                Center</button>
-                            <button type="button" name="leftalignFeedback" onclick="applyTextAlignment('left')">&#x2190;
-                                Left</button>
-                            <button type="button" name="rightalignFeedback"
-                                onclick="applyTextAlignment('right')">&#x2192; Right</button>
-                            <button type="button" name="justifyalignFeedback"
-                                onclick="applyTextAlignment('justify')">&#x21C4; Justify</button>
-                        </div>
+        <form id="feedbackFrom" method="post" name="feedbackForm">
+            <table>
+                <tr>
+                    <td> <span>Candidate Name: </span> </td>
+                    <td> <span id="candidateInFeedbackId">
+                            <?php $this->_($this->eventDetails['candidateFullName']); ?>
+                        </span> </td>
+                </tr>
+
+                <tr>
+                    <td> <span>Interview Level: </span> </td>
+                    <td> <span id="interviewLevelInFeedbackId">
+                            <?php $this->_($this->eventDetails['interviewLevel']); ?>
+                        </span> </td>
+                </tr>
+                <tr>
+                    <td>Feedback:</td>
+                    <td>
                         <input type="hidden" name="postback" value="1">
-                        <input type="hidden" name="candidateId" value="<?php $this->_($this->eventDetails['candidateId']); ?>" >
-                        <input type="hidden" name="calendar_event_id" value="<?php $this->_($this->eventDetails['calendar_event_id']); ?>" >
+                        <input type="hidden" name="candidateId"
+                            value="<?php $this->_($this->eventDetails['candidateId']); ?>">
+                        <input type="hidden" name="calendar_event_id"
+                            value="<?php $this->_($this->eventDetails['calendar_event_id']); ?>">
+                    </td>
+                </tr>
 
-                        <textarea id="displayTextarea" rows="15" name="feedbackText"></textarea>
+            </table>
+            <div class="card-body">
+                <textarea id="summernote" name="feedbackText">Place <em>some</em> <u>text</u> <strong>here</strong></textarea>
+                <button type="submit" name="feedbackSubmit"> Submit</button>
+                <button type="reset"> Reset</button>
+            </div>
 
-                        <button type="submit" name="feedbackSubmit"> Submit</button>
-                        <button type="reset"> Reset</button>
+</form>
 
-                    </form>
-                </td>
-            </tr>
 
-        </table>
+
+        <script src="admin-lte/plugins/jquery/jquery.min.js"></script>
+        <script src="admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="admin-lte/plugins/summernote/summernote-bs4.min.js"></script>
 
         <script>
-            function updateDisplay() {
-                var text = document.getElementById('textInput').value;
-                document.getElementById('displayTextarea').value = text;
-            }
+            $(function() {
+               
+                // Summernote
+                $('#summernote').summernote();
 
-            function applyItalic() {
-                var textarea = document.getElementById('displayTextarea');
-                textarea.style.fontStyle = "italic";
-            }
-
-            function applyBold() {
-                var textarea = document.getElementById('displayTextarea');
-                textarea.style.fontWeight = "bold";
-            }
-
-            function applyTextAlignment(value) {
-                var textarea = document.getElementById('displayTextarea');
-                textarea.style.textAlign = value;
-            }
-        </script>
-    </div>
+            })
+        </script>  
+  </div>
 <?php TemplateUtility::printFooter(); ?>

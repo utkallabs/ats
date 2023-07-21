@@ -23,22 +23,23 @@
                     <th>Interview Level</th>
                     <th>Date</th>
                     <th>Time</th>
-                    <th>Feedback</th>
-                    <th>Show Feedback</th>
+                    <th>Add Feedback</th>
+                    <th>Edit Feedback</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($this->candidates as $key => $candidate): ?>
                     <tr>
                         <td width="5%"><?php echo ++$key; ?></td>
-                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=show&amp;candidateID=<?php echo $candidate['candidateId']; ?>"><?php echo $candidate['candidateFullName']; ?></a></td>
+                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=show&amp;candidateID=<?php echo $candidate['candidateId']; ?>">
+                        <?php echo $candidate['candidateFullName']; ?></a></td>
                         <td><?php echo  $candidate['interview_level']; ?></td>
                         <td><?php echo  explode(" ",$candidate['date'])[0]; ?></td>
                         <td><?php echo date("g:i a", strtotime(explode(" ",$candidate['date'])[1])); ?></td>
 
-                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=feedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Feedback</a></td>
+                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=feedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Add Feedback</a></td>
 
-                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=showFeedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Show</a></td>
+                        <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=editFeedback&amp;eventID=<?php echo $candidate['calendar_event_id'];?>">Edit Feedback</a></td>
  
                     </tr>
                 <?php endforeach; ?>

@@ -601,10 +601,52 @@ class Candidates
                 user.ats_roll = 2
             ORDER BY
                 user.user_id ASC",
-            $this->_siteID
+            $this->_siteID,
+            
         );
         return $this->_db->getAllAssoc($sql);
 
+    }
+
+    public function getAtsRoll($userId){
+        $sql = sprintf(
+            "SELECT
+                user.user_id AS userID,
+                user.ats_roll
+            FROM
+                user               
+            WHERE
+                user.user_id = %s",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        
+        return $this->_db->getAssoc($sql);
+    }
+
+    public function getFeedbackForInterviewer($userId){
+        $sql = sprintf(
+            "SELECT
+                candidate.candidate_id AS candidateId, 
+                calendar_event.interviewer_id AS interviewerId,
+                CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+                calendar_event.interview_level AS interviewLevel,
+                calendar_event.calendar_event_id 
+            FROM
+                candidate 
+            JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id 
+            JOIN user ON user.user_id = calendar_event.interviewer_id 
+            WHERE 
+                user.user_id = %s
+            GROUP BY
+                candidate.candidate_id,
+                CONCAT(candidate.first_name, ' ', candidate.last_name)
+            ORDER BY
+                calendar_event.date DESC",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        return $this->_db->getAllAssoc($sql);
     }
 
 
@@ -644,10 +686,51 @@ class Candidates
              $eventID
  
         );
-        //print_r($sql);exit;
+       
         return $this->_db->getAssoc($sql);
         
     }
+    public function onUpdateFeedback($eventID,$feedbackText){
+        $sql = sprintf(
+            "UPDATE calendar_event 
+
+            SET feedback = %s
+
+            WHERE calendar_event_id = %s",
+             $this->_db->makeQueryString($feedbackText),
+             $eventID,
+             $this->_siteID
+        );
+        $this->_db->query($sql);
+    }
+
+   public function showListOfFeedbackToHr($candidateID,  $userId){
+    $sql = sprintf(
+        "SELECT
+            candidate.candidate_id AS candidateId, 
+            calendar_event.interviewer_id AS interviewerId,
+            CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,
+            CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName,  
+            calendar_event.interview_level AS interviewLevel,
+            calendar_event.calendar_event_id,
+            calendar_event.feedback AS Feedback 
+        FROM
+            candidate 
+        JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id
+        JOIN user ON calendar_event.interviewer_id = user.user_id
+        WHERE
+            candidate.candidate_id = %s
+        AND
+            user.user_id = $userId
+        ORDER BY
+            calendar_event.date DESC",
+        $this->_db->makeQueryInteger($candidateID)
+        );
+    //    print_r($sql);exit;
+
+    return $this->_db->getAllAssoc($sql);
+   }
+
 
 
 
@@ -678,8 +761,30 @@ class Candidates
         );
 
         return $this->_db->getAssoc($sql);
+   }
 
-}
+   public function getCandidatesForHr()
+   {  
+    
+   $sql = sprintf(
+           "SELECT
+               candidate.candidate_id AS candidateId, 
+               calendar_event.interviewer_id AS interviewerId,
+               CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+               calendar_event.interview_level AS interviewLevel,
+               calendar_event.calendar_event_id 
+           FROM
+               candidate 
+           JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id 
+           GROUP BY
+            candidate.candidate_id,
+            CONCAT(candidate.first_name, ' ', candidate.last_name)
+           ORDER BY
+               calendar_event.date DESC"
+       );
+       return $this->_db->getAllAssoc($sql);
+    
+    }  
 
 
     public function getWithDuplicity($candidateID)
@@ -2540,7 +2645,6 @@ class CandidatesDataGrid extends DataGrid
             $orderSQL,
             $limitSQL
         );
-
         return $sql;
     }
 }
