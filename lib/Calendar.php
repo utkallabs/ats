@@ -209,7 +209,12 @@ class Calendar
         return $array;
     }
 
-
+    /**
+     * Returns  Interviewers .
+     *
+     * @return array Multi-dimensional result set array of interviewers data, or
+     *               array() if no records are present.
+     */
     public function getInterviewer(){
         $sql = sprintf(
             "SELECT
@@ -219,7 +224,7 @@ class Calendar
             FROM
                 user
             WHERE
-                user.is_interviewer = 1
+                user.ats_roll = 2
             ORDER BY
                 user.user_id ASC",
             $this->_siteID

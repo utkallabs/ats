@@ -368,9 +368,7 @@
                     </table>
                     <?php endif; ?>
                     <table class="editTable" width="700">
-
-
-                        <tr>
+                         <tr>
                             <td class="tdVertical">
                                 <label id="canRelocateLabel" for="canRelocate">Can Relocate:</label>
                             </td>

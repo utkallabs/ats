@@ -63,7 +63,7 @@ class CandidatesUI extends UserInterface
      * contacts listing.
      */
     const TRUNCATE_KEYSKILLS = 30;
-
+    private $_atsRoll ;
 
     public function __construct()
     {
@@ -73,11 +73,26 @@ class CandidatesUI extends UserInterface
         $this->_moduleDirectory = 'candidates';
         $this->_moduleName = 'candidates';
         $this->_moduleTabText = 'Candidates';
-        $this->_subTabs = array(
-            'Add Candidate'     => CATSUtility::getIndexName() . '?m=candidates&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@candidates.add',
-            'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search',
-            'Interviewing Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showCandidatesForInterviewer'
-        );
+       
+
+        $candidates = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $this->_atsRoll = $candidates->getAtsRoll($userId);
+
+        if($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
+            $this->_subTabs = array(
+                'Add Candidate'     => CATSUtility::getIndexName() . '?m=candidates&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@candidates.add',
+                'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search',
+                'Interviewing Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showCandidatesForInterviewer',
+                'All Interview Feedbacks' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showFeedbacksForHr'
+            );
+        }else{
+            $this->_subTabs = array(
+            'Interviewing Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showCandidatesForInterviewer',
+                'Feedbacks' => CATSUtility::getIndexName() . '?m=candidates&amp;a=showFeedbacksForHr'
+            );
+        }
+
     }
 
 
@@ -372,8 +387,91 @@ class CandidatesUI extends UserInterface
                 {
                     CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                 }
-                $this->listByView();
+                if($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
+                    $this->listByView();
+                    
+                }else{
+                    $this->showCandidatesForInterviewer();
+                }
+                
                 break;
+                case 'feedback':
+                    if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                    {
+                        CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                    }
+                    
+                    if($this->isPostBack()){
+                        $this->onFeedback();
+
+                    }else{
+                        $this->feedback();
+                    }
+                    
+                    break; 
+
+                    case 'editFeedback':
+                        if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                        {
+                            CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                        }
+                        
+                        if($this->isPostBack()){
+                            $this->onUpdateFeedback();
+                            
+    
+                        }else{
+                            $this->onShowFeedback();
+                            
+                        }
+                        
+                        break; 
+                        case 'updateFeedback':
+                            if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                            {
+                                CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                            }
+                            
+                            if($this->isPostBack()){
+                                $this->onUpdateFeedback();
+        
+                            }else{
+                                $this->onUpdateFeedback();
+                            }
+                            
+                            break;     
+
+                    case 'showFeedbacksForHr':
+                        if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                        {
+                            CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                        }
+                        
+                        if($this->isPostBack()){
+                            $this->showFeedbacksToHr();
+    
+                        }else{
+                            $this->showFeedbacksToHr();
+                        }
+                        
+                    break; 
+
+                    case 'feedbacksShow':
+                        if ($this->getUserAccessLevel('candidates.feedback') < ACCESS_LEVEL_EDIT)
+                        {
+                            CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                        }
+                        
+                        if($this->isPostBack()){
+                            $this->showListOfFeedbackToHr();
+    
+                        }else{
+                            $this->showListOfFeedbackToHr();
+                        }
+                        
+                    break; 
+
+                           
         }
     }
 
@@ -447,7 +545,19 @@ class CandidatesUI extends UserInterface
         $dataGrid = DataGrid::get("candidates:candidatesListByViewDataGrid", $dataGridProperties);
 
         $candidates = new Candidates($this->_siteID);
-        $this->_template->assign('totalCandidates', $candidates->getCount());
+
+    /*
+     * Called by ats_roll for processing the candidate list activity / change
+     * status dialog.
+     */
+        
+        
+        if($this->_atsRoll['ats_roll'] == 3 ||$this->_atsRoll['ats_roll'] == 4){
+            $this->_template->assign('totalCandidates', $candidates->getCount());
+        }else{
+            CommonErrors::fatal(COMMONERROR_BADINDEX, $this);
+        }
+
 
         $this->_template->assign('active', $this);
         $this->_template->assign('dataGrid', $dataGrid);
@@ -492,9 +602,10 @@ class CandidatesUI extends UserInterface
         {
             $candidateID = $candidates->getIDByEmail($_GET['email']);
         }
-        
+    
         $data = $candidates->getWithDuplicity($candidateID);
-
+        $interviewerForCandidate = $candidates->getInterviewerForCandidate($candidateID);
+        
         /* Bail out if we got an empty result set. */
         if (empty($data))
         {
@@ -726,8 +837,10 @@ class CandidatesUI extends UserInterface
 
         $lists = $candidates->getListsForCandidate($candidateID);
 
+
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
+        $this->_template->assign('interviewerForCandidate', $interviewerForCandidate);
         $this->_template->assign('data', $data);
         $this->_template->assign('isShortNotes', $isShortNotes);
         $this->_template->assign('attachmentsRS', $attachmentsRS);
@@ -900,8 +1013,14 @@ class CandidatesUI extends UserInterface
         /* REMEMBER TO ALSO UPDATE JobOrdersUI::addCandidateModal() IF
          * APPLICABLE.
          */
-        $this->_template->display('./modules/candidates/Add.tpl');
-    }
+
+
+        if($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
+            $this->_template->display('./modules/candidates/Add.tpl');
+        }else{
+            CommonErrors::fatal(COMMONERROR_BADINDEX, $this);
+        }
+     }
 
     public function checkParsingFunctions()
     {
@@ -1776,10 +1895,11 @@ class CandidatesUI extends UserInterface
         }
 
         $extraFieldRS = $candidates->extraFields->getValuesForAdd($candidateID);
-        $interviewers = $candidates->getInterviewer();
+       
+        $interviewersFromAtsRoll = $candidates->getInterviewerFromAtsRoll();
 
         $this->_template->assign('extraFieldRS', $extraFieldRS);
-        $this->_template->assign('interviewers', $interviewers);
+        $this->_template->assign('interviewers', $interviewersFromAtsRoll);
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('pipelineRS', $pipelineRS);
         $this->_template->assign('statusRS', $statusRS);
@@ -3674,6 +3794,7 @@ class CandidatesUI extends UserInterface
 
     private function showCandidatesForInterviewer()
     {
+        
         $candidates = new Candidates($this->_siteID);
         $userId = $this->_userID;
         $candidates = $candidates->getCandidatesForInterviewer($userId);
@@ -3683,6 +3804,112 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('active', $this);
         $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
     }
+    
+    private function feedback()
+    {
+        $eventID = $_GET['eventID'];
+
+        $candidateObj = new Candidates($this->_siteID);
+        $eventDetails = $candidateObj->getCandidatesForFeedback($eventID);
+
+        $this->_template->assign('active', $this);
+        $this->_template->assign('eventDetails', $eventDetails);
+        $this->_template->display('./modules/candidates/Feedback.tpl');
+    }  
+
+    private function onFeedback()
+    {
+        $candidateID = $_POST['candidateId'];
+        $eventID = $_POST['calendar_event_id'];
+        $feedbackText = $_POST['feedbackText'];
+
+        $candidate = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+
+        $eventDetails = $candidate->onAddFeedback($eventID,$feedbackText);
+        $candidates = $candidate->getCandidatesForInterviewer($userId);
+        
+        $this->_template->assign('active', $this);
+        $this->_template->assign('eventDetails', $eventDetails);
+        $this->_template->assign('candidates', $candidates);
+        $this->_template->assign('feedbackText', $feedbackText);
+        $this->_template->assign('candidateID', $candidateID);
+        $this->_template->assign('eventID', $eventID);
+
+        $this->_template->display('./modules/candidates/ShowCandidatesForInterviewer.tpl');
+    }
+
+    private function onShowFeedback(){
+
+        $eventID = $_GET['eventID'];
+        $feedbackText = $_POST['feedbackText'];
+        $candidateObj = new Candidates($this->_siteID);
+        $candidateInfo = $candidateObj->getCandidatesForFeedback($eventID);
+        $showFeedback =  $candidateObj->onShowFeedback($eventID);
+        $updateFeedback = $candidateObj->onAddFeedback($eventID,$feedbackText);
+
+
+        $this->_template->assign('active', $this);
+        $this->_template->assign('candidateInfo', $candidateInfo);
+        $this->_template->assign('feedbackText', $showFeedback);
+  
+
+        $this->_template->display('./modules/candidates/showFeedback.tpl');
+
+    }
+
+    private function onUpdateFeedback(){
+        $eventID = $_GET['eventID'];
+        $feedbackText =  $_POST['feedbackText'];
+        $candidateObj = new Candidates($this->_siteID);
+        $updateFeedback = $candidateObj->onUpdateFeedback($eventID,$feedbackText);
+        $candidateInfo = $candidateObj->getCandidatesForFeedback($eventID);
+        $showFeedback =  $candidateObj->onShowFeedback($eventID);
+
+        $this->_template->assign('active', $this);
+        $this->_template->assign('eventDetails', $updateFeedback);
+        $this->_template->assign('candidateInfo', $candidateInfo);
+        $this->_template->assign('feedbackText', $showFeedback);
+        $this->_template->assign('eventID', $eventID);
+
+        $this->_template->display('./modules/candidates/showFeedback.tpl');
+    }
+
+
+    private function showFeedbacksToHr(){
+       
+        $candidatesObj = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $atsRoll = $candidatesObj->getAtsRoll($userId);
+
+        if($atsRoll['ats_roll'] == 3 || $atsRoll['ats_roll'] == 4){
+            $candidates = $candidatesObj->getCandidatesForHr();
+        }else if($atsRoll['ats_roll'] == 2){
+            $candidates = $candidatesObj->getFeedbackForInterviewer($atsRoll['userID']);
+        }else{
+            $candidates = [];
+        }
+
+        $this->_template->assign('isFinishedMode', true);
+        $this->_template->assign('active', $this);
+        $this->_template->assign('candidates', $candidates);
+        $this->_template->assign('atsRoll', $atsRoll);
+
+        $this->_template->display('./modules/candidates/showFeedbacksForHr.tpl');
+    }
+
+    private function showListOfFeedbackToHr(){
+        $candidateID = $_GET['candidateID'];
+        $userId = $this->_userID;
+        $candidates = new Candidates($this->_siteID);
+        $candidateDetails = $candidates->showListOfFeedbackToHr($candidateID, $userId );    
+        $this->_template->assign('active', $this);
+        $this->_template->assign('candidateDetails', $candidateDetails);
+        $this->_template->assign('candidates', $candidates);
+        $this->_template->display('./modules/candidates/ListOfFeedback.tpl');
+
+    }
+    
 }
 
 ?>
