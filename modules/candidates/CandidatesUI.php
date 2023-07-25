@@ -79,7 +79,7 @@ class CandidatesUI extends UserInterface
         $userId = $this->_userID;
         $this->_atsRoll = $candidates->getAtsRoll($userId);
 
-        if($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
+        if($this->_atsRoll == 3 || $this->_atsRoll == 4){
             $this->_subTabs = array(
                 'Add Candidate'     => CATSUtility::getIndexName() . '?m=candidates&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@candidates.add',
                 'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search',
@@ -3842,12 +3842,9 @@ class CandidatesUI extends UserInterface
     private function onShowFeedback(){
 
         $eventID = $_GET['eventID'];
-        $feedbackText = $_POST['feedbackText'];
         $candidateObj = new Candidates($this->_siteID);
         $candidateInfo = $candidateObj->getCandidatesForFeedback($eventID);
         $showFeedback =  $candidateObj->onShowFeedback($eventID);
-        $updateFeedback = $candidateObj->onAddFeedback($eventID,$feedbackText);
-
 
         $this->_template->assign('active', $this);
         $this->_template->assign('candidateInfo', $candidateInfo);
