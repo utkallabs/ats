@@ -309,9 +309,9 @@
             <td>
                 <select name="interviewerId" id="interviewerId">
                     <option> Select Interviewer</option>
-                    <?php foreach ($this->interviewers AS $index => $interviewer): ?>
-                    <option value="<?php $this->_($interviewer['user_id']); ?> ">
-                        <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
+                    <?php foreach ($this->interviewers AS $index => $interviewersFromAtsRoll): ?>
+                    <option value="<?php $this->_($interviewersFromAtsRoll['user_id']); ?> ">
+                        <?php echo $interviewersFromAtsRoll['first_name'] . " " . $interviewersFromAtsRoll['last_name']; ?>
                     </option>
                     <?php endforeach; ?>
                 </select>

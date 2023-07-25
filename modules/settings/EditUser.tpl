@@ -62,6 +62,18 @@
                     </tr>
 
                     <tr>
+                     <td class="tdVertical">
+                     <label id="atsRollLabel" for="aInterviewerLabel">ATS Roll:</label>
+                       </td>
+                       <td class="tdData">
+  <input type="radio" value="1" name="atsRoll" <?php if ($this->atsRoll == 1) echo 'checked'; ?>>&nbsp;<span> New User </span><br>
+  <input type="radio" value="2" name="atsRoll" <?php if ($this->atsRoll == 2) echo 'checked'; ?>>&nbsp;<span>Interviewer</span><br>
+  <input type="radio" value="3" name="atsRoll" <?php if ($this->atsRoll == 3) echo 'checked'; ?>>&nbsp;<span>HR</span><br>
+  <input type="radio" value="4" name="atsRoll" <?php if ($this->atsRoll == 4) echo 'checked'; ?>>&nbsp;<span>Administrator</span><br>
+</td>
+                     </tr>
+
+                    <tr>
                         <td class="tdVertical">
                             <label id="notesLabel" for="notes">Access Level:</label>
                         </td>
