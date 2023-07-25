@@ -1141,7 +1141,6 @@ class SettingsUI extends UserInterface
         $email          = $this->getTrimmedInput('username', $_POST);
         $username       = $this->getTrimmedInput('username', $_POST);
         $accessLevel    = $this->getTrimmedInput('accessLevel', $_POST);
-        $is_interviewer = $this->getTrimmedInput('interviewer', $_POST);
         $atsRoll        = $this->getTrimmedInput('atsRoll', $_POST);
 
         
@@ -1199,7 +1198,7 @@ class SettingsUI extends UserInterface
         }
 
         $userID = $users->add(
-            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer,$atsRoll
+            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible,$atsRoll
         );
 
         /* Check role (category) to make sure that the role is allowed to be set. */
