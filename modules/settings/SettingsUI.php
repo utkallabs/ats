@@ -1008,6 +1008,7 @@ class SettingsUI extends UserInterface
         );
 
         $accessLevels = $users->getAccessLevels();
+        $atsRoll = $users->getAtsRoll($userID);
 
         $loginAttempts = $users->getLastLoginAttempts(
             $userID, self::MAX_RECENT_LOGINS
@@ -1068,6 +1069,7 @@ class SettingsUI extends UserInterface
         $this->_template->assign('data', $data);
         $this->_template->assign('categories', $categories);
         $this->_template->assign('accessLevels', $accessLevels);
+        $this->_template->assign('atsRoll', $atsRoll);
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('currentUser', $this->_userID);
         $this->_template->assign('loginDisplay', self::MAX_RECENT_LOGINS);
@@ -1140,7 +1142,9 @@ class SettingsUI extends UserInterface
         $username       = $this->getTrimmedInput('username', $_POST);
         $accessLevel    = $this->getTrimmedInput('accessLevel', $_POST);
         $is_interviewer = $this->getTrimmedInput('interviewer', $_POST);
-        
+        $atsRoll        = $this->getTrimmedInput('atsRoll', $_POST);
+
+
         $password       = $this->getTrimmedInput('password', $_POST);
         $retypePassword = $this->getTrimmedInput('retypePassword', $_POST);
         $role           = $this->getTrimmedInput('role', $_POST);
@@ -1148,6 +1152,12 @@ class SettingsUI extends UserInterface
 
         $users = new Users($this->_siteID);
         $license = $users->getLicenseData();
+
+        /*if the specified username not exists then email send to user. */
+        if (!$users->userNameExist($username))
+        {
+            $this->sendUserCreationEmail($email, $password, $firstName);
+        }
 
         if (!$license['canAdd'] && $accessLevel > ACCESS_LEVEL_READ)
         {
@@ -1189,7 +1199,7 @@ class SettingsUI extends UserInterface
         }
 
         $userID = $users->add(
-            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer
+            $lastName, $firstName, $email,$username ,$password, $accessLevel, $eeoIsVisible, $is_interviewer,$atsRoll
         );
 
         /* Check role (category) to make sure that the role is allowed to be set. */
@@ -1228,6 +1238,19 @@ class SettingsUI extends UserInterface
     }
 
     /*
+     * Called by handleRequest() to process to send email when user creation.
+     */
+    private function sendUserCreationEmail($userEmail, $userPassword, $userFirstName ){
+        $subject = "ATS User Creation";
+
+        $body = "Dear " . $userFirstName .", \r\n " . "I hope this email finds you well. You have been added as an user in our Applicant Tracking System (ATS). This addition recognizes your expertise and valuable contributions you can make to our hiring process. \r\n \r\n To get started, please click on the following link: https://ats.utkallabs.com This link will take you to the ATS login page. \r\n Upon reaching the login page, please enter the provided username and password to access your account. \r\n \r\n ". "Username - " . '<b>' . $userEmail . '</b>' . " \r\n " . " Password - " . $userPassword ." \r\n " . " You can change your password after login with this email and password ";
+
+        $recipient = [$userEmail, "New User"];
+        $mailer = new Mailer($this->_siteID, $this->_userID);
+        $mailer->sendToOne($recipient, $subject, $body, true);
+    }
+
+    /*
      * Called by handleRequest() to process loading the user edit page.
      */
     private function editUser()
@@ -1244,6 +1267,7 @@ class SettingsUI extends UserInterface
         $license = $users->getLicenseData();
         $accessLevels = $users->getAccessLevels();
         $data = $users->get($userID);
+        $atsRoll = $users->getAtsRoll($userID);
 
         if (empty($data))
         {
@@ -1298,6 +1322,7 @@ class SettingsUI extends UserInterface
                 }
             }
         }
+
         $EEOSettings = new EEOSettings($this->_siteID);
         $EEOSettingsRS = $EEOSettings->getAll();
 
@@ -1305,6 +1330,7 @@ class SettingsUI extends UserInterface
         $this->_template->assign('subActive', '');
         $this->_template->assign('data', $data);
         $this->_template->assign('accessLevels', $accessLevels);
+        $this->_template->assign('atsRoll', $atsRoll);
         $this->_template->assign('defaultAccessLevel', ACCESS_LEVEL_DELETE);
         $this->_template->assign('EEOSettingsRS', $EEOSettingsRS);
         $this->_template->assign('license', $license);
@@ -1347,7 +1373,7 @@ class SettingsUI extends UserInterface
         $passwordRst = $this->getTrimmedInput('passwordIsReset', $_POST);
         $role        = $this->getTrimmedInput('role', $_POST);
         $eeoIsVisible   = $this->isChecked('eeoIsVisible', $_POST);
-        $is_interviewer   = $this->isChecked('interviewer', $_POST);
+        $atsRoll      = $this->getTrimmedInput('atsRoll', $_POST);
 
         /* Bail out if any of the required fields are empty. */
         if (empty($firstName) || empty($lastName) || empty($username))
@@ -1392,7 +1418,7 @@ class SettingsUI extends UserInterface
         $users = new Users($this->_siteID);
 
         if (!$users->update($userID, $lastName, $firstName, $email, $username,
-            $accessLevel, $eeoIsVisible, $is_interviewer))
+            $accessLevel,$atsRoll, $eeoIsVisible))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update user.');
         }

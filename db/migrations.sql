@@ -16,3 +16,13 @@ ALTER TABLE `calendar_event` ADD `interview_level` VARCHAR(2) DEFAULT NULL AFTER
 
 ALTER TABLE `site` CHANGE `time_zone` `time_zone` FLOAT(5) NULL DEFAULT '0';
 
+/* New ats roll column in user table*/
+ALTER TABLE `user` ADD `ats_roll` INT(11) NOT NULL AFTER `can_see_eeo_info`;
+
+/* New feedback column in user table*/
+ALTER TABLE `calendar_event` ADD `feedback` TEXT NULL DEFAULT NULL AFTER `interview_level`;
+
+
+
+
+

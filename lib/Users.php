@@ -87,7 +87,7 @@ class Users
      * @return new user ID, or -1 on failure.
      */
     public function add($lastName, $firstName, $email, $username, $password,
-            $accessLevel, $eeoIsVisible = false,$is_interviewer, $userSiteID = -1)
+            $accessLevel, $eeoIsVisible = false,$is_interviewer,$atsRoll, $userSiteID = -1)
     {
 
         $md5pwd = $password == LDAPUSER_PASSWORD ? $password : md5($password);
@@ -104,7 +104,8 @@ class Users
         last_name,
         site_id,
         can_see_eeo_info,
-        is_interviewer
+        is_interviewer,
+        ats_roll
             )
                 VALUES (
                     %s,
@@ -112,6 +113,7 @@ class Users
                     %s,
                     1,
                     0,
+                    %s,
                     %s,
                     %s,
                     %s,
@@ -127,7 +129,9 @@ class Users
         $this->_db->makeQueryString($lastName),
         $userSiteID,
         ($eeoIsVisible ? 1 : 0),
-        ($is_interviewer ? 1 : 0)
+        ($is_interviewer ? 1 : 0),
+        $this->_db->makeQueryString($atsRoll)
+
             );
 
         $queryResult = $this->_db->query($sql);
@@ -152,7 +156,7 @@ class Users
      * @return boolean True if successful; false otherwise.
      */
     public function update($userID, $lastName, $firstName, $email,
-            $username, $accessLevel = -1, $eeoIsVisible = false, $is_interviewer)
+            $username, $accessLevel = -1,$atsRoll, $eeoIsVisible = false)
     {
         /* If an access level was specified, make sure the access level is
          * updated by the query.
@@ -177,8 +181,8 @@ class Users
                 first_name       = %s,
                 email            = %s,
                 user_name        = %s,
-                can_see_eeo_info = %s,
-                is_interviewer   = %s
+                ats_roll         = %s,
+                can_see_eeo_info = %s
                 %s
                 WHERE
                 user_id = %s
@@ -188,6 +192,8 @@ class Users
                 $this->_db->makeQueryString($firstName),
                 $this->_db->makeQueryString($email),
                 $this->_db->makeQueryString($username),
+                $this->_db->makeQueryString($atsRoll),
+
                 ($eeoIsVisible ? 1 : 0),
                 ($is_interviewer ? 1 : 0),
                 $accessLevelSQL,
@@ -291,7 +297,6 @@ class Users
                 access_level.long_description AS accessLevelLongDescription,
                 user.first_name AS firstName,
                 user.last_name AS lastName,
-                user.is_interviewer AS is_interviewer,
                 CONCAT(
                     user.first_name, ' ', user.last_name
                     ) AS fullName,
@@ -621,6 +626,28 @@ class Users
                 );
 
         return $this->_db->getAllAssoc($sql);
+    }
+
+
+    /**
+     * Returns ats roll
+     *
+     * @return array ats roll data
+     */
+    public function getAtsRoll($userID)
+    {
+        $sql = sprintf(
+         "SELECT
+             user.user_id,
+             user.ats_roll AS atsRoll
+                FROM
+                user
+                WHERE
+                user.user_id = %s ",
+            $this->_db->makeQueryInteger($userID)
+                );
+            $res = $this->_db->getAssoc($sql);
+             return $res['atsRoll'] ;
     }
 
     /**
