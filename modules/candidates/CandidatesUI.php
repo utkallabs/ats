@@ -78,7 +78,8 @@ class CandidatesUI extends UserInterface
         $candidates = new Candidates($this->_siteID);
         $userId = $this->_userID;
         $this->_atsRoll = $candidates->getAtsRoll($userId);
-        if($this->_atsRoll != [] && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)){
+
+        if(count($this->_atsRoll) > 0 && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)){
             $this->_subTabs = array(
                 'Add Candidate'     => CATSUtility::getIndexName() . '?m=candidates&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@candidates.add',
                 'Search Candidates' => CATSUtility::getIndexName() . '?m=candidates&amp;a=search',
