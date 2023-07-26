@@ -87,7 +87,7 @@ class Users
      * @return new user ID, or -1 on failure.
      */
     public function add($lastName, $firstName, $email, $username, $password,
-            $accessLevel, $eeoIsVisible = false,$is_interviewer,$atsRoll, $userSiteID = -1)
+            $accessLevel, $eeoIsVisible = false,$atsRoll, $userSiteID = -1)
     {
 
         $md5pwd = $password == LDAPUSER_PASSWORD ? $password : md5($password);
@@ -104,7 +104,6 @@ class Users
         last_name,
         site_id,
         can_see_eeo_info,
-        is_interviewer,
         ats_roll
             )
                 VALUES (
@@ -113,7 +112,6 @@ class Users
                     %s,
                     1,
                     0,
-                    %s,
                     %s,
                     %s,
                     %s,
@@ -129,7 +127,6 @@ class Users
         $this->_db->makeQueryString($lastName),
         $userSiteID,
         ($eeoIsVisible ? 1 : 0),
-        ($is_interviewer ? 1 : 0),
         $this->_db->makeQueryString($atsRoll)
 
             );

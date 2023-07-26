@@ -704,7 +704,7 @@ class Candidates
         $this->_db->query($sql);
     }
 
-   public function showListOfFeedbackToHr($candidateID,  $userId){
+   public function showListOfFeedbackToInterviewer($candidateID,  $userId){
     $sql = sprintf(
         "SELECT
             candidate.candidate_id AS candidateId, 
@@ -726,10 +726,37 @@ class Candidates
             calendar_event.date DESC",
         $this->_db->makeQueryInteger($candidateID)
         );
-    //    print_r($sql);exit;
 
     return $this->_db->getAllAssoc($sql);
    }
+
+
+   public function showListOfFeedbackToHr($candidateId){
+    $sql = sprintf(
+        "SELECT
+            candidate.candidate_id AS candidateId, 
+            calendar_event.interviewer_id AS interviewerId,
+            CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,
+            CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName,  
+            calendar_event.interview_level AS interviewLevel,
+            calendar_event.calendar_event_id,
+            calendar_event.feedback AS Feedback 
+        FROM
+              calendar_event
+        JOIN candidate ON candidate.candidate_id = calendar_event.data_item_id
+        JOIN user ON calendar_event.interviewer_id = user.user_id
+        WHERE
+            calendar_event.data_item_id = %s
+        ORDER BY
+            calendar_event.date DESC",
+        $this->_db->makeQueryInteger($candidateId),
+        $this->_siteID
+        );
+
+
+    return $this->_db->getAllAssoc($sql);
+   }
+
 
 
 
