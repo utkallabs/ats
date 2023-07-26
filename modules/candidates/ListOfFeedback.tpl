@@ -17,7 +17,7 @@
 
         <table>
             <tr>
-                <td><strong>Cnadidate Name:</strong></td>
+                <td><strong>Candidate Name:</strong></td>
                 <td><strong> <?php echo $this->candidateDetails[0]['candidateFullName']; ?></strong></td>
             </tr>
 

@@ -462,11 +462,15 @@ class CandidatesUI extends UserInterface
                             CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                         }
                         
-                        if($this->isPostBack()){
+                        if($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
                             $this->showListOfFeedbackToHr();
-    
+
+
+                        }else if($this->_atsRoll['ats_roll'] == 2){
+                            $this->showListOfFeedbackToInterviewer();
                         }else{
                             $this->showListOfFeedbackToHr();
+
                         }
                         
                     break; 
@@ -3897,17 +3901,32 @@ class CandidatesUI extends UserInterface
     }
 
     private function showListOfFeedbackToHr(){
-        $candidateID = $_GET['candidateID'];
-        $userId = $this->_userID;
-        $candidates = new Candidates($this->_siteID);
-        $candidateDetails = $candidates->showListOfFeedbackToHr($candidateID, $userId );    
-        $this->_template->assign('active', $this);
-        $this->_template->assign('candidateDetails', $candidateDetails);
-        $this->_template->assign('candidates', $candidates);
-        $this->_template->display('./modules/candidates/ListOfFeedback.tpl');
 
-    }
-    
+        $candidateID = $_GET['candidateID'];
+           $userId = $this->_userID;
+           $candidates = new Candidates($this->_siteID);
+           $candidateDetails = $candidates->showListOfFeedbackToHr($candidateID, $userId );  
+   
+   
+           $this->_template->assign('active', $this);
+           $this->_template->assign('candidateDetails', $candidateDetails);
+           $this->_template->assign('candidates', $candidates);
+           $this->_template->display('./modules/candidates/ListOfFeedback.tpl');
+       }
+   
+       private function showListOfFeedbackToInterviewer(){
+           $candidateID = $_GET['candidateID'];
+           $userId = $this->_userID;
+           $candidates = new Candidates($this->_siteID);
+           $candidateDetails = $candidates->showListOfFeedbackToHr($candidateID, $userId );    
+           $candidateDetails = $candidates->showListOfFeedbackToInterviewer($candidateID, $userId ); 
+   
+           $this->_template->assign('active', $this);
+           $this->_template->assign('candidateDetails', $candidateDetails);
+           $this->_template->assign('candidates', $candidates);
+           $this->_template->display('./modules/candidates/ListOfFeedback.tpl');
+   
+       }     
 }
 
 ?>
