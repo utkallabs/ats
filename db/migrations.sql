@@ -26,3 +26,7 @@ ALTER TABLE `calendar_event` ADD `feedback` TEXT NULL DEFAULT NULL AFTER `interv
 
 
 
+/* Change timezone type float in site table*/
+
+ALTER TABLE `site` CHANGE `time_zone` `time_zone` FLOAT(5) NULL DEFAULT '0';
+
