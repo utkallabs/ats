@@ -30,6 +30,8 @@
  * @version    $Id: Candidates.php 3813 2007-12-05 23:16:22Z brian $
  */
 
+use PHPUnit\Framework\Constraint\IsFalse;
+
 include_once(LEGACY_ROOT . '/lib/Attachments.php');
 include_once(LEGACY_ROOT . '/lib/Pipelines.php');
 include_once(LEGACY_ROOT . '/lib/History.php');
@@ -93,7 +95,7 @@ class Candidates
      */
     public function add($firstName, $middleName, $lastName, $email1, $email2,
         $phoneHome, $phoneCell, $phoneWork, $address, $city, $state, $zip,
-        $source, $sourceId, $keySkills, $interviewer_id, $dateAvailable, $currentEmployer, $canRelocate,
+        $source, $sourceId, $keySkills, $dateAvailable, $currentEmployer, $canRelocate,
         $currentPay, $desiredPay, $notes, $webSite, $bestTimeToCall, $enteredBy, $owner,
         $gender = '', $race = '', $veteran = '', $disability = '',
         $skipHistory = false)
@@ -116,7 +118,6 @@ class Candidates
                 source,
                 sourceId,
                 key_skills,
-                interviewer_id,
                 date_available,
                 current_employer,
                 can_relocate,
@@ -137,7 +138,6 @@ class Candidates
                 eeo_gender
             )
             VALUES (
-                %s,
                 %s,
                 %s,
                 %s,
@@ -187,7 +187,6 @@ class Candidates
             $this->_db->makeQueryString($source),
             $this->_db->makeQueryInteger($sourceId),
             $this->_db->makeQueryString($keySkills),
-            $this->_db->makeQueryString($interviewer_id),
             $this->_db->makeQueryStringOrNULL($dateAvailable),
             $this->_db->makeQueryString($currentEmployer),
             ($canRelocate ? '1' : '0'),
@@ -199,10 +198,10 @@ class Candidates
             $this->_db->makeQueryInteger($enteredBy),
             $this->_db->makeQueryInteger($owner),
             $this->_siteID,
-            $this->_db->makeQueryString($gender),
             $this->_db->makeQueryInteger($race),
             $this->_db->makeQueryInteger($veteran),
-            $this->_db->makeQueryString($disability)
+            $this->_db->makeQueryString($disability),
+            $this->_db->makeQueryString($gender)
             
         );
 
@@ -262,7 +261,7 @@ class Candidates
         $city, $state, $zip, $source, $sourceId, $keySkills, $dateAvailable,
         $currentEmployer, $canRelocate, $currentPay, $desiredPay,
         $notes, $webSite, $bestTimeToCall, $owner, $isHot, $email, $emailAddress,
-        $gender = '', $race = '', $veteran = '', $disability = '',$interviewer_id)
+        $gender = '', $race = '', $veteran = '', $disability = '')
     {
         $sql = sprintf(
             "UPDATE
@@ -298,8 +297,7 @@ class Candidates
                 eeo_ethnic_type_id    = %s,
                 eeo_veteran_type_id   = %s,
                 eeo_disability_status = %s,
-                eeo_gender            = %s,
-                interviewer_id        = %s
+                eeo_gender            = %s
             WHERE
                 candidate_id = %s
             AND
@@ -334,7 +332,6 @@ class Candidates
             $this->_db->makeQueryInteger($veteran),
             $this->_db->makeQueryString($disability),
             $this->_db->makeQueryString($gender),
-            $this->_db->makeQueryInteger($interviewer_id),
             $this->_db->makeQueryInteger($candidateID),
             $this->_siteID
         );
@@ -543,8 +540,7 @@ class Candidates
                     IF (candidate.eeo_gender = 'f',
                         'Female',
                         ''))
-                     AS eeoGenderText,
-                candidate.interviewer_id AS interviewerId   
+                     AS eeoGenderText  
                      
             FROM
                 candidate
@@ -591,6 +587,230 @@ class Candidates
         return $this->_db->getAllAssoc($sql);
 
     }
+
+
+    public function getInterviewerFromAtsRoll(){
+        $sql = sprintf(
+            "SELECT
+                user.first_name,
+                user.last_name,
+                user.user_id
+            FROM
+                user
+            WHERE
+                user.ats_roll = 2
+            ORDER BY
+                user.user_id ASC",
+            $this->_siteID,
+            
+        );
+        return $this->_db->getAllAssoc($sql);
+
+    }
+
+    public function getAtsRoll($userId){
+        $sql = sprintf(
+            "SELECT
+                user.user_id AS userID,
+                user.ats_roll
+            FROM
+                user               
+            WHERE
+                user.user_id = %s",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        
+        return $this->_db->getAssoc($sql);
+    }
+
+    public function getFeedbackForInterviewer($userId){
+        $sql = sprintf(
+            "SELECT
+                candidate.candidate_id AS candidateId, 
+                calendar_event.interviewer_id AS interviewerId,
+                CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+                calendar_event.interview_level AS interviewLevel,
+                calendar_event.calendar_event_id 
+            FROM
+                candidate 
+            JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id 
+            JOIN user ON user.user_id = calendar_event.interviewer_id 
+            WHERE 
+                user.user_id = %s
+            GROUP BY
+                candidate.candidate_id,
+                CONCAT(candidate.first_name, ' ', candidate.last_name)
+            ORDER BY
+                calendar_event.date DESC",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        return $this->_db->getAllAssoc($sql);
+    }
+
+
+    /**
+     * Returns Feedback 
+     * for a given event ID.
+     *
+     * @return array Associative result set array of feedback data, or array()
+     *               if no records were returned.
+     */
+    public function onAddFeedback($eventID,$feedbackText){
+        $sql = sprintf(
+            "UPDATE calendar_event 
+
+            SET feedback = %s
+
+            WHERE calendar_event_id = %s",
+             $this->_db->makeQueryString($feedbackText),
+             $eventID
+        );
+        $this->_db->query($sql);
+    }
+
+    /**
+     * Returns Feedback  for a given candidate ID.
+     *
+     * @return array Associative result set array of feedback data, or array()
+     *               if no records were returned.
+     */
+    public function onShowFeedback($eventID){
+        $sql = sprintf(
+            "SELECT
+             feedback
+            FROM
+            calendar_event
+            WHERE calendar_event_id = %s ",
+             $eventID
+ 
+        );
+       
+        return $this->_db->getAssoc($sql);
+        
+    }
+    public function onUpdateFeedback($eventID,$feedbackText){
+        $sql = sprintf(
+            "UPDATE calendar_event 
+
+            SET feedback = %s
+
+            WHERE calendar_event_id = %s",
+             $this->_db->makeQueryString($feedbackText),
+             $eventID,
+             $this->_siteID
+        );
+        $this->_db->query($sql);
+    }
+
+   public function  showListOfFeedbackToInterviewer($candidateID,  $userId){
+    $sql = sprintf(
+        "SELECT
+            candidate.candidate_id AS candidateId, 
+            calendar_event.interviewer_id AS interviewerId,
+            CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,
+            CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName,  
+            calendar_event.interview_level AS interviewLevel,
+            calendar_event.calendar_event_id,
+            calendar_event.feedback AS Feedback 
+        FROM
+            candidate 
+        JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id
+        JOIN user ON calendar_event.interviewer_id = user.user_id
+        WHERE
+            candidate.candidate_id = %s
+        AND
+            user.user_id = $userId
+        ORDER BY
+            calendar_event.date DESC",
+        $this->_db->makeQueryInteger($candidateID)
+        );
+    //    print_r($sql);exit;
+
+    return $this->_db->getAllAssoc($sql);
+   }
+
+   public function showListOfFeedbackToHr($candidateId){
+    $sql = sprintf(
+        "SELECT
+            candidate.candidate_id AS candidateId, 
+            calendar_event.interviewer_id AS interviewerId,
+            CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,
+            CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName,  
+            calendar_event.interview_level AS interviewLevel,
+            calendar_event.calendar_event_id,
+            calendar_event.feedback AS Feedback 
+        FROM
+              calendar_event
+        JOIN candidate ON candidate.candidate_id = calendar_event.data_item_id
+        JOIN user ON calendar_event.interviewer_id = user.user_id
+        WHERE
+            calendar_event.data_item_id = %s
+        ORDER BY
+            calendar_event.date DESC",
+        $this->_db->makeQueryInteger($candidateId),
+        $this->_siteID
+        );
+
+
+    return $this->_db->getAllAssoc($sql);
+   }
+
+
+
+    /**
+     * Returns Feedback  for a given candidate ID.
+     *
+     * @return array Associative result set array of feedback data, or array()
+     *               if no records were returned.
+     */
+
+    public function getCandidatesForFeedback($eventID)
+    {
+        $sql = sprintf(
+            "SELECT
+                candidate.candidate_id AS candidateId, 
+                calendar_event.interviewer_id AS interviewerId,
+                CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+                calendar_event.interview_level AS interviewLevel,
+                calendar_event.calendar_event_id 
+            FROM
+                candidate 
+            JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id 
+            WHERE
+                calendar_event.calendar_event_id = %s
+            ORDER BY
+                calendar_event.date DESC",
+            $eventID
+        );
+
+        return $this->_db->getAssoc($sql);
+   }
+
+   public function getCandidatesForHr()
+   {  
+    
+   $sql = sprintf(
+           "SELECT
+               candidate.candidate_id AS candidateId, 
+               calendar_event.interviewer_id AS interviewerId,
+               CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+               calendar_event.interview_level AS interviewLevel,
+               calendar_event.calendar_event_id 
+           FROM
+               candidate 
+           JOIN calendar_event ON candidate.candidate_id = calendar_event.data_item_id 
+           GROUP BY
+            candidate.candidate_id,
+            CONCAT(candidate.first_name, ' ', candidate.last_name)
+           ORDER BY
+               calendar_event.date DESC"
+       );
+       return $this->_db->getAllAssoc($sql);
+    
+    }  
+
 
     public function getWithDuplicity($candidateID)
     {
@@ -662,8 +882,7 @@ class Candidates
                 candidate.is_admin_hidden AS isAdminHidden,
                 DATE_FORMAT(
                     candidate.date_available, '%%m-%%d-%%y'
-                ) AS dateAvailable,
-                candidate.interviewer_id AS interviewerId
+                ) AS dateAvailable
 
             FROM
                 candidate
@@ -677,6 +896,41 @@ class Candidates
 
         return $this->_db->getAssoc($sql);
     }
+
+    /**
+     * Returns all interviewer name relevent for the  Candidate details page
+     * for a given candidate ID.
+     *
+     * @param integer Candidate ID.
+     * @return array Associative result set array of interviewer , or array()
+     *               if no records were returned.
+     */
+
+    public function getInterviewerForCandidate($candidateID)
+    {
+        $sql = sprintf(
+            "SELECT
+                CONCAT( user.first_name, ' ', user.last_name ) AS interviewerFullName,
+                 calendar_event.interview_level,
+                 calendar_event.date,
+                 calendar_event.calendar_event_id,
+                 user.user_id      
+            FROM
+                calendar_event
+            
+            LEFT JOIN user
+                ON calendar_event.interviewer_id = user.user_id
+            WHERE
+                calendar_event.data_item_id = %s",
+
+            $this->_db->makeQueryInteger($candidateID)
+           
+        );
+
+       return $this->_db->getAllAssoc($sql);
+    
+    }
+
 
     // FIXME: Document me.
     public function getExport($IDs)
@@ -1927,6 +2181,7 @@ class Candidates
 
     public function getListsForCandidate($candidateID){
         $sql = sprintf("
+    
             SELECT 
                 saved_list.description AS name,
                 saved_list.saved_list_id AS listID
@@ -1974,7 +2229,8 @@ class Candidates
                 ce.interviewer_id AS interviewerId,
                 CONCAT( c.first_name, ' ', c.last_name ) AS candidateFullName, 
                 ce.date, 
-                ce.interview_level 
+                ce.interview_level,
+                ce.calendar_event_id 
             FROM
                 candidate AS c
             JOIN calendar_event AS ce ON c.candidate_id = ce.data_item_id 
@@ -1984,8 +2240,8 @@ class Candidates
                 ce.date DESC",
             $userId
         );
-        
         return $this->_db->getAllAssoc($sql);
+
     }
 }
 
@@ -2414,7 +2670,6 @@ class CandidatesDataGrid extends DataGrid
             $orderSQL,
             $limitSQL
         );
-
         return $sql;
     }
 }

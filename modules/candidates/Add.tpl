@@ -492,21 +492,6 @@
 
             <p class="note<?php if ($this->isModal): ?>Unsized<?php endif; ?>" style="margin-top: 5px;">Other</p>
             <table class="editTable">
-                <tr>
-                    <td class="tdVertical">
-                        <label id="InterviewerLabel" for="Interviewer">Interviewer:</label>
-                    </td>
-                    <td>
-                        <select name="interviewer_id">
-                             <option> Select Interviewer </option>
-                                 <?php foreach ($this->interviewers AS $index => $interviewer): ?>
-                                 <option value="<?php $this->_($interviewer['user_id']); ?> ">
-                                <?php echo $interviewer['first_name'] . " " . $interviewer['last_name']; ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                </tr>
 
                 <tr>
                     <td class="tdVertical">

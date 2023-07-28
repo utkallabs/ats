@@ -664,7 +664,7 @@ table.detailsOutside
     margin-bottom: 5px;
 }
 
-table.detailsOutside td
+table.detailsOutside td 
 {
     margin: 0px;
     padding: 0px;
@@ -748,6 +748,8 @@ p.freeformbottom
     font: normal normal normal 12px Arial, Tahoma, sans-serif;
     visibility: hidden;
 }
+
+
 
 .button
 {
@@ -1377,3 +1379,61 @@ td.contentContainerOld {
 #emailPreview * {
     padding: 5px;
 }
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 20px;
+    background-color: #f3f3f3;
+  }
+  
+  #loader::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: #3498db;
+    animation: progress 2s linear infinite;
+  }
+  
+  @keyframes progress {
+    0% { width: 0; }
+    100% { width: 200%; }
+  }
+
+/* Feedback */
+textarea {
+    width: 200%;
+}
+
+#editTextarea{
+    width: 200%;
+}
+
+/* Accordian  */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+  }
+  
+  .active, .accordion:hover {
+    background-color: #ccc; 
+  }
+  
+  .panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+  }
+

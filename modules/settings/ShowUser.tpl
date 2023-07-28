@@ -61,6 +61,25 @@
                                 <td class="vertical">Access Level:</td>
                                 <td class="data"><?php $this->_($this->data['accessLevelLongDescription']); ?></td>
                             </tr>
+
+                            <tr>
+                                <td class="vertical">ATS Roll:</td>
+                                <td class="data" checked>
+                                 <?php
+                                 $atsRoll = $this->atsRoll;
+                                 if ($atsRoll == 1) {
+                                   echo "New User";
+                                 } elseif ($atsRoll == 2) {
+                                   echo "Interviewer";
+                                 } elseif ($atsRoll == 3) {
+                                   echo "HR";
+                                 } elseif ($atsRoll == 4) {
+                                   echo "Administrator";
+                                 }
+                                 ?>
+                               </td>
+                               
+                            </tr>
                             
                             <?php if($this->EEOSettingsRS['enabled'] == 1): ?> <tr>
                                 <td class="vertical">Can See EEO Info:</td>
