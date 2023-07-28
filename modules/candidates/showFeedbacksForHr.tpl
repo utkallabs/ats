@@ -21,6 +21,7 @@
                 <tr>
                     <th width="5%">Sl No</th>
                     <th>Candidate Name</th>
+                    <th>Candidate Email</th>
                     <th>Show Feedbacks</th>
                 </tr>
             </thead>
@@ -29,7 +30,9 @@
             <?php foreach ($this->candidates as $key => $candidate): ?>
             <tr>
                 <td width="5%"><?php echo ++$key; ?></td>
-                <td><?php echo $candidate['candidateFullName']; ?></td>
+                <td> <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=show&amp;candidateID=<?php echo $candidate['candidateId']; ?>"> 
+                <?php echo $candidate['candidateFullName']; ?></a></td>
+                <td><?php echo $candidate['email1'];?></td>
                 <td><a href="<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=feedbacksShow&amp;candidateID=<?php echo $candidate['candidateId']; ?>">Show Feedbacks</a>
                 </td>
             </tr>

@@ -3498,8 +3498,7 @@ class CandidatesUI extends UserInterface
         $subject = "Interview Scheduled";
 
         $body = "Hello HR Team, \r\n " . "Interview has been scheduled for the candidate . \r\n ". "Candidate Name - " . '<b>' . $candidateData['candidateFullName'] . '</b>' . " \r\n " . " Interviewer Name - " . $interviewerData['fullName'] ." \r\n " . " Interview Date - " . $data['dateAdd'] . " \r\n " . " \r\n " . " Interview Time - " . $data['hour'] .":". $data['minute'] . $data['meridiem'] . " \r\n " . " Interview Duration - " . $data['duration'] ."Minutes". " \r\n " . " Interview Link - " . $data['interview_link'] . " \r\n ";
-
-        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],[$interviewerData['email'], "Interviewer Name"]];
+        $recipient = [[CONFIG_HR_MAIL, "HR UTKALLABS"],[$interviewerData['email'], "Interviewer Name"]];
         $mailer = new Mailer($this->_siteID, $this->_userID);
         $mailer->sendToMany($recipient, $subject, $body, true);
     }
@@ -3512,7 +3511,7 @@ class CandidatesUI extends UserInterface
 
         $body = "Hello HR, \r\n " . "This E-Mail is a notification that \r\n ". "The candidate " . $candidateData['candidateFullName'] . " status has been changed. \r\n " . " Old Status - " . $oldStatus ." \r\n " . $activityNote . " \r\n ";
 
-        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"]];
+        $recipient = [[CONFIG_HR_MAIL, "HR UTKALLABS"]];
         $mailer = new Mailer($this->_siteID, $this->_userID);
         $mailer->sendToMany($recipient, $subject, $body, true);
     }

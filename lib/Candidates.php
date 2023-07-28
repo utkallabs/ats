@@ -628,6 +628,8 @@ class Candidates
         $sql = sprintf(
             "SELECT
                 candidate.candidate_id AS candidateId, 
+                candidate.email1 AS email1,
+               candidate.email2 AS email2,
                 calendar_event.interviewer_id AS interviewerId,
                 CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
                 calendar_event.interview_level AS interviewLevel,
@@ -793,9 +795,12 @@ class Candidates
     
    $sql = sprintf(
            "SELECT
-               candidate.candidate_id AS candidateId, 
+               candidate.candidate_id AS candidateId,
+               candidate.email1 AS email1,
+               candidate.email2 AS email2, 
                calendar_event.interviewer_id AS interviewerId,
                CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
+               calendar_event.date_modified,
                calendar_event.interview_level AS interviewLevel,
                calendar_event.calendar_event_id 
            FROM
@@ -805,7 +810,7 @@ class Candidates
             candidate.candidate_id,
             CONCAT(candidate.first_name, ' ', candidate.last_name)
            ORDER BY
-               calendar_event.date DESC"
+               calendar_event.date_modified DESC"
        );
        return $this->_db->getAllAssoc($sql);
     
