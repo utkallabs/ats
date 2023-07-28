@@ -16,3 +16,7 @@ ALTER TABLE `calendar_event` ADD `interview_link` VARCHAR(255) NOT NULL AFTER `i
 
 ALTER TABLE `calendar_event` ADD `interview_level` VARCHAR(2) NOT NULL AFTER `interview_link`;
 
+/* Change timezone type float in site table*/
+
+ALTER TABLE `site` CHANGE `time_zone` `time_zone` FLOAT(5) NULL DEFAULT '0';
+
