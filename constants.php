@@ -46,7 +46,7 @@ define('CATS_VERSION', '0.9.6');
 
 
 /* Copyright information at bottom of pages. */
-define('COPYRIGHT_HTML', '&copy; 2007-2020 OpenCATS.');
+define('COPYRIGHT_HTML', '&copy; 2021-2023 Utkallabs.');
 
 /* HTTP response codes. */
 define('HTTP_OK',             200);
