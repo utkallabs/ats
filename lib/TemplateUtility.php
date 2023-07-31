@@ -145,9 +145,9 @@ class TemplateUtility
                 }
                 else
                 {
-                    echo '<a href="http://www.opencats.org" target="_blank">';
+                    echo '<a href="http://www.utkallabs.com" target="_blank">';
                     echo '<img src="images/tabs/small_upgrade.jpg" border="0" /> ';
-                    echo 'OpenCATS.org</a>&nbsp;&nbsp;&nbsp;&nbsp;', "\n";
+                    echo 'utkallabs.com</a>&nbsp;&nbsp;&nbsp;&nbsp;', "\n";
                 }
             }
 
@@ -827,8 +827,8 @@ class TemplateUtility
        */
 
         echo '<div class="footerBlock">', "\n";
-        echo '<p id="footerText">OpenCATS Version ', CATS_VERSION, $buildString,
-             '. <span id="toolbarVersion"></span>Powered by <a href="http://www.opencats.org/"><strong>OpenCATS</strong></a>.</p>', "\n";
+        echo '<p id="footerText">UL ATS ', 'V 0.1',
+             '. <span id="toolbarVersion"></span>Powered by <a href="http://www.utkallabs.com"><strong>Utkallabs</strong></a>.</p>', "\n";
         echo '<span id="footerResponse">Server Response Time: ', $loadTime, ' seconds.</span><br />';
         echo '<span id="footerCopyright">', COPYRIGHT_HTML, '</span>', "\n";
         if (!eval(Hooks::get('TEMPLATEUTILITY_SHOWPRIVACYPOLICY'))) return;
