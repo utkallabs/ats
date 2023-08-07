@@ -172,7 +172,7 @@ class InstallationTests
         }
 
         echo sprintf(
-            '<tr class="fail"><td><strong>PHP 5.0.0 or greater is required to run OpenCATS.</strong><br />'
+            '<tr class="fail"><td><strong>PHP 5.0.0 or greater is required to run UL ATS.</strong><br />'
             . 'Found version: %s.</td></tr>',
             PHP_VERSION
         );
@@ -308,7 +308,7 @@ class InstallationTests
 
         // FIXME: More information.
         echo '<tr class="warning"><td><strong>PHP GD image manipulation library extension (gd) is not loaded.</strong><br />'
-            . 'Check your settings in php.ini.<br /><br />OpenCATS will function without GD, but no graphs will load.<br /><br />'
+            . 'Check your settings in php.ini.<br /><br />UL ATS will function without GD, but no graphs will load.<br /><br />'
             . 'Under certain Linux / BSD distributions, the PHP GD extension is a separate package.<br /><br />'
             . '<strong>Ubuntu:</strong> Run "apt-get install php7-gd" and restart your webserver.<br /><br />'
             . '<strong>Debian:</strong> Run "apt-get install php7-gd" and restart your webserver.<br /><br />'
@@ -329,7 +329,7 @@ class InstallationTests
         }
 
         echo '<tr class="warning"><td><strong>PHP LDAP library extension (ldap) is not loaded.</strong><br />'
-            . 'Check your settings in php.ini.<br /><br />OpenCATS will function without LDAP, but will not authenticate from a LDAP service<br /><br />'
+            . 'Check your settings in php.ini.<br /><br />UL ATS will function without LDAP, but will not authenticate from a LDAP service<br /><br />'
             . 'Under certain GNU/Linux distributions, the PHP LDAP extension is a separate package.<br /><br />'
             . '<strong>Ubuntu/Debian:</strong> Run "apt-get install php7-ldap" and restart your webserver.<br /><br />'
             . '<strong>Fedora/CentOS/RHEL:</strong> Run "dnf install php-ldap" or "yum install php-ldap" and restart your webserver.<br /><br />'
@@ -353,7 +353,7 @@ class InstallationTests
 
         echo '<tr class="warning"><td><strong>PHP SOAP extension (soap) is not loaded.</strong><br />'
             . 'Check your settings in php.ini.<br /><br />'
-            . 'OpenCATS will function without SOAP, but '
+            . 'UL ATS will function without SOAP, but '
             . 'CATS Professional functionality will not be supported.<br /><br />'
             . 'Under certain Linux / BSD distributions, the PHP SOAP extension is a separate package.<br /><br />'
             . '<strong>Ubuntu:</strong> Run "apt-get install php-soap" and restart your webserver.<br /><br />'
@@ -376,7 +376,7 @@ class InstallationTests
 
         echo '<tr class="warning"><td><strong>PHP Zip support extension (zip) is not loaded.</strong><br />'
             . 'Check your settings in php.ini.<br /><br />'
-            . 'openCATS will function without zip, but '
+            . 'UL ATS will function without zip, but '
             . 'attachment handling functionality will be limited.<br /><br />'
             . '</td></tr>';
         $GLOBALS['warningsOccurred'] = true;
@@ -787,7 +787,7 @@ class InstallationTests
         }
 
         echo sprintf(
-            '<tr class="fail"><td>MySQL 4.1.0 or greater is required to run OpenCATS. Found version: %s.</td></tr>',
+            '<tr class="fail"><td>MySQL 4.1.0 or greater is required to run UL ATS. Found version: %s.</td></tr>',
             $version
         );
 

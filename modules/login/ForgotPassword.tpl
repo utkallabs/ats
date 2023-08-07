@@ -13,7 +13,7 @@
     <body>
 
     <div id="headerBlock">
-        <span id="mainLogo">OpenCATS</span>
+        <span id="mainLogo">UL ATS</span>
     </div>
 
     <div id="contents">
@@ -51,7 +51,7 @@
 
             <div id="loginText">
                 <div class="ctr"><img src="images/security.gif" width="64" height="64" alt="security" /></div>
-                <p>Welcome to OpenCATS!</p>
+                <p>Welcome to UL ATS!</p>
             </div>
 
             <div style="clear: both;"></div>

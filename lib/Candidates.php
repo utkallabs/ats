@@ -9,7 +9,7 @@
  * The contents of this file are subject to the CATS Public License
  * Version 1.1a (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.catsone.com/.
+ * http://www.utkallabs.com/.
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
@@ -629,7 +629,7 @@ class Candidates
             "SELECT
                 candidate.candidate_id AS candidateId, 
                 candidate.email1 AS email1,
-               candidate.email2 AS email2,
+                candidate.email2 AS email2,
                 calendar_event.interviewer_id AS interviewerId,
                 CONCAT( candidate.first_name, ' ', candidate.last_name ) AS candidateFullName,  
                 calendar_event.interview_level AS interviewLevel,
@@ -2331,6 +2331,7 @@ class CandidatesDataGrid extends DataGrid
                                      'pagerOptional'   => false,
                                      'alphaNavigation' => true,
                                      'filter'         => 'candidate.last_name'),
+                                   
 
             'E-Mail' =>         array('select'   => 'candidate.email1 AS email1',
                                      'sortableColumn'     => 'email1',
@@ -2398,6 +2399,8 @@ class CandidatesDataGrid extends DataGrid
                                      'sortableColumn'    => 'keySkills',
                                      'pagerWidth'   => 210,
                                      'filter'         => 'candidate.key_skills'),
+
+                                     
 
             'Recent Status' => array('select'  => '(
                                                     SELECT
