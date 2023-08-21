@@ -335,3 +335,18 @@ function checkValidSiteName()
     }
     return errorMessage;
 }
+
+$(document).ready(function(){
+    $('input[name="atsRoll"]').change(function () {
+        if($('input[name="atsRoll"]:checked').val() == 1){
+            $('#access100').attr('checked', true);
+        }
+        else if($('input[name="atsRoll"]:checked').val() == 2){
+            $('#access200').attr('checked', true);
+        }else if($('input[name="atsRoll"]:checked').val() == 3){
+            $('#access300').attr('checked', true);
+        }else if($('input[name="atsRoll"]:checked').val() == 4){
+            $('#access400').attr('checked', true);
+        }
+    });
+});
