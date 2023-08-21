@@ -23,8 +23,8 @@
                     </td>
                 </tr>
             </table>
-
-            <table>
+            <input type="hidden" id="atsRollVal" value="<?php echo $this->atsRoll; ?>" />
+            <table id="recentCallsTable">
                 <tr>
                     <td align="left" valign="top" style="text-align: left; width: 50%; height: 240px;">
                         <div class="noteUnsizedSpan">Recent Hires</div>
@@ -67,8 +67,8 @@
                     </td>
                 </tr>
             </table>
-
-            <table>
+            <input type="hidden" id="atsRollVal" value="<?php echo $this->atsRoll; ?>" />
+            <table id="importantCandidateTable">
                 <tr>
                     <td align="left" valign="top" style="text-align: left; width: 50%; height: 260px;">
                         <div class="noteUnsizedSpan">Important Candidates (Submitted, Interviewing, Offered in Active Job Orders) - Page <?php echo($this->dataGrid->getCurrentPageHTML()); ?> (<?php echo($this->dataGrid->getNumberOfRows()); ?> Items)</div>

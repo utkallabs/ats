@@ -39,3 +39,14 @@ function trackTableHighlight()
 {
     return;
 }
+
+$(document).ready(function() {
+   let atsRollVal = $('#atsRollVal').val();
+   if(atsRollVal == 3 || atsRollVal == 4){
+    $('#importantCandidateTable').show();
+    $('#recentCallsTable').show();
+   }else{
+    $('#importantCandidateTable').hide();
+    $('#recentCallsTable').hide();
+   }
+});

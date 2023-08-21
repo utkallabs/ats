@@ -720,6 +720,7 @@ class Calendar
         $sql = sprintf(
             "SELECT
                 calendar_event.calendar_event_id AS eventID,
+                
                 calendar_event.title AS title,
                 calendar_event.description AS description,
                 calendar_event.public AS public,
@@ -747,6 +748,7 @@ class Calendar
                 calendar_event
             LEFT JOIN user AS entered_by_user
                 ON calendar_event.entered_by = entered_by_user.user_id
+           
             WHERE
                 TO_DAYS(NOW()) = TO_DAYS(calendar_event.date)
             AND
@@ -883,8 +885,7 @@ class Calendar
                 $style,
                 htmlspecialchars($row['title'])
             );
-        }
-
+        }       
         return $HTML;
     }
 
