@@ -222,7 +222,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        Change how CATS stores user passwords, and how users can retrieve them.
+                                        Change how <strong>UL ATS</strong> stores user passwords, and how users can retrieve them.
                                     </td>
                                 </tr>
                                 <tr>
@@ -233,7 +233,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        Change how CATS checks periodically for new versions.
+                                        Change how <strong>UL ATS</strong> checks periodically for new versions.
                                     </td>
                                 </tr>
                                 <tr>
@@ -244,7 +244,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        View information about this CATS installation.
+                                        View information about this <strong>UL ATS</strong> installation.
                                     </td>
                                 </tr>
                             </table>

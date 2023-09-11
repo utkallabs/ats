@@ -1,6 +1,6 @@
-<b>Please name your OpenCATS site.</b>
+<b>Please name your UL ATS site.</b>
 <br />
-The name you choose will be used to describe your OpenCATS site. By default, it will be seen in
+The name you choose will be used to describe your UL ATS site. By default, it will be seen in
 e-mail notifications.
 <p />
 <div id="siteBeacon" style="display: none;">&nbsp;</div>

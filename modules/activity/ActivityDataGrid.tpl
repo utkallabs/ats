@@ -56,6 +56,8 @@
 
                 </tr>
             </table>
+            <input type="hidden" id="atsRollVal" value="<?php echo $this->atsRoll; ?>" />
+
 
             <?php endif; ?>
         </div>

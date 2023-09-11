@@ -31,8 +31,10 @@ class candidatesListByViewDataGrid extends CandidatesDataGrid
             array('name' => 'Owner', 'width' => 65),
             array('name' => 'Created', 'width' => 60),
             array('name' => 'Modified', 'width' => 60),
+            array('name' => 'Feedback', 'width' => 60),
+           
         );
-
+//print_r( $this->_defaultColumns);
          parent::__construct("candidates:candidatesListByViewDataGrid",
                              $siteID, $parameters, $misc
                         );

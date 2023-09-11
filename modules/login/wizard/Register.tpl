@@ -8,7 +8,7 @@ input.licenseKey { border: 1px solid #0C519D; padding: 5px; width: 500px; }
         </td>
 
         <td align="left" valign="top">
-            <b>OpenCATS</b> users get everything.</b>
+            <b>UL ATS</b> users get everything.</b>
             <ul>
                 <li>Freeform text-search across resume's.</li>
                 <li>A careers website where applicants can view public jobs and apply.</li>

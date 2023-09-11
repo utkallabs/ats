@@ -8,10 +8,10 @@
             <b>To help you get started as quickly as possible, we’ve prepared a few easy tasks.</b>
             </span>
             <p />
-            If you have any questions, comments or suggestions about OpenCATS, we’d love to hear your
-            feedback! You can contact support at anytime at the OpenCATS forums.
+            If you have any questions, comments or suggestions about UL ATS, we’d love to hear your
+            feedback! You can contact support at anytime at the UL ATS forums.
             <p />
-            Like the thousands of people that use OpenCATS everyday, we’re confident that you will
+            Like the thousands of people that use UL ATS everyday, we’re confident that you will
             find it to be an easy-to-use, comprehensive solution to all of your recruiting needs.
         </td>
     </tr>

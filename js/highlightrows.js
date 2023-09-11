@@ -3,7 +3,7 @@
  * Portions Copyright (C) 2006 - 2007 Cognizo Technologies Inc.
  *
  * The Contents of this file are subject to the CATS Public Licence
- * A copy of the licence can be found at www.catsone.com
+ * A copy of the licence can be found at www.utkallabs.com
  *
  * This file contains functions to highlight rows of a table and preserve the
  * orginal style of the table, includeing table cells which may be differnt

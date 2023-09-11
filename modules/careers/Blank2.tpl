@@ -29,8 +29,8 @@
     </div>
     <div style="text-align:center;">
 
-        <?php /* WARNING: It is against the terms of the CPL to remove or alter the following line.  The 'Powered by OpenCATS' line must stay visible on every page. */ ?>
-        <span style="font-size: 9px;">Powered by</span> <a style="color: #888; position: relative; font-size: 9px; font-weight: normal; text-align: center; left: 0px; top: 0px;" href="http://www.opencats.com" target="_blank">OpenCATS</a>.
+        <?php /* WARNING: It is against the terms of the CPL to remove or alter the following line.  The 'Powered by UL ATS' line must stay visible on every page. */ ?>
+        <span style="font-size: 9px;">Powered by</span> <a style="color: #888; position: relative; font-size: 9px; font-weight: normal; text-align: center; left: 0px; top: 0px;" href="http://www.utkakllabs.com" target="_blank">UL ATS</a>.
 
     </div>
     <script type="text/javascript">st_init();</script>

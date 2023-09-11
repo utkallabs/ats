@@ -9,7 +9,7 @@
  * The contents of this file are subject to the CATS Public License
  * Version 1.1a (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.catsone.com/.
+ * http://www.utkallabs.com/.
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
@@ -720,6 +720,7 @@ class Calendar
         $sql = sprintf(
             "SELECT
                 calendar_event.calendar_event_id AS eventID,
+                
                 calendar_event.title AS title,
                 calendar_event.description AS description,
                 calendar_event.public AS public,
@@ -747,6 +748,7 @@ class Calendar
                 calendar_event
             LEFT JOIN user AS entered_by_user
                 ON calendar_event.entered_by = entered_by_user.user_id
+           
             WHERE
                 TO_DAYS(NOW()) = TO_DAYS(calendar_event.date)
             AND
@@ -883,8 +885,7 @@ class Calendar
                 $style,
                 htmlspecialchars($row['title'])
             );
-        }
-
+        }       
         return $HTML;
     }
 
