@@ -34,7 +34,6 @@ class candidatesListByViewDataGrid extends CandidatesDataGrid
             array('name' => 'Feedback', 'width' => 60),
            
         );
-//print_r( $this->_defaultColumns);
          parent::__construct("candidates:candidatesListByViewDataGrid",
                              $siteID, $parameters, $misc
                         );
