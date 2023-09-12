@@ -8,7 +8,7 @@
  * The contents of this file are subject to the CATS Public License
  * Version 1.1a (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.catsone.com/.
+ * http://www.utkallabs.com/.
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
@@ -39,3 +39,14 @@ function trackTableHighlight()
 {
     return;
 }
+
+$(document).ready(function() {
+   let atsRollVal = $('#atsRollVal').val();
+   if(atsRollVal == 3 || atsRollVal == 4){
+    $('#importantCandidateTable').show();
+    $('#recentCallsTable').show();
+   }else{
+    $('#importantCandidateTable').hide();
+    $('#recentCallsTable').hide();
+   }
+});

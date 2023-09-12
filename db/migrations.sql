@@ -30,3 +30,19 @@ ALTER TABLE `calendar_event` ADD `feedback` TEXT NULL DEFAULT NULL AFTER `interv
 
 ALTER TABLE `site` CHANGE `time_zone` `time_zone` FLOAT(5) NULL DEFAULT '0';
 
+/*Migration for the source field for older candidates*/
+UPDATE candidate
+SET sourceId = 
+CASE
+WHEN source = 'Tadit' THEN 1
+WHEN source = 'Suvendu' THEN 2
+WHEN source = 'HR & Career email' THEN 3
+WHEN source = 'Jagatbandhu' THEN 4
+WHEN source = 'LinkedIn' THEN 5
+WHEN source = 'Nirmal' THEN 6
+WHEN source = 'TestYantra' THEN 7
+WHEN source = 'Employee' THEN 8
+WHEN source = 'Naukri' THEN 9
+END WHERE source IN ('Tadit','Suvendu','HR & Career email','Jagatbandhu','LinkedIn', 'Nirmal', 'TestYantra','Employee');
+
+

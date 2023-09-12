@@ -15,7 +15,7 @@
     <!-- CATS_LOGIN -->
     <?php TemplateUtility::printPopupContainer(); ?>
 <!--       <div id="headerBlock"> 
-            <span id="mainLogo">opencats</span><br /> 
+            <span id="mainLogo">Utkallabs</span><br /> 
              <span id="subMainLogo">Applicant Tracking System</span> 
        </div> -->
 <p>
@@ -40,7 +40,7 @@
                 </div>
 
                 <div id="formBlock">
-                    <img src="images/CATS-sig.gif" alt="Login" hspace="10" vspace="10" />
+                    <img src="images/applicationLogo.jpg" alt="Login" hspace="10" vspace="10" />
                     <br />
                     <form name="loginForm" id="loginForm" action="<?php echo(CATSUtility::getIndexName()); ?>?m=login&amp;a=attemptLogin<?php if ($this->reloginVars != ''): ?>&amp;reloginVars=<?php echo($this->reloginVars); ?><?php endif; ?>" method="post" onsubmit="return checkLoginForm(document.loginForm);" autocomplete="off">
                         <div id="subFormBlock">
@@ -108,7 +108,7 @@
 <p>
 	&nbsp;</p>  
 
-	<span style="font-size: 12px;"><a href="http://forums.opencats.org ">opencats support forum</a></span>
+	<span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a></span>
 	           <div id="login">
                 <?php if (!empty($this->message)): ?>
                     <div>
@@ -122,7 +122,7 @@
 	</div>
 	  <div id="footerBlock">
                 <span class="footerCopyright"><?php echo(COPYRIGHT_HTML); ?></span>
-                Based upon original work and Powered by <a href="http://www.opencats.org" target="_blank">OpenCATS</a>.</div>
+                Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a>.</div>
             </div>
         </div>
 

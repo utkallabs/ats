@@ -196,6 +196,7 @@ class Mailer
     {
 
         $this->_mailer->From     = $from[0];
+
         $this->_mailer->FromName = $from[1];
 
         $this->_mailer->WordWrap = $wrapLinesAt;
@@ -243,6 +244,7 @@ class Mailer
                     'recipient'    => $recipients[$key],
                     'errorMessage' => $this->_mailer->ErrorInfo
                 );
+
             }
             else if ($logMessage)
             {

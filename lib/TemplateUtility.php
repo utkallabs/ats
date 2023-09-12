@@ -813,17 +813,17 @@ class TemplateUtility
             $buildString = '';
         }
 
-        /* THE MODIFICATION OF THE COPYRIGHT AND 'Powered by OpenCATS' LINES IS NOT ALLOWED
-           BY THE TERMS OF THE CPL FOR OpenCATS OPEN SOURCE EDITION.
+        /* THE MODIFICATION OF THE COPYRIGHT AND 'Powered by UL ATS' LINES IS NOT ALLOWED
+           BY THE TERMS OF THE CPL FOR UL ATS OPEN SOURCE EDITION.
 
              II) The following copyright notice must be retained and clearly legible
              at the bottom of every rendered HTML document: Copyright (C) 2007-2020
-             OpenCATs All rights reserved.
+             UL ATS All rights reserved.
 
-             III) The "Powered by OpenCATS" text or logo must be retained and clearly
+             III) The "Powered by UL ATS" text or logo must be retained and clearly
              legible on every rendered HTML document. The logo, or the text
-             "OpenCATS", must be a hyperlink to the CATS Project website, currently
-             http://www.opencats.org/.
+             "UL ATS", must be a hyperlink to the CATS Project website, currently
+             http://www.utkallabs.com/.
        */
 
         echo '<div class="footerBlock">', "\n";
@@ -871,8 +871,8 @@ class TemplateUtility
 
         echo '<div class="footerBlock">', "\n";
         echo '<p id="footerText">Report generated on ', $date, '.<br />', "\n";
-        echo 'CATS Version ', CATS_VERSION, $buildString,
-             '. Powered by <a href="http://www.catsone.com/"><strong>CATS</strong></a>.</p>', "\n";
+        echo 'UL ATS Version ', CATS_VERSION, $buildString,
+             '. Powered by <a href="http://www.utkallabs.com/"><strong>UL ATS</strong></a>.</p>', "\n";
         echo '<span id="footerCopyright">', COPYRIGHT_HTML, '</span>', "\n";
         echo '</div>', "\n";
 

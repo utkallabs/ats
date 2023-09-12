@@ -43,7 +43,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    Change your CATS login password.
+                                    Change your <strong>UL ATS</strong> login password.
                                 </td>
                             </tr>
                             <!--<tr>

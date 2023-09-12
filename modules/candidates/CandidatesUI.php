@@ -3497,11 +3497,67 @@ class CandidatesUI extends UserInterface
     private function sendInterviewEmail($candidateData, $interviewerData, $data){
         $subject = "Interview Scheduled";
 
-        $body = "Hello HR Team, \r\n " . "Interview has been scheduled for the candidate . \r\n ". "Candidate Name - " . '<b>' . $candidateData['candidateFullName'] . '</b>' . " \r\n " . " Interviewer Name - " . $interviewerData['fullName'] ." \r\n " . " Interview Date - " . $data['dateAdd'] . " \r\n " . " \r\n " . " Interview Time - " . $data['hour'] .":". $data['minute'] . $data['meridiem'] . " \r\n " . " Interview Duration - " . $data['duration'] ."Minutes". " \r\n " . " Interview Link - " . $data['interview_link'] . " \r\n ";
+        $intrviewerFullName = $interviewerData['fullName'];
+        $candidateFullname =$candidateData['candidateFullName'];
+        $interviewDate = $data['dateAdd'];
+        $interviewHour = $data['hour'];
+        $interviewMinute = $data['minute'];
+        $interviewMeridian = $data['meridiem'];
+        $interviewDuration = $data['duration'];
+        $interviewLink = $data['interview_link'];
 
-        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"],[$interviewerData['email'], "Interviewer Name"]];
+        $body = '<html>
+        <body>
+        <p><span>Dear HR Team,</span></p>
+        <p><span>I hope this email finds you well. We would like to inform you
+         that we have scheduled an interview for a potential candidate with '." ". 
+         $intrviewerFullName.'</span></p>
+         <span>Candidate Name'.":".$candidateFullname.'</span></br>
+         <span>Interview Date'.":".$interviewDate.'</span></br>
+         <span>Interview Time'.":".$interviewHour.":" .$interviewMinute.$interviewMeridian.'</span></br>
+         <span>Interview Duration'.":". $interviewDuration."".'Minutes</span></br>
+         <span>Interview Link: <a href="' . $interviewLink . '">' . $interviewLink . '</a></span></p></br>
+         <p><span>Please ensure that the candidate and the interviewer are informed about the interview schedule and have all the necessary information.</br> If there are any changes, please let us know as soon as possible.</span></p>
+         <p><span>If you have any questions or require further information, feel free to reach out to us
+         .</span></p>
+         <p><span>Thank you for your cooperation.</span></p>
+         <p><span>Regards,<br>HR UTKALLABS</span></p>
+         <span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a></span>
+        </body>
+        </html>
+        ';
+
+
+       
+        $interviewerBody =  '
+        <html>
+        <body>
+            <span>Dear'." ". $intrviewerFullName.'</span>
+            <span>I hope this email finds you well. This is a gentle reminder that the interview with the candidate  is scheduled as follows:.</span>
+            <span>Candidate Name'.":".$candidateFullname.'</span></br>
+            <span>Interview Date'.":".$interviewDate.'</span></br>
+            <span>Interview Time'.":".$interviewHour.":" .$interviewMinute.$interviewMeridian.'</span></br>
+            <span>Interview Duration'. $interviewDuration."".'Minutes</span></br>
+            <span>Interview Link: <a href="' . $interviewLink . '">' . $interviewLink . '</a></span>
+            </br>
+            <span>We appreciate your valuable time and expertise in participating in this interview process. Your insights and assessment will help us in making an informed decision about the candidates suitability for the role.<span></br>  
+            <span>If the scheduled date and time are not suitable for you or if there are any unforeseen circumstances, please let us know as soon as possible, and we will make necessary adjustments accordingly.</span></br>
+            <span>If you have any questions or need any further information, please do not hesitate to reach out HR Team</span></br>
+            <span>Regards,<br>HR UTKALLABS</span>
+            <span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a></span>
+            <p><img src="images/applicationLogo.jpg" alt="Your Logo"></p>
+            
+        </body>
+        </html>
+    ';
+
+
+        $recipient = [CONFIG_HR_MAIL, "HR UTKALLABS"];
+        $interviewerRecipient = [$interviewerData['email'], "Interviewer Name"];
+        
         $mailer = new Mailer($this->_siteID, $this->_userID);
-        $mailer->sendToMany($recipient, $subject, $body, true);
+        $mailer->sendToOne($recipient, $subject, $body, true);
+        $mailer->sendToOne($interviewerRecipient, $subject, $interviewerBody, true);
     }
 
     /*
@@ -3512,7 +3568,7 @@ class CandidatesUI extends UserInterface
 
         $body = "Hello HR, \r\n " . "This E-Mail is a notification that \r\n ". "The candidate " . $candidateData['candidateFullName'] . " status has been changed. \r\n " . " Old Status - " . $oldStatus ." \r\n " . $activityNote . " \r\n ";
 
-        $recipient = [["hr@utkallabs.com", "HR UTKALLABS"]];
+        $recipient = [[CONFIG_HR_MAIL, "HR UTKALLABS"]];
         $mailer = new Mailer($this->_siteID, $this->_userID);
         $mailer->sendToMany($recipient, $subject, $body, true);
     }

@@ -33,6 +33,8 @@ include_once(LEGACY_ROOT . '/lib/Dashboard.php');
 
 class HomeUI extends UserInterface
 {
+    private $_atsRoll ;
+
     public function __construct()
     {
         parent::__construct();
@@ -42,6 +44,13 @@ class HomeUI extends UserInterface
         $this->_moduleName = 'home';
         $this->_moduleTabText = 'Dashboard';
         $this->_subTabs = array();
+
+        $candidates = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $this->_atsRoll = $candidates->getAtsRoll($userId);
+
+        
+
     }
 
 
@@ -99,9 +108,10 @@ class HomeUI extends UserInterface
         
         $calendar = new Calendar($this->_siteID);
         $upcomingEventsHTML = $calendar->getUpcomingEventsHTML(7, UPCOMING_FOR_DASHBOARD);
-        
+       
         $calendar = new Calendar($this->_siteID);
-        $upcomingEventsFupHTML = $calendar->getUpcomingEventsHTML(7, UPCOMING_FOR_DASHBOARD_FUP);        
+        $upcomingEventsFupHTML = $calendar->getUpcomingEventsHTML(7, UPCOMING_FOR_DASHBOARD_FUP); 
+        //print_r($upcomingEventsHTML);exit;
 
         /* Important cand datagrid */
 
@@ -112,9 +122,10 @@ class HomeUI extends UserInterface
         );
 
         $dataGrid = DataGrid::get("home:ImportantPipelineDashboard", $dataGridProperties);
-
+        
         $this->_template->assign('dataGrid', $dataGrid);
-
+        $this->_template->assign('atsRoll', $this->_atsRoll['ats_roll']);
+       
         $dataGridProperties = array(
             'rangeStart'    => 0,
             'maxResults'    => 15,

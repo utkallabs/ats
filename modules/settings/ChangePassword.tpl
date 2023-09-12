@@ -16,7 +16,7 @@
             </table>
 
 	    <?php if ($this->auth_mode == "ldap"): ?>
-		<p class="note">LDAP Enabled. Password cannot be changed from OpenCATS</p>
+		<p class="note">LDAP Enabled. Password cannot be changed from UL ATS</p>
 	    <?php endif; ?>
             <p class="note">Change Password</p>
 

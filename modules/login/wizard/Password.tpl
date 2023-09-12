@@ -1,4 +1,4 @@
-<b>Set your new administrative password for OpenCATS.</b>
+<b>Set your new administrative password for UL ATS.</b>
 <p />
 <div id="passwordBeacon" style="display: none;">&nbsp;</div>
 <table cellpadding="0" cellspacing="0" border="0">
