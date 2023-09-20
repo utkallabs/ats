@@ -400,11 +400,13 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                                 </div>
                                 <?php endforeach; ?>
                                 <?php if ($this->getUserAccessLevel('pipelines.addActivityChangeStatus') >= ACCESS_LEVEL_EDIT): ?>
+                                <?php if($this->atsRoll['ats_roll'] == 4 || $this->atsRoll['ats_roll'] == 3 ) :?>
                                 <a href="#"
                                     onclick="showPopWin('<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=addActivityChangeStatus&amp;candidateID=<?php echo($this->candidateID); ?>&amp;jobOrderID=-1&amp;onlyScheduleEvent=true', 600, 350, null); return false;">
                                     <img src="images/calendar_add.gif" width="16" height="16" border="0"
                                         alt="Schedule Event" class="absmiddle" />&nbsp;Schedule Event
                                 </a>
+                                <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                         </tr>
