@@ -218,6 +218,12 @@ class HomeUI extends UserInterface
         $contactsRS   = $search->contacts($query);
         $jobOrdersRS  = $search->jobOrders($query);
         //$listsRS      = $search->lists($query);
+        // print_r($this->_userID);exit;
+        if (count($this->_atsRoll) > 0 && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)) {
+            $candidatesRS = $search->candidates($query);
+        }else{
+            $candidatesRS = $search->searchCandidate($query, $this->_userID);
+        }   
 
         if (!empty($candidatesRS))
         {
@@ -374,12 +380,16 @@ class HomeUI extends UserInterface
                 }
             }
         }
+        $userId = $this->_userID;
+        $candidates = new Candidates($this->_siteID);
+        $atsRoll = $candidates->getAtsRoll($userId);
 
         $this->_template->assign('active', $this);
         $this->_template->assign('jobOrdersRS', $jobOrdersRS);
         $this->_template->assign('candidatesRS', $candidatesRS);
         $this->_template->assign('companiesRS', $companiesRS);
         $this->_template->assign('contactsRS', $contactsRS);
+        $this->_template->assign('atsRoll', $atsRoll);
         //$this->_template->assign('listsRS', $listsRS);
         $this->_template->assign('wildCardQuickSearch', $wildCardQuickSearch);
 
