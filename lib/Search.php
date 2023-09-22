@@ -1455,6 +1455,80 @@ class QuickSearch
         return $this->_db->getAllAssoc($sql);
     }
     
+    public function searchCandidate($wildCardString, $interviewerId)
+    {
+        $wildCardString = str_replace('*', '%', $wildCardString) . '%';
+        $wildCardString = $this->_db->makeQueryString($wildCardString);
+
+        $sql = sprintf(
+            "SELECT
+                candidate.candidate_id AS candidateID,
+                candidate.first_name AS firstName,
+                candidate.last_name AS lastName,
+                candidate.phone_home AS phoneHome,
+                candidate.phone_cell AS phoneCell,
+                candidate.key_skills AS keySkills,
+                candidate.email1 AS email1,
+                candidate.email2 AS email2,
+                owner_user.first_name AS ownerFirstName,
+                owner_user.last_name AS ownerLastName,
+                DATE_FORMAT(
+                    candidate.date_created, '%%m-%%d-%%y'
+                ) AS dateCreated,
+                DATE_FORMAT(
+                    candidate.date_modified, '%%m-%%d-%%y'
+                ) AS dateModified
+            FROM
+                candidate
+            LEFT JOIN user AS owner_user
+                ON candidate.owner = owner_user.user_id
+            LEFT JOIN calendar_event AS ce
+                ON ce.data_item_id = candidate.candidate_id
+            WHERE
+            (
+                CONCAT(candidate.first_name, ' ', candidate.last_name) LIKE %s
+                OR CONCAT(candidate.last_name, ' ', candidate.first_name) LIKE %s
+                OR CONCAT(candidate.last_name, ', ', candidate.first_name) LIKE %s
+                OR candidate.email1 LIKE %s
+                OR candidate.email2 LIKE %s
+                OR REPLACE(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(candidate.phone_home, '-', ''),
+                        '.', ''),
+                    ')', ''),
+                '(', '') LIKE %s
+                OR REPLACE(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(candidate.phone_cell, '-', ''),
+                        '.', ''),
+                    ')', ''),
+                '(', '') LIKE %s
+            )
+            AND
+                candidate.site_id = %s
+            AND
+                candidate.is_admin_hidden = 0
+            AND
+                ce.interviewer_id = $interviewerId
+            ORDER BY
+                candidate.date_modified DESC,
+                candidate.first_name ASC,
+                candidate.last_name ASC",
+            $wildCardString,
+            $wildCardString,
+            $wildCardString,
+            $wildCardString,
+            $wildCardString,
+            $wildCardString,
+            $wildCardString,
+            $this->_siteID
+        );
+
+        return $this->_db->getAllAssoc($sql);
+    }
+    
     /**
      * Support function for Quick Search code. Searches all relevant fields for
      * $wildCardString.
@@ -1487,6 +1561,7 @@ class QuickSearch
                 owner_user.last_name AS ownerLastName
             FROM
                 company
+            LEFT JOIN user
             LEFT JOIN user AS owner_user
                 ON company.owner = owner_user.user_id
             WHERE
@@ -1506,7 +1581,7 @@ class QuickSearch
             $wildCardString,
             $this->_siteID
         );
-
+       //print_r($sql);exit;
         return $this->_db->getAllAssoc($sql);
     }
     
