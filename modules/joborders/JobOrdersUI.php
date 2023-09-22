@@ -72,20 +72,27 @@ class JobOrdersUI extends UserInterface
      */
     const TRUNCATE_CLIENT_NAME = 28;
 
-
+    private $_atsRoll ;
     public function __construct()
     {
         parent::__construct();
+
 
         $this->_authenticationRequired = true;
         $this->_moduleDirectory = 'joborders';
         $this->_moduleName = 'joborders';
         $this->_moduleTabText = 'Job Orders';
+
+        $candidates = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $this->_atsRoll = $candidates->getAtsRoll($userId);
+
         $this->_subTabs = array(
             //'Add Job Order'     => CATSUtility::getIndexName() . '?m=joborders&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@joborders.add',
             'Add Job Order' => 'javascript:void(0);*js=showPopWin(\''.CATSUtility::getIndexName().'?m=joborders&amp;a=addJobOrderPopup\', 400, 250, null);*al=' . ACCESS_LEVEL_EDIT . '@joborders.add',
             'Search Job Orders' => CATSUtility::getIndexName() . '?m=joborders&amp;a=search'
-        );
+        ); 
+
     }
 
 
@@ -304,7 +311,12 @@ class JobOrdersUI extends UserInterface
                 {
                     CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                 }
+                if ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
                 $this->listByView();
+                }
+                else{
+                    CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
+                }
                 break;
         }
     }
@@ -336,6 +348,8 @@ class JobOrdersUI extends UserInterface
         $this->_template->assign('userID', $_SESSION['CATS']->getUserID());
         $this->_template->assign('errMessage', $errMessage);
         $this->_template->assign('jobOrderFilters', $jobOrderFilters);
+        $this->_template->assign('atsRoll', $this->_atsRoll['ats_roll']);
+
 
         if (!eval(Hooks::get('JO_LIST_BY_VIEW'))) return;
 

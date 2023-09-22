@@ -263,6 +263,23 @@ class JobOrders
         return true;
     }
 
+
+    public function getAtsRoll($userId){
+        $sql = sprintf(
+            "SELECT
+                user.user_id AS userID,
+                user.ats_roll
+            FROM
+                user               
+            WHERE
+                user.user_id = %s",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        
+        return $this->_db->getAssoc($sql);
+    }
+
     /**
      * Removes a job order and all associated records from the system.
      *

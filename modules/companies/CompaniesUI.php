@@ -47,7 +47,7 @@ class CompaniesUI extends UserInterface
      */
     const NOTES_MAXLEN = 500;
 
-
+    private $_atsRoll ;
     public function __construct()
     {
         parent::__construct();
@@ -55,12 +55,19 @@ class CompaniesUI extends UserInterface
         $this->_authenticationRequired = true;
         $this->_moduleDirectory = 'companies';
         $this->_moduleName = 'companies';
+
+        $userId = $this->_userID;
+        $candidates = new Candidates($this->_siteID);
+        $this->_atsRoll = $candidates->getAtsRoll($userId);
+
         $this->_moduleTabText = 'Companies';
-        $this->_subTabs = array(
-            'Add Company'     => CATSUtility::getIndexName() . '?m=companies&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@companies.add' . '*hrmode=0',
-            'Search Companies' => CATSUtility::getIndexName() . '?m=companies&amp;a=search*hrmode=0',
-            'Go To My Company' => CATSUtility::getIndexName() . '?m=companies&amp;a=internalPostings*hrmode=0'
-        );
+        
+
+                $this->_subTabs = array(
+                    'Add Company'     => CATSUtility::getIndexName() . '?m=companies&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@companies.add' . '*hrmode=0',
+                    'Search Companies' => CATSUtility::getIndexName() . '?m=companies&amp;a=search*hrmode=0',
+                    'Go To My Company' => CATSUtility::getIndexName() . '?m=companies&amp;a=internalPostings*hrmode=0'
+                );
     }
 
 
@@ -181,7 +188,12 @@ class CompaniesUI extends UserInterface
                 {
                     CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                 }
+                if ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
                 $this->listByView();
+                }
+                else{
+                    CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.'); 
+                }
                 break;
         }
     }
