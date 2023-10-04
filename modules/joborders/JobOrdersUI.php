@@ -82,11 +82,6 @@ class JobOrdersUI extends UserInterface
         $this->_moduleDirectory = 'joborders';
         $this->_moduleName = 'joborders';
         $this->_moduleTabText = 'Job Orders';
-
-        $candidates = new Candidates($this->_siteID);
-        $userId = $this->_userID;
-        $this->_atsRoll = $candidates->getAtsRoll($userId);
-
         $this->_subTabs = array(
             //'Add Job Order'     => CATSUtility::getIndexName() . '?m=joborders&amp;a=add*al=' . ACCESS_LEVEL_EDIT . '@joborders.add',
             'Add Job Order' => 'javascript:void(0);*js=showPopWin(\''.CATSUtility::getIndexName().'?m=joborders&amp;a=addJobOrderPopup\', 400, 250, null);*al=' . ACCESS_LEVEL_EDIT . '@joborders.add',
@@ -311,12 +306,7 @@ class JobOrdersUI extends UserInterface
                 {
                     CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                 }
-                if ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4){
                 $this->listByView();
-                }
-                else{
-                    CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
-                }
                 break;
         }
     }

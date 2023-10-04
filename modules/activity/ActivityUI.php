@@ -55,9 +55,8 @@ class ActivityUI extends UserInterface
         $this->_authenticationRequired = true;
         $this->_moduleDirectory = 'activity';
         $this->_moduleName = 'activity';
-        if (count($this->_atsRoll) > 0 && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)) {
         $this->_moduleTabText = 'Activities';
-        }
+        
         
     }
 
