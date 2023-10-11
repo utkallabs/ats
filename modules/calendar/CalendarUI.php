@@ -34,6 +34,8 @@ include_once(LEGACY_ROOT . '/lib/SystemUtility.php');
 
 class CalendarUI extends UserInterface
 {
+    private $_atsRoll ;
+
     public function __construct()
     {
         parent::__construct();
@@ -47,6 +49,13 @@ class CalendarUI extends UserInterface
             'Add Event' => 'javascript:void(0);*js=userCalendarAddEvent();*al=' . ACCESS_LEVEL_EDIT . '@calendar',
             'Goto Today' => 'javascript:void(0);*js=goToToday();*al=' . ACCESS_LEVEL_READ . '@calendar'
         );
+
+        $userId = $this->_userID;
+
+        if ($userId > 0) {
+            $candidates = new Candidates($this->_siteID);
+            $this->_atsRoll = $candidates->getAtsRoll($userId)['ats_roll'];
+        }
     }
 
 
@@ -178,7 +187,12 @@ class CalendarUI extends UserInterface
         else
         {
             $superUserActive = false;
+            
         }
+//
+//      $userIsSuperUser = true;
+//        $superUserActive = 1;
+
 
         $startingWeekday = DateUtility::getStartingWeekday($month, $year);
         $daysInMonth     = DateUtility::getDaysInMonth($month, $year);
@@ -206,26 +220,31 @@ class CalendarUI extends UserInterface
         $eventsStringNow = $calendar->makeEventString(
             $calendar->getEventArray($month, $year),
             $month,
-            $year
+            $year,
+            $this->_atsRoll
         );
 
         $eventsStringBefore = $calendar->makeEventString(
             $calendar->getEventArray($monthBefore, $yearBefore),
             $monthBefore,
-            $yearBefore
+            $yearBefore,
+            $this->_atsRoll
         );
 
         $eventsStringAfter = $calendar->makeEventString(
             $calendar->getEventArray($monthAfter, $yearAfter),
             $monthAfter,
-            $yearAfter
+            $yearAfter,
+            $this->_atsRoll
         );
+
 
         $eventsString = implode(
             '@',
             array($eventsStringNow, $eventsStringBefore, $eventsStringAfter, $userIsSuperUser)
         );
 
+        
         /* Textual representation of the month and year. */
         $dateString = date(
             'F Y',
@@ -251,7 +270,9 @@ class CalendarUI extends UserInterface
             $view = $calendarSettingsRS['calendarView'];
         }
         
-        $summaryHTML = $calendar->getUpcomingEventsHTML(12, UPCOMING_FOR_CALENDAR);
+        $summaryHTML = $calendar->getUpcomingEventsHTML(12,$this->_atsRoll, UPCOMING_FOR_CALENDAR);
+
+
 
         if (!eval(Hooks::get('CALENDAR_SHOW'))) return;
 
@@ -296,13 +317,11 @@ class CalendarUI extends UserInterface
         $this->_template->assign('month', $month);
         $this->_template->assign('year', $year);
         $this->_template->assign('showEvent', $showEvent);
-        $this->_template->assign('dateString', $dateString);
+        $this->_template->assign('dateString','');
         $this->_template->assign('isCurrentMonth', $isCurrentMonth);
         $this->_template->assign('eventsString', $eventsString);
         $this->_template->assign('interviewers', $interviewers);
-        
         $this->_template->assign('allowEventReminders', $allowEventReminders);
-
         $this->_template->display('./modules/calendar/Calendar.tpl');
     }
 
@@ -336,7 +355,8 @@ class CalendarUI extends UserInterface
         $eventsString = $calendar->makeEventString(
             $calendar->getEventArray($month, $year),
             $month,
-            $year
+            $year,
+            $this->_atsRoll
         );
 
         if (!eval(Hooks::get('CALENDAR_DATA'))) return;

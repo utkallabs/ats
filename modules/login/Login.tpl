@@ -119,11 +119,12 @@
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-	</div>
-	  <div id="footerBlock">
-                <span class="footerCopyright"><?php echo(COPYRIGHT_HTML); ?></span>
-                Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a>.</div>
+
+	  <div id="footerBlock" >
+                <span class="footerCopyright text-center"><?php echo(COPYRIGHT_HTML); ?>
+                Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a>.</div></span>
             </div>
+        </div>
         </div>
 
 

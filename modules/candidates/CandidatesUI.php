@@ -229,10 +229,12 @@ class CandidatesUI extends UserInterface
                 }
                 if ($this->isPostBack())
                 {
+            
                     $this->onAddActivityChangeStatus();
                 }
                 else
                 {
+                    
                     $this->addActivityChangeStatus();
                 }
 
@@ -840,7 +842,8 @@ class CandidatesUI extends UserInterface
         $questionnaires = $questionnaire->getCandidateQuestionnaires($candidateID);
 
         $lists = $candidates->getListsForCandidate($candidateID);
-
+        $userId = $this->_userID;
+        $atsRoll = $candidates->getAtsRoll($userId);
 
         $this->_template->assign('active', $this);
         $this->_template->assign('questionnaires', $questionnaires);
@@ -861,6 +864,7 @@ class CandidatesUI extends UserInterface
         $this->_template->assign('tagsRS', $tags->getAll());
         $this->_template->assign('assignedTags', $tags->getCandidateTagsTitle($candidateID));
         $this->_template->assign('lists', $lists);
+        $this->_template->assign('atsRoll', $atsRoll);
 
         $this->_template->display('./modules/candidates/Show.tpl');
         
@@ -1904,6 +1908,7 @@ class CandidatesUI extends UserInterface
 
         $this->_template->assign('extraFieldRS', $extraFieldRS);
         $this->_template->assign('interviewers', $interviewersFromAtsRoll);
+        
         $this->_template->assign('candidateID', $candidateID);
         $this->_template->assign('pipelineRS', $pipelineRS);
         $this->_template->assign('statusRS', $statusRS);
@@ -3073,6 +3078,7 @@ class CandidatesUI extends UserInterface
 
         $pipelines = new Pipelines($this->_siteID);
         $statusRS = $pipelines->getStatusesForPicking();
+        
 
         /* Module directory override for fatal() calls. */
         if ($directoryOverride != '')
@@ -3499,23 +3505,25 @@ class CandidatesUI extends UserInterface
 
         $intrviewerFullName = $interviewerData['fullName'];
         $candidateFullname =$candidateData['candidateFullName'];
-        $interviewDate = $data['dateAdd'];
+        $interviewDateArray = explode('-',$data['dateAdd']); 
+        $interviewDateConvert =$interviewDateArray[1].'-'.$interviewDateArray[0].'-20'.$interviewDateArray[2] ;
+        $interviewDate =date("M/d/20y", strtotime($interviewDateConvert )) ;
         $interviewHour = $data['hour'];
         $interviewMinute = $data['minute'];
         $interviewMeridian = $data['meridiem'];
         $interviewDuration = $data['duration'];
         $interviewLink = $data['interview_link'];
-
+        
         $body = '<html>
         <body>
         <p><span>Dear HR Team,</span></p>
         <p><span>I hope this email finds you well. We would like to inform you
-         that we have scheduled an interview for a potential candidate with '." ". 
+         that we have scheduled an interview for a potential candidate with '." ".
          $intrviewerFullName.'</span></p>
-         <span>Candidate Name'.":".$candidateFullname.'</span></br>
-         <span>Interview Date'.":".$interviewDate.'</span></br>
-         <span>Interview Time'.":".$interviewHour.":" .$interviewMinute.$interviewMeridian.'</span></br>
-         <span>Interview Duration'.":". $interviewDuration."".'Minutes</span></br>
+         <span>Candidate Name'." : ".$candidateFullname.'</span></br>
+         <span>Interview Date'." : ".$interviewDate.'</span></br>
+         <span>Interview Time'." : ".$interviewHour." : " .$interviewMinute.$interviewMeridian.'</span></br>
+         <span>Interview Duration'." : ". $interviewDuration." ".'Minutes</span></br>
          <span>Interview Link: <a href="' . $interviewLink . '">' . $interviewLink . '</a></span></p></br>
          <p><span>Please ensure that the candidate and the interviewer are informed about the interview schedule and have all the necessary information.</br> If there are any changes, please let us know as soon as possible.</span></p>
          <p><span>If you have any questions or require further information, feel free to reach out to us
@@ -3532,21 +3540,20 @@ class CandidatesUI extends UserInterface
         $interviewerBody =  '
         <html>
         <body>
-            <span>Dear'." ". $intrviewerFullName.'</span>
-            <span>I hope this email finds you well. This is a gentle reminder that the interview with the candidate  is scheduled as follows:.</span>
-            <span>Candidate Name'.":".$candidateFullname.'</span></br>
-            <span>Interview Date'.":".$interviewDate.'</span></br>
-            <span>Interview Time'.":".$interviewHour.":" .$interviewMinute.$interviewMeridian.'</span></br>
-            <span>Interview Duration'. $interviewDuration."".'Minutes</span></br>
+            <span>Dear ' . $intrviewerFullName. ",".'</span><br>
+            <span>I hope this email finds you well. This is a gentle reminder that the interview with the candidate  is scheduled as follows :</span>
+            <span>Candidate Name'." - ".$candidateFullname.'</span></br>
+            <span>Interview Date'." - ".$interviewDate.'</span></br>
+            <span>Interview Time'." - ".$interviewHour.":" .$interviewMinute." ".$interviewMeridian.'</span></br>
+            <span>Interview Duration'." - ". $interviewDuration."  ".'Minutes</span></br>
             <span>Interview Link: <a href="' . $interviewLink . '">' . $interviewLink . '</a></span>
             </br>
             <span>We appreciate your valuable time and expertise in participating in this interview process. Your insights and assessment will help us in making an informed decision about the candidates suitability for the role.<span></br>  
             <span>If the scheduled date and time are not suitable for you or if there are any unforeseen circumstances, please let us know as soon as possible, and we will make necessary adjustments accordingly.</span></br>
             <span>If you have any questions or need any further information, please do not hesitate to reach out HR Team</span></br>
             <span>Regards,<br>HR UTKALLABS</span>
-            <span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a></span>
-            <p><img src="images/applicationLogo.jpg" alt="Your Logo"></p>
-            
+            <span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a>
+            </span>            
         </body>
         </html>
     ';

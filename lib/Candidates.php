@@ -2327,7 +2327,7 @@ class CandidatesDataGrid extends DataGrid
             'Last Name' =>      array('select'         => 'candidate.last_name AS lastName',
                                      'sortableColumn'  => 'lastName',
                                      'pagerRender'     => 'if ($rsData[\'isHot\'] == 1) $className =  \'jobLinkHot\'; else $className = \'jobLinkCold\'; return \'<a href="'.CATSUtility::getIndexName().'?m=candidates&amp;a=show&amp;candidateID=\'.$rsData[\'candidateID\'].\'" class="\'.$className.\'">\'.htmlspecialchars($rsData[\'lastName\']).\'</a>\';',
-                                     'pagerWidth'      => 85,
+                                     'pagerWidth'      => 85, 
                                      'pagerOptional'   => false,
                                      'alphaNavigation' => true,
                                      'filter'         => 'candidate.last_name'),
@@ -2525,7 +2525,7 @@ class CandidatesDataGrid extends DataGrid
                                      'pagerRender'      => 'return $rsData[\'dateCreated\'];',
                                      'sortableColumn'     => 'dateCreatedSort',
                                      'pagerWidth'    => 60,
-                                     'filterHaving' => 'DATE_FORMAT(candidate.date_created, \'%m-%d-%y\')'),
+                                     'filterHaving' => 'DATE_FORMAT(candidate.date_created, \'%m-%d-%y\')'),                       
 
             'Modified' =>      array('select'   => 'DATE_FORMAT(candidate.date_modified, \'%m-%d-%y\') AS dateModified',
                                      'pagerRender'      => 'return $rsData[\'dateModified\'];',
@@ -2533,7 +2533,15 @@ class CandidatesDataGrid extends DataGrid
                                      'pagerWidth'    => 60,
                                      'pagerOptional' => false,
                                      'filterHaving' => 'DATE_FORMAT(candidate.date_modified, \'%m-%d-%y\')'),
+            'Feedback' =>      array('select'   => 'DATE_FORMAT(candidate.date_modified, \'%m-%d-%y\') AS dateModified',
+                                    //  'pagerRender'      => 'return $rsData[\'dateModified\'];',
+                                     'pagerRender'      =>  'return \'<a href="'.CATSUtility::getIndexName().'?m=candidates&amp;a=feedbacksShow&amp;candidateID=\'.$rsData[\'candidateID\'].\'" class="\'.$className.\'">Show</a>\';',
+                                     'pagerWidth'    => 60,
+                                     'pagerOptional' => false,
+                                     'filterHaving' => 'DATE_FORMAT(candidate.date_modified, \'%m-%d-%y\')'),  
 
+            
+                         
             /* This one only works when called from the saved list view.  Thats why it is not optional, filterable, or exportable.
              * FIXME:  Somehow make this defined in the associated savedListDataGrid class child.
              */

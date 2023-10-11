@@ -567,7 +567,8 @@ class TemplateUtility
      * @param string module name to forcibly highlight
      * @return void
      */
-    public static function printTabs($active, $subActive = '', $forceHighlight = '')
+    
+    public static function printTabs($active, $subActive = '', $forceHighlight = '',$atsRoll ='')
     {
         /* Special tab behaviors:
          *
@@ -594,6 +595,30 @@ class TemplateUtility
         $indexName = CATSUtility::getIndexName();
 
         $modules = ModuleUtility::getModules();
+        //echo "<pre>";
+
+        $atsRoll = null;
+        if (isset($_SESSION['CATS']) && !empty($_SESSION['CATS']))
+        {
+            /* Get the current user's user ID. */
+            $userId = $_SESSION['CATS']->getUserID();
+
+            /* Get the current user's site ID. */
+            $siteId = $_SESSION['CATS']->getSiteID();
+
+            $candidates = new Candidates($siteId);
+            $atsRoll = $candidates->getAtsRoll($userId);
+
+        }
+
+        if (($atsRoll != null) && ($atsRoll['ats_roll'] == 1 || $atsRoll['ats_roll'] == 2)){     
+        unset($modules['activity']);
+        unset($modules['joborders']);
+        unset($modules['companies']);
+        unset($modules['contacts']);
+        unset($modules['lists']);
+        unset($modules['reports']);
+        }
         foreach ($modules as $moduleName => $parameters)
         {
             $tabText = $parameters[1];

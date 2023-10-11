@@ -400,11 +400,13 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                                 </div>
                                 <?php endforeach; ?>
                                 <?php if ($this->getUserAccessLevel('pipelines.addActivityChangeStatus') >= ACCESS_LEVEL_EDIT): ?>
+                                <?php if($this->atsRoll['ats_roll'] == 4 || $this->atsRoll['ats_roll'] == 3 ) :?>
                                 <a href="#"
                                     onclick="showPopWin('<?php echo(CATSUtility::getIndexName()); ?>?m=candidates&amp;a=addActivityChangeStatus&amp;candidateID=<?php echo($this->candidateID); ?>&amp;jobOrderID=-1&amp;onlyScheduleEvent=true', 600, 350, null); return false;">
                                     <img src="images/calendar_add.gif" width="16" height="16" border="0"
                                         alt="Schedule Event" class="absmiddle" />&nbsp;Schedule Event
                                 </a>
+                                <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -580,7 +582,7 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
         <?php endif; ?>
         <br clear="all" />
         <br />
-
+        <?php if ($this->atsRoll['ats_roll']==3 ||$this->atsRoll['ats_roll']==4 ) :?>
         <p class="note">Job Orders for Candidates</p>
         <table class="sortablepair">
             <tr>
@@ -695,7 +697,8 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
 
             <?php endforeach; ?>
         </table>
-
+        <?php endif; ?>
+        <?php if ($this->atsRoll['ats_roll']==3 ||$this->atsRoll['ats_roll']==4 ) :?>
         <?php if (!$this->isPopup): ?>
         <?php if ($this->getUserAccessLevel('candidates.considerForJobSearch') >= ACCESS_LEVEL_EDIT): ?>
         <a href="#"
@@ -724,7 +727,6 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
             </tr>
             <?php endforeach; ?>
         </table>
-
         <p class="note">Activity</p>
 
         <table id="activityTable" class="sortable">
@@ -786,6 +788,7 @@ use OpenCATS\UI\CandidateDuplicateQuickActionMenu;
                     title="Log an Activity / Change Status" alt="Log an Activity / Change Status" border="0" />&nbsp;Log
                 an Activity
             </a>
+            <?php endif ;?>
             <?php endif; ?>
             <img src="images/indicator2.gif" id="addActivityIndicator" alt=""
                 style="visibility: hidden; margin-left: 5px;" height="16" width="16" />

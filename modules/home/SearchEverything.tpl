@@ -16,6 +16,7 @@
             <br />
 
             <!-- JO -->
+            <?php if ($this->atsRoll['ats_roll']==3 ||$this->atsRoll['ats_roll']==4 ) :?>
             <p class="note">Job Orders Results</p>
             <?php if (!empty($this->jobOrdersRS)): ?>
                 <table class="sortable" width="100%">
@@ -59,6 +60,7 @@
                 <p>No matching entries found.</p>
             <?php endif; ?>
             <br />
+            <?php endif; ?>
             <!-- /JO -->
 
             <!-- Candidates -->
@@ -102,6 +104,7 @@
             <!-- /Candidates -->
 
             <!-- Companies -->
+            <?php if ($this->atsRoll['ats_roll']==3 ||$this->atsRoll['ats_roll']==4 ) :?>
             <p class="note">Companies Results</p>
             <?php if (!empty($this->companiesRS)): ?>
                 <table class="sortable" width="100%">
@@ -133,9 +136,11 @@
                 <p>No matching entries found.</p>
             <?php endif; ?>
             <br />
+            <?php endif; ?>
             <!-- /Companies -->
 
             <!-- Contacts -->
+            <?php if ($this->atsRoll['ats_roll']==3 ||$this->atsRoll['ats_roll']==4 ) :?>
             <p class="note">Contacts Results</p>
             <?php if (!empty($this->contactsRS)): ?>
                 <table class="sortable" width="100%">
@@ -180,6 +185,7 @@
                 </table>
             <?php else: ?>
                 <p>No matching entries found.</p>
+            <?php endif; ?>
             <?php endif; ?>
             <!-- /Contacts -->
         </div>
