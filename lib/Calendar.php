@@ -155,7 +155,7 @@ class Calendar
             $year,
             $this->_siteID
         );
-
+        
         $rs = $this->_db->getAllAssoc($sql);
 
         /* Build an array of result set arrays for each day of the month.
@@ -207,6 +207,22 @@ class Calendar
         }
 
         return $array;
+    }
+
+    public function getAtsRoll($userId){
+        $sql = sprintf(
+            "SELECT
+                user.user_id AS userID,
+                user.ats_roll
+            FROM
+                user               
+            WHERE
+                user.user_id = %s",
+            $this->_db->makeQueryInteger($userId),
+            $this->_siteID
+        );
+        
+        return $this->_db->getAssoc($sql);
     }
 
     /**
@@ -301,7 +317,7 @@ class Calendar
             ORDER BY
                 typeID ASC"
         );
-
+        
         return $this->_db->getAllAssoc($sql);
     }
 
@@ -552,7 +568,7 @@ class Calendar
      * @param boolean Show events from EVERYONE?
      * @return string Event data string for calendar.js to parse.
      */
-    public function makeEventString($eventArray, $month, $year,
+    public function makeEventString($eventArray, $month, $year,$atsRoll,
         $showAllUsersEvents = true)
     {
         $stringArray = array();
@@ -599,15 +615,24 @@ class Calendar
                     );
                 }
 
+                 
                 /* Filter out events user should not see here. */
-                if ($showAllUsersEvents || $event['public'] == '1' ||
-                    $event['userID'] == $this->_userID)
-                {
-                    $stringArray[] = implode('*', $eventParameters);
+                if ($atsRoll == "2") {
+                    if ($event['interviewerId'] == $this->_userID) {
+                        $stringArray[] = implode('*', $eventParameters);
+                    }
+                } elseif ($atsRoll == "3" || $atsRoll == "4") {
+                     $stringArray[] = implode('*', $eventParameters);
+                } else if (
+                    $showAllUsersEvents
+                    || $event['public'] == '1'
+                    || $event['userID'] == $this->_userID
+                ) {
+                     $stringArray[] = implode('*', $eventParameters);
                 }
             }
-        }
 
+        }
         if (empty($stringArray))
         {
             return 'noentries|' . $year . ',' . $month;
@@ -693,7 +718,7 @@ class Calendar
      * @param flag Type / format of upcoming events to return.
      * @return string Upcoming events HTML.
      */
-    public function getUpcomingEventsHTML($limit, $flag = UPCOMING_FOR_CALENDAR)
+    public function getUpcomingEventsHTML($limit,$atsRoll, $flag = UPCOMING_FOR_CALENDAR)
     {
         switch ($flag)
         {
@@ -715,6 +740,69 @@ class Calendar
                 $criteria = 'AND TYPE = 100';
                 break;
         }
+         
+        if($atsRoll == 2) {
+            /* Get today's events. */
+            $sql = sprintf(
+                "SELECT
+                    calendar_event.calendar_event_id AS eventID,
+                    
+                    calendar_event.title AS title,
+                    calendar_event.description AS description,
+                    calendar_event.public AS public,
+                    calendar_event.all_day AS allDay,
+                    DATE_FORMAT(
+                        calendar_event.date, '%%d'
+                    ) AS day,
+                    DATE_FORMAT(
+                        calendar_event.date, '%%m'
+                    ) AS month,
+                    DATE_FORMAT(
+                        calendar_event.date, '%%y'
+                    ) AS year,
+                    DATE_FORMAT(
+                        calendar_event.date, '%%m-%%d-%%y'
+                    ) AS date,
+                    DATE_FORMAT(
+                        calendar_event.date, '%%h:%%i %%p'
+                    ) AS time,
+                    calendar_event.date AS dateSort,
+                    entered_by_user.user_id AS userID,
+                    entered_by_user.first_name AS enteredByFirstName,
+                    entered_by_user.last_name AS enteredByLastName
+                FROM
+                    calendar_event
+                LEFT JOIN user AS entered_by_user
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+                ON calendar_event.entered_by = entered_by_user.user_id
+                    ON calendar_event.entered_by = entered_by_user.user_id         
+            
+                WHERE
+                    TO_DAYS(NOW()) = TO_DAYS(calendar_event.date)
+                AND
+                    calendar_event.site_id = %s
+                AND calendar_event.interviewer_id = $this->_userID
+                %s
+                ORDER BY
+                    dateSort ASC",
+                $this->_siteID,
+                $criteria
+            );
+
+            $todayRS = $this->_db->getAllAssoc($sql);
+        }else{
 
         /* Get today's events. */
         $sql = sprintf(
@@ -747,12 +835,10 @@ class Calendar
             FROM
                 calendar_event
             LEFT JOIN user AS entered_by_user
-                ON calendar_event.entered_by = entered_by_user.user_id
+                ON calendar_event.entered_by = entered_by_user.user_id         
            
             WHERE
                 TO_DAYS(NOW()) = TO_DAYS(calendar_event.date)
-            AND
-                calendar_event.site_id = %s
             AND
             (
                 %s
@@ -767,6 +853,65 @@ class Calendar
             $criteria
         );
         $todayRS = $this->_db->getAllAssoc($sql);
+    }
+
+        if($atsRoll == 2 ){
+
+            
+        /* Get events after today. */
+        $sql = sprintf(
+            "SELECT
+                calendar_event.calendar_event_id AS eventID,
+                calendar_event.title AS title,
+                calendar_event.description AS description,
+                calendar_event.public AS public,
+                calendar_event.all_day AS allDay,
+                DATE_FORMAT(
+                    calendar_event.date, '%%d'
+                ) AS day,
+                DATE_FORMAT(
+                    calendar_event.date, '%%m'
+                ) AS month,
+                DATE_FORMAT(
+                    calendar_event.date, '%%y'
+                ) AS year,
+                DATE_FORMAT(
+                    calendar_event.date, '%%m-%%d-%%y'
+                ) AS date,
+                DATE_FORMAT(
+                    calendar_event.date, '%%h:%%i %%p'
+                ) AS time,
+                calendar_event.date AS dateSort,
+                entered_by_user.user_id AS userID,
+                entered_by_user.first_name AS enteredByFirstName,
+                entered_by_user.last_name AS enteredByLastName
+            FROM
+                calendar_event
+            LEFT JOIN user AS entered_by_user
+                ON calendar_event.entered_by = entered_by_user.user_id
+            WHERE
+                DATE(calendar_event.date) > CURDATE()
+            AND
+                TO_DAYS(NOW()) != TO_DAYS(calendar_event.date)
+            AND
+                calendar_event.site_id = %s
+            AND
+            (
+                calendar_event.interviewer_id = $this->_userID 
+            )
+            %s
+            ORDER BY
+                dateSort ASC
+            LIMIT
+                0, %s",
+            $this->_siteID,
+            $criteria,
+            $limit
+        );
+    
+        $futureRS = $this->_db->getAllAssoc($sql);
+
+        }else{
 
         /* Get events after today. */
         $sql = sprintf(
@@ -820,7 +965,10 @@ class Calendar
             $criteria,
             $limit
         );
+
         $futureRS = $this->_db->getAllAssoc($sql);
+        
+    }
 
         $indexName = CATSUtility::getIndexName();
 

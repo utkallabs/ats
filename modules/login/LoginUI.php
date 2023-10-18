@@ -64,7 +64,16 @@ class LoginUI extends UserInterface
                     $this->forgotPassword();
                 }
                 break;
-
+            case 'changePassword';
+            if ($this->isPostBack())
+                {
+                    $this->onChangePassword();
+                }
+                else
+                {
+                    $this->changePassword();
+                }
+                break;
             case 'noCookiesModal':
                 $this->noCookiesModal();
                 break;
@@ -437,10 +446,23 @@ class LoginUI extends UserInterface
     private function forgotPassword()
     {
         if (!eval(Hooks::get('FORGOT_PASSWORD'))) return;
-
+        $this->_template->assign('complete', false);
         $this->_template->display('./modules/login/ForgotPassword.tpl');
     }
 
+    private function getName($n) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+     
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+     
+        return $randomString;
+    }
+
+    
     /*
      * Called by handleRequest() to handle processing the form for retrieving
      * forgotten passwords.
@@ -450,18 +472,25 @@ class LoginUI extends UserInterface
         $username = $this->getTrimmedInput('username', $_POST);
 
         if (!eval(Hooks::get('ON_FORGOT_PASSWORD'))) return;
-
         $user = new Users($this->_siteID);
-        if ($password = $user->getPassword($username))
+        if ( $verifyEmail = $user->getPassword($username))
         {
-            $mailer = new Mailer($this->_siteID);
-            $mailerStatus = $mailer->sendToOne(
-                array($username, $username),
-                PASSWORD_RESET_SUBJECT,
-                sprintf(PASSWORD_RESET_BODY, $password),
-                true
-            );
+            $subject = "Forgot Password UL-ATS";
+            $randomString = $this->getName(150);
 
+             $forgotLink = CATSUtility::getAbsoluteURI() . CATSUtility::getIndexName() . '?m=login&a=changePassword&token=' . $randomString . '&email=' . $verifyEmail['email'];
+
+            $body = '<html>
+                        <body>
+                        <span style="font-size: 12px;"><a href=' . $forgotLink . '>' . $forgotLink . '</a>
+                        </span>            
+                        </body>
+                    </html>
+                    ';
+            $recipient = [$username, "UTKALLABS ATS"];
+            $mailer = new Mailer($this->_siteID, 1264);
+            $mailerStatus = $mailer->sendToOne($recipient,$subject,$body,true);
+            $storeToken = $user->storeForgotPasswordToken($username, $randomString);
             if ($mailerStatus)
             {
                 $this->_template->assign('username', $username);
@@ -477,10 +506,105 @@ class LoginUI extends UserInterface
         {
             $this->_template->assign('message', 'No such username found.');
             $this->_template->assign('complete', false);
+            $this->_template->assign('messageSuccess', false);
         }
 
         $this->_template->display('./modules/login/ForgotPassword.tpl');
     }
+
+    private function changePassword(){
+
+        $token = isset( $_REQUEST['token']) ? $_REQUEST['token'] : '';
+        $email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
+        $newPassword = $this->getTrimmedInput('newPassword', $_POST);
+        $retypePassword = $this->getTrimmedInput('retypeNewPassword', $_POST);
+        
+        if(empty($token) || empty($email)){
+            $this->_template->assign('error','Something went wrong!');
+        }else{
+            $this->_template->assign('token',$token);
+            $this->_template->assign('email',$email);
+        }
+
+       $this->_template->display('./modules/login/ChangePassword.tpl');   
+    }
+
+    private function onChangePassword(){
+    //    get tokent & email & password & retypePassword
+    //    validate token email password & retypePassword fields
+    //    get the user who trying to reset password by using their token and email
+    
+    $validateErrors = $this->getTrimmedInput('message', $_GET);
+        if (isset($_GET['messageSuccess']) &&
+            $_GET['messageSuccess'] == 'true')
+        {
+            $this->_template->assign('messageSuccess', true);
+        }
+        else
+        {
+            $this->_template->assign('messageSuccess', false);
+        }
+
+        $users = new Users($this->_siteID);
+
+        $logout = false;
+
+        $token = $this->getTrimmedInput('token', $_POST);
+        $email = $this->getTrimmedInput('email', $_POST);
+        $newPassword = $this->getTrimmedInput('newPassword', $_POST);
+        $retypePassword = $this->getTrimmedInput('retypeNewPassword', $_POST);
+
+        $validateErrors = [];    
+        if (empty($token) || empty($email) || empty($newPassword) || empty($retypePassword)) {
+            $validateErrors[] = "All fields are required.";  
+        }
+    
+        if ($newPassword !== $retypePassword) {
+            $validateErrors[] = "Passwords do not match.";
+        }
+    
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $validateErrors[] = "Invalid email format.";
+        }
+    
+        if (count($validateErrors) > 0) {
+            $this->_template->assign('message', 'No such username found.');
+            $this->_template->assign('complete', false);
+            $this->_template->assign('messageSuccess', false);
+            return;
+        }    
+
+        $tokenExp = $users->getPassword($_REQUEST['email']);
+        $tokenCreationTime = $tokenExp['token_exp'];
+        $tokenExpirationTime = date('Y-m-d H:i:s', strtotime($tokenCreationTime .' + 5 minute' )); 
+        $currentTime = date('Y-m-d H:i:s', time());
+        $forgotLink = CATSUtility::getAbsoluteURI() . CATSUtility::getIndexName() . '?m=login&a=forgotPassword' ;
+            if ($currentTime <= $tokenExpirationTime) {
+                CATSUtility::transferRelativeURI('m=login');
+            } else {
+                echo '<div class="error-message" 
+                style="
+                padding: 50px;
+                font-size:25px;
+                top-padding:10px;
+                color: #ff0000;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                ">Oops, something went wrong!<br><a href="' . $forgotLink . '"> Please try again</a></div>';
+                echo "</br>";
+                
+            }
+
+        $status = $users->fogotPassword( 
+            $_REQUEST['email'], $newPassword, $retypePassword
+        );
+        if ($status){
+
+        }
+        
+    
+}
 
 
     // FIXME: Document me.

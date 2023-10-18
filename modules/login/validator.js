@@ -82,3 +82,71 @@ function checkPassword()
 
     return errorMessage;
 }
+
+function checkUserRetypePassword()
+{
+    var errorMessage = '';
+
+    fieldValue = document.getElementById('retypePassword').value;
+    fieldLabel = document.getElementById('retypePasswordLabel');
+    if (fieldValue == '')
+    {
+        errorMessage = "    - You must enter a password in both fields.\n";
+
+        fieldLabel.style.color = '#ff0000';
+    }
+    else
+    {
+        fieldLabel.style.color = '#000';
+    }
+
+    return errorMessage;
+}
+
+function checkUserPasswordsMatch()
+{
+    var errorMessage = '';
+
+    fieldValue1 = document.getElementById('password').value;
+    fieldValue2 = document.getElementById('retypePassword').value;
+
+    fieldLabel1 = document.getElementById('passwordLabel');
+    fieldLabel2 = document.getElementById('retypePasswordLabel');
+
+    if (fieldValue1 != fieldValue2)
+    {
+        errorMessage = "    - The two passwords you entered do not match.\n";
+
+        fieldLabel1.style.color = '#ff0000';
+        fieldLabel2.style.color = '#ff0000';
+    }
+    else
+    {
+        fieldLabel1.style.color = '#000';
+        fieldLabel2.style.color = '#000';
+    }
+
+    return errorMessage;
+}
+
+
+function checkChangePasswordForm(form)
+{
+    var errorMessage = '';
+
+    errorMessage += checkNewPassword();
+    errorMessage += checkRetypeNewPassword();
+
+    if (errorMessage == '')
+    {
+        errorMessage += checkPasswordsMatch();
+    }
+
+    if (errorMessage != '')
+    {
+        alert("Form Error:\n" + errorMessage);
+        return false;
+    }
+
+    return true;
+}

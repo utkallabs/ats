@@ -123,6 +123,11 @@ div#contents
 {
     text-align: center;
     font: normal normal normal 12px Arial, Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
 div#login
@@ -185,7 +190,17 @@ div#loginText
     float: left;
     display: inline;
 }
-
+form#forgotForm label{
+    font-weight: bold;
+    text-align: left; 
+}
+form#forgotForm input.login-input-box{
+    {
+        width: 140px;
+        margin: 0px 0px 1em 0px;
+        border: 1px solid #ccc;
+    }
+}
 form#loginForm label
 {
     font-weight: bold;
@@ -300,4 +315,54 @@ div.clear
     border: none;
     padding: 3px 4px 3px 4px;
     font: normal normal normal 12px Arial, Tahoma, sans-serif;
+}
+/* changePassword css */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 20px;
+    /* background-color: #f9f9f9;
+    border: 1px solid black;
+    min-width: 10vw;
+    background-size: auto; */
+}
+#passwordForm{
+    background-color:#f9f9f9 ;
+}
+.cpLabel {
+    font-weight: bold;
+    float: left;
+}
+.cpPassword {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+.message {
+    color: red;
+}
+#errorMessage{
+    color: red;
+}
+div#formBlockcp{
+    justify-content: center;
+    /* display: inline; */
+    text-align: left; 
+    width:320px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    /* background-color:#f1f3f5F; */
+        background: #fff; 
+    -webkit-box-shadow: #B3B3B3 6px 6px 6px;
+    -moz-box-shadow: #B3B3B3 6px 6px 6px;
+    box-shadow: #B3B3B3 6px 6px 6px;
+
+        
+}
+.cpLabel.login-input-box{
+    display: flex;
 }

@@ -42,6 +42,7 @@
 
             <?php if ($this->errMessage != ''): ?>
             <div id="errorMessage" style="padding: 25px 0px 25px 0px; border-top: 1px solid #800000; border-bottom: 1px solid #800000; background-color: #f7f7f7;margin-bottom: 15px;">
+            <input type="hidden" id="atsRollVal" value="<?php echo $this->atsRoll; ?>" />
             <table>
                 <tr>
                     <td align="left" valign="center" style="padding-right: 5px;">

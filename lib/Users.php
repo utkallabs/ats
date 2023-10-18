@@ -782,6 +782,40 @@ class Users
         return LOGIN_SUCCESS;
     }
 
+    public function fogotPassword($emailID, $newPassword)
+    {
+
+        $sql = sprintf(
+                "SELECT
+                user.password AS password,
+                user.access_level AS accessLevel,
+                user.can_change_password AS canChangePassword
+                FROM
+                user
+                WHERE
+                user.email = %s",
+                $this->_db->makeQueryString($emailID)
+                );
+        $rs = $this->_db->getAssoc($sql);
+
+        /* Change the user's password. */
+        $sql = sprintf(
+                "UPDATE
+                user
+                SET
+                password = md5(%s)
+                WHERE
+                user.email = %s",
+                //token
+                $this->_db->makeQueryString($newPassword),
+                $this->_db->makeQueryString($emailID)
+                );
+        $this->_db->query($sql);
+        // FIXME: Did the above query succeed? If not, fail.
+
+        return LOGIN_SUCCESS;
+    }
+
     /**
      * Resets a user's password to the password specified.
      *
@@ -1345,6 +1379,40 @@ class Users
         return ($rs['password'] == LDAPUSER_PASSWORD);
     }
     
+    public function getPassword($username){
+        $sql = sprintf(
+            "SELECT
+                user.user_id AS userID,
+                user.email AS email,
+                user.token_exp
+                FROM
+                user
+                WHERE
+                    user.email = %s",
+                    $this->_db->makeQueryString($username)
+        );
+
+        return $this->_db->getAssoc($sql);
+       
+    }
+
+    public function storeForgotPasswordToken($username, $token){
+        $now = date('Y-m-d h:i:s');
+        $sql = sprintf(
+            "UPDATE
+            user
+            SET
+            token = %s,
+            token_exp = %s
+            WHERE
+            user.email = %s",
+            $this->_db->makeQueryString($token),
+            $this->_db->makeQueryString($now),
+            $this->_db->makeQueryString($username),
+            );
+        $this->_db->query($sql);
+    }
+
 }
 
 

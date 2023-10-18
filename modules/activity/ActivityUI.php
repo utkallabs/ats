@@ -48,16 +48,16 @@ class ActivityUI extends UserInterface
     {
         parent::__construct();
 
+        $candidates = new Candidates($this->_siteID);
+        $userId = $this->_userID;
+        $this->_atsRoll = $candidates->getAtsRoll($userId);
+
         $this->_authenticationRequired = true;
         $this->_moduleDirectory = 'activity';
         $this->_moduleName = 'activity';
         $this->_moduleTabText = 'Activities';
-
-        $candidates = new Candidates($this->_siteID);
-        $userId = $this->_userID;
-        $this->_atsRoll = $candidates->getAtsRoll($userId);
-        $this->_atsRoll = $candidates->getAtsRoll($userId);
-
+        
+        
     }
 
     public function handleRequest()
@@ -124,11 +124,11 @@ class ActivityUI extends UserInterface
         $activityEntries = new ActivityEntries($this->_siteID);
         $this->_template->assign('numActivities', $activityEntries->getCount());
 
-        if(count($this->_atsRoll) > 0 && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)){
-        $this->_template->display('./modules/activity/ActivityDataGrid.tpl');
-    }else{
-        CommonErrors::fatal(COMMONERROR_BADINDEX, $this);
-    }
+        if (count($this->_atsRoll) > 0 && ($this->_atsRoll['ats_roll'] == 3 || $this->_atsRoll['ats_roll'] == 4)) {
+            $this->_template->display('./modules/activity/ActivityDataGrid.tpl');
+        } else {
+            CommonErrors::fatal(COMMONERROR_BADINDEX, $this);
+        }
 
     }
 
