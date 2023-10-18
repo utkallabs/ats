@@ -7,7 +7,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo(HTML_ENCODING); ?>" />
         <style type="text/css" media="all">@import "modules/login/login.css";</style>
         <script type="text/javascript" src="js/lib.js"></script>
-        <script type="text/javascript" src="modules/login/validator.js"></script>
         <script type="text/javascript" src="js/submodal/subModal.js"></script>
     </head>
 
@@ -17,7 +16,8 @@
 <!--       <div id="headerBlock"> 
             <span id="mainLogo">Utkallabs</span><br /> 
              <span id="subMainLogo">Applicant Tracking System</span> 
-       </div> -->
+       </div> -->        <script type="text/javascript" src="modules/login/validator.js"></script>
+
 <p>
 	&nbsp;</p>
 <p>
@@ -66,7 +66,8 @@
                                 <br />
 
                                 <input type="submit" class="button" value="Login" />
-                                <input type="reset"  id="reset" name="reset"  class="button" value="Reset" />
+                                <input type="reset"  id="reset" name="reset"  class="button" value="Reset" /></br>
+                                <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=loginm=login&a=forgotPassword"> forgot Password </a>
                             <?php else: ?>
                                 <br />
                                 <a href="javascript:void(0);" onclick="demoLogin(); return false;">Login to Demo Account</a><br />
