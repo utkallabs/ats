@@ -376,7 +376,7 @@ class SettingsUI extends UserInterface
             case 'addUser':
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.addUser.POST') < ACCESS_LEVEL_SA)
+                    if ($this->getUserAccessLevel('settings.addUser.POST') < ACCESS_LEVEL_HR)
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
@@ -397,7 +397,7 @@ class SettingsUI extends UserInterface
 
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.editUser.POST') < ACCESS_LEVEL_SA)
+                    if ($this->getUserAccessLevel('settings.editUser.POST') < ACCESS_LEVEL_HR)
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
@@ -856,7 +856,7 @@ class SettingsUI extends UserInterface
             case 'administration':
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.administration.POST') < ACCESS_LEVEL_SA && !$_SESSION['CATS']->hasUserCategory('careerportal'))
+                    if ($this->getUserAccessLevel('settings.administration.POST') < ACCESS_LEVEL_HR && !$_SESSION['CATS']->hasUserCategory('careerportal'))
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
