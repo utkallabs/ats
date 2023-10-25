@@ -57,7 +57,7 @@ class SettingsUI extends UserInterface
     /* Maximum number of login history entries to display on User Details. */
     const MAX_RECENT_LOGINS = 15;
 
-
+    private $_atsRoll ;
     public function __construct()
     {
         parent::__construct();
@@ -2373,6 +2373,10 @@ class SettingsUI extends UserInterface
      */
     private function administration()
     {
+        $userId = $this->_userID;
+        $users = new Users($this->_siteID);
+        $atsRoll = $users->getAtsRoll($userId);
+        $this->_template->assign('atsRoll',$atsRoll);
         $systemInfo = new SystemInfo();
         $systemInfoData = $systemInfo->getSystemInfo();
 
