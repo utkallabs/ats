@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
-        <title>UL ATS - Login</title>
+        <title>UL ATS - Forgot Password</title>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo(HTML_ENCODING); ?>">
         <style type="text/css" media="all">@import "modules/login/login.css";</style>
         <script type="text/javascript" src="js/lib.js"></script>
@@ -11,10 +11,6 @@
     </head>
 
     <body>
-
-    <div id="headerBlock">
-        <span id="mainLogo">UL ATS</span>
-    </div>
 
     <div id="contents">
         <div id="login">
@@ -29,30 +25,27 @@
             <?php endif; ?>
 
             <div id="formBlock">
-                <img src="images/login.gif" alt="Login" />
-                <?php if (!$this->complete): ?>
-                    <form name="loginForm" id="loginForm" action="<?php echo(CATSUtility::getIndexName()); ?>?m=login&amp;a=forgotPassword" method="post" autocomplete="off">
-                        <input type="hidden" name="postback" value="true" />
-                        <div id="subFormBlock">
-                            <label id="usernameLabel" for="username">Username</label><br />
-                            <input name="username" id="username" class="login-input-box" />
-                            <br />
+                <img src="images/applicationLogo.jpg" alt="Login" />
+                
+            <?php if (!$this->complete): ?>
+                <form name="ForgotForm" class="pcForm"  id="forgotForm" action="<?php echo(CATSUtility::getIndexName()); ?>?m=login&amp;a=forgotPassword" method="post" autocomplete="off">
+                    <input type="hidden" name="postback" value="true" />
+                    <div id="subFormBlock">
+                        <label id="usernameLabel" for="username">Username</label><br />
+                        <input type="email" name="username" id="username" class="login-input-box" placeholder="Enter your mail" />
+                        <br /></br>
 
-                            <input type="submit" id="submit" name="submit" class="login-submit-button" value="Email my Password" />
-                        </div>
-                    </form>
-                <?php else: ?>
-                    <p>
-                        An email has been sent to <?php $this->_($this->username); ?> containing your password.<br /><br />
-                        <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=login">Return to login page</a>
-                    </p>
-                <?php endif; ?>
-            </div>
-
-            <div id="loginText">
-                <div class="ctr"><img src="images/security.gif" width="64" height="64" alt="security" /></div>
-                <p>Welcome to UL ATS!</p>
-            </div>
+                        <input type="submit" id="submit" name="sendResetLink" class="login-input-box btn btn-primary login-submit-button" value="Send Reset Link" />
+                    </div>
+                </form>
+            <?php else: ?>
+                <p>
+                    An email has been sent to <?php $this->_($this->username); ?> containing your password.<br /><br />
+                    <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=login">Return to login page</a>
+                </p>
+            <?php endif; ?>
+            <span style="line-height: 30px;font-size: 10px;padding-LEFT: 10px;">Version <?php echo(CATSUtility::getVersion()); ?></span>
+        </div>
 
             <div style="clear: both;"></div>
         </div>

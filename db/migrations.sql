@@ -45,4 +45,12 @@ WHEN source = 'Employee' THEN 8
 WHEN source = 'Naukri' THEN 9
 END WHERE source IN ('Tadit','Suvendu','HR & Career email','Jagatbandhu','LinkedIn', 'Nirmal', 'TestYantra','Employee');
 
+/* New token column in user table*/
+ALTER TABLE `user` ADD `token` VARCHAR(255)  NULL AFTER `password`;
+ALTER TABLE `user` ADD `token_exp` DATE NULL AFTER `token`;
+
+/* New token column in user table*/
+INSERT INTO `access_level` (`access_level_id`, `short_description`, `long_description`) VALUES ('375', 'HR Access', 'Add, Edit, Delete User');
+
+
 

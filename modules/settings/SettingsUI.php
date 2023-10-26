@@ -57,7 +57,7 @@ class SettingsUI extends UserInterface
     /* Maximum number of login history entries to display on User Details. */
     const MAX_RECENT_LOGINS = 15;
 
-
+    private $_atsRoll ;
     public function __construct()
     {
         parent::__construct();
@@ -376,7 +376,7 @@ class SettingsUI extends UserInterface
             case 'addUser':
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.addUser.POST') < ACCESS_LEVEL_SA)
+                    if ($this->getUserAccessLevel('settings.addUser.POST') < ACCESS_LEVEL_HR)
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
@@ -397,7 +397,7 @@ class SettingsUI extends UserInterface
 
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.editUser.POST') < ACCESS_LEVEL_SA)
+                    if ($this->getUserAccessLevel('settings.editUser.POST') < ACCESS_LEVEL_HR)
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
@@ -856,7 +856,7 @@ class SettingsUI extends UserInterface
             case 'administration':
                 if ($this->isPostBack())
                 {
-                    if ($this->getUserAccessLevel('settings.administration.POST') < ACCESS_LEVEL_SA && !$_SESSION['CATS']->hasUserCategory('careerportal'))
+                    if ($this->getUserAccessLevel('settings.administration.POST') < ACCESS_LEVEL_HR && !$_SESSION['CATS']->hasUserCategory('careerportal'))
                     {
                         CommonErrors::fatal(COMMONERROR_PERMISSION, $this, 'Invalid user level for action.');
                     }
@@ -2373,6 +2373,10 @@ class SettingsUI extends UserInterface
      */
     private function administration()
     {
+        $userId = $this->_userID;
+        $users = new Users($this->_siteID);
+        $atsRoll = $users->getAtsRoll($userId);
+        $this->_template->assign('atsRoll',$atsRoll);
         $systemInfo = new SystemInfo();
         $systemInfoData = $systemInfo->getSystemInfo();
 
