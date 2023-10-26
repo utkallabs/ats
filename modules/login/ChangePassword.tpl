@@ -53,6 +53,7 @@
     <div id="footerBlock">
         <span class="footerCopyright">
             <?php echo(COPYRIGHT_HTML); ?>
+            Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a>
         </span>
     </div>
 

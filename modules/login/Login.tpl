@@ -66,8 +66,8 @@
                                 <br />
 
                                 <input type="submit" class="button" value="Login" />
-                                <input type="reset"  id="reset" name="reset"  class="button" value="Reset" /></br>
-                                <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=loginm=login&a=forgotPassword"> forgot Password </a>
+                                <input type="reset"  id="reset" name="reset"  class="button" value="Reset" /></br><br>
+                                <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=loginm=login&a=forgotPassword"> Forgot Password? </a>
                             <?php else: ?>
                                 <br />
                                 <a href="javascript:void(0);" onclick="demoLogin(); return false;">Login to Demo Account</a><br />
@@ -76,7 +76,7 @@
                         </div>
                     </form>
                 
-                    <span style="line-height: 30px;font-size: 10px;padding-LEFT: 10px;">Version <?php echo(CATSUtility::getVersion()); ?></span>
+                    <span style="line-height: 10px;font-size: 10px;padding-LEFT: 10px;">Version <?php echo(CATSUtility::getVersion()); ?></span>
                 </div>
                 <div style="clear: both;"></div>
             </div>
@@ -109,8 +109,7 @@
 <p>
 	&nbsp;</p>  
 
-	<span style="font-size: 12px;"><a href="http://www.utkallabs.com ">Utkallabs</a></span>
-	           <div id="login">
+	<div id="login">
                 <?php if (!empty($this->message)): ?>
                     <div>
                         <?php if ($this->messageSuccess): ?>
@@ -123,7 +122,7 @@
 
 	  <div id="footerBlock" >
                 <span class="footerCopyright text-center"><?php echo(COPYRIGHT_HTML); ?>
-                Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a>.</div></span>
+                Based upon original work and Powered by <a href="http://www.utkallabs.com" target="_blank">Utkallabs</a></span>
             </div>
         </div>
         </div>
