@@ -30,6 +30,7 @@
                         <p class="noteUnsized">Site Management</p>
 
                         <table class="searchTable" width="100%">
+                        <?php if($this->atsRoll == 4){ ?>
                             <tr>
                                 <td width="230">
                                     <img src="images/bullet_black.gif" alt="" />
@@ -43,7 +44,9 @@
                                     Configure your website where applicants can apply and post their resumes for your jobs.
                                 </td>
                             </tr>
+                            <?php } ?> 
                            <tr>
+                           <?php if($this->atsRoll == 4){ ?>
                                 <td width="230">
                                     <img src="images/bullet_black.gif" alt="" />
                                     <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=settings&amp;a=administration&amp;s=siteName">
@@ -54,7 +57,9 @@
                                     Change the site details such as site name and institution configuration.
                                 </td>
                             </tr>
+                            <?php } ?>
                             <tr>
+                            <?php if(($this->atsRoll == 4) || ($this->atsRoll == 3 )){ ?>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
                                     <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=settings&amp;a=manageUsers">
@@ -65,7 +70,9 @@
                                     Add, edit and delete users for your site.
                                 </td>
                             </tr>
+                            <?php } ?>
                             <tr>
+                            <?php if($this->atsRoll == 4) {?>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
                                     <a href="<?php echo(CATSUtility::getIndexName()); ?>?m=settings&amp;a=loginActivity">
@@ -76,6 +83,8 @@
                                     Shows you the login history for your site.
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) {?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -87,6 +96,8 @@
                                     Configure E-Mail preferences such as return address and when E-Mails are sent.
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) {?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -98,6 +109,8 @@
                                     Configure E-Mail templates for your site.
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) {?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -109,6 +122,8 @@
                                     Change how addresses and times are displayed and behave for different regions.
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) { ?>
                             <tr <?php if (!$this->totalCandidates): ?>style="background-color: #DAE3F7;"<?php endif; ?>>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -120,6 +135,8 @@
                                     <?php if (!$this->totalCandidates): ?><b><?php endif; ?>Import resumes, candidates, companies or contacts from files on your computer.<?php if (!$this->totalCandidates): ?></b><?php endif; ?>
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) { ?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -131,12 +148,14 @@
                                     Produce a downloadable backup with all the content in your site.
                                 </td>
                             </tr>
+                            <?php } ?>
                         </table>
                         <br />
 
+                        <?php if($this->atsRoll == 4) {?>
                         <p class="noteUnsized">Feature Settings</p>
-
                         <table class="searchTable" width="100%">
+                        
                             <!--<tr>
                                 <td width="230">
                                     <img src="images/bullet_black.gif" alt="" />
@@ -148,6 +167,7 @@
                                     Configure how your site's reports look by default.
                                 </td>
                             </tr>-->
+                            <?php if($this->atsRoll == 4) {?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -159,6 +179,8 @@
                                     Enable and configure EEO / EOC compliance tracking.
                                 </td>
                             </tr>
+                            <?php } ?>
+                            <?php if($this->atsRoll == 4) {?>
                             <tr>
                                 <td>
                                     <img src="images/bullet_black.gif" alt="" />
@@ -170,9 +192,11 @@
                                     Add/Remove tags, description for tags
                                 </td>
                             </tr>
+                            <?php } ?>
                         </table>
+                        <?php } ?>
                         <br />
-
+                        <?php if($this->atsRoll == 4) {?>
                         <p class="noteUnsized">GUI Customization</p>
 
                         <table class="searchTable" width="100%">
@@ -199,6 +223,7 @@
                                 </td>
                             </tr>
                         </table>
+                        <?php } ?>
                         <br />
 
                         <?php if ($this->systemAdministration): ?>
