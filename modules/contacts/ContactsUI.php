@@ -420,6 +420,7 @@ class ContactsUI extends UserInterface
     private function add()
     {
         $companies = new Companies($this->_siteID);
+        // echo '<pre>'; print_r($companies); exit;
         $contacts = new Contacts($this->_siteID);
 
         /* Do we have a selected_company_id? */

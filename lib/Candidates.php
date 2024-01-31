@@ -601,7 +601,7 @@ class Candidates
                 user.ats_roll = 2
             ORDER BY
                 user.user_id ASC",
-            $this->_siteID,
+            $this->_siteID
             
         );
         return $this->_db->getAllAssoc($sql);

@@ -38,8 +38,8 @@
  */
 
 /* Do we need to run the installer? */
-
-include_once('./config.php');
+//  echo 'hi'; exit;
+include_once('config.php');
 
 if (!file_exists('INSTALL_BLOCK') && !isset($_POST['performMaintenence']))
 {

@@ -30,7 +30,7 @@
 include_once(LEGACY_ROOT . '/lib/SystemInfo.php');
 include_once(LEGACY_ROOT . '/lib/Mailer.php');
 include_once(LEGACY_ROOT . '/lib/Site.php');
-include_once(LEGACY_ROOT . '/lib/NewVersionCheck.php');
+include_once(LEGACY_ROOT . '/lib/NewVersionCheck.php'); 
 include_once(LEGACY_ROOT . '/lib/Wizard.php');
 include_once(LEGACY_ROOT . '/lib/License.php');
 
@@ -306,6 +306,7 @@ class LoginUI extends UserInterface
          */
 
         $wizard = new Wizard(CATSUtility::getIndexName() . '?m=home', './js/wizardIntro.js');
+    //    echo '<pre>'; print_r($wizard); exit;
         if ($_SESSION['CATS']->isFirstTimeSetup())
         {
             $wizard->addPage('Welcome!', './modules/login/wizard/Intro.tpl', '', false, true);
@@ -513,12 +514,11 @@ class LoginUI extends UserInterface
     }
 
     private function changePassword(){
-
         $token = isset( $_REQUEST['token']) ? $_REQUEST['token'] : '';
         $email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
         $newPassword = $this->getTrimmedInput('newPassword', $_POST);
         $retypePassword = $this->getTrimmedInput('retypeNewPassword', $_POST);
-        
+
         if(empty($token) || empty($email)){
             $this->_template->assign('error','Something went wrong!');
         }else{
@@ -579,28 +579,54 @@ class LoginUI extends UserInterface
         $tokenExpirationTime = date('Y-m-d H:i:s', strtotime($tokenCreationTime .' + 5 minute' )); 
         $currentTime = date('Y-m-d H:i:s', time());
         $forgotLink = CATSUtility::getAbsoluteURI() . CATSUtility::getIndexName() . '?m=login&a=forgotPassword' ;
-            if ($currentTime <= $tokenExpirationTime) {
-                CATSUtility::transferRelativeURI('m=login');
-            } else {
-                echo '<div class="error-message" 
-                style="
-                padding: 50px;
-                font-size:25px;
-                top-padding:10px;
-                color: #ff0000;
-                text-align: center;
-                justify-content: center;
-                align-items: center;
-                ">Oops, something went wrong!<br><a href="' . $forgotLink . '"> Please try again</a></div>';
-                echo "</br>";
+        $redirectLink = '?m=login&a=LoginUI' ;
+            // if ($currentTime <= $tokenExpirationTime) {
+            //     CATSUtility::transferRelativeURI('m=login');
+            // } else {
+            //     echo '<div class="error-message" 
+            //     style="
+            //     padding: 50px;
+            //     font-size:25px;
+            //     top-padding:10px;
+            //     color: #ff0000;
+            //     text-align: center;
+            //     justify-content: center;
+            //     align-items: center;
+            //     ">Oops, something went wrong!<br><a href="' . $forgotLink . '"> Please try again</a></div>';
+            //     echo "</br>";
                 
-            }
+            // }
 
         $status = $users->fogotPassword( 
             $_REQUEST['email'], $newPassword, $retypePassword
         );
         if ($status){
+            // CATSUtility::transferRelativeURI('m=login');
+            echo '<div class="error-message" 
+            style="
+            padding: 50px;
+            font-size:25px;
+            top-padding:10px;
+            color: #ff0000;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            ">YOUR PASSWORD CHANGED SUCCESSFULLY<br><a href="' . $redirectLink. '"> CLICK HERE TO LOGIN</a></div>';
+            echo "</br>";            
 
+        }
+        else{
+            echo '<div class="error-message" 
+            style="
+            padding: 50px;
+            font-size:25px;
+            top-padding:10px;
+            color: #ff0000;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            ">Oops, something went wrong!<br><a href="' . $forgotLink . '"> Please try again</a></div>';
+            echo "</br>";            
         }
         
     

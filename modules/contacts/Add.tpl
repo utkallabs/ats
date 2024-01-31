@@ -95,6 +95,15 @@
                                         &nbsp; <img src="images/indicator2.gif" alt="AJAX" id="ajaxIndicatorReportsTo" style="vertical-align: middle; visibility: hidden; margin-left: 5px;" />
                                     </td>
                                 </tr>
+
+                                 <tr>
+                                    <td class="tdVertical">
+                                        <label id="skypeLabel" for="skype">Skype Id:</label>
+                                    </td>
+                                    <td class="tdData">
+                                        <input type="text" id="skype" name="skype" class="inputbox" style="width: 150px"/>&nbsp;
+                                    </td>
+                                </tr>
                                 
                                <tr>
                                     <td class="tdVertical">
@@ -111,6 +120,7 @@
                                 <tr><td>&nbsp;</td></tr>
                                 <tr><td>&nbsp;</td></tr>
                                 <tr><td>&nbsp;</td></tr>
+                                 <tr><td>&nbsp;</td></tr>
                             </table>
                         </td>
 
