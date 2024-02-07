@@ -111,6 +111,16 @@
                                         &nbsp; <img src="images/indicator2.gif" alt="AJAX" id="ajaxIndicatorReportsTo" style="vertical-align: middle; visibility: hidden; margin-left: 5px;" />
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="tdVertical">
+                                        <label id="skypeLabel" for="title">Skype ID:</label>
+                                    </td>
+                                    <td class="tdData">
+                                        <input type="text" name="skypeId" id="skypeId" value="<?php $this->_($this->data['skypeId']); ?>" class="inputbox" style="width: 150px" />&nbsp;
+                                    </td>
+                                </tr>
+
+                                
 
                                 <tr>
                                     <td class="tdVertical">

@@ -524,6 +524,7 @@ class ContactsUI extends UserInterface
         $title      = $this->getTrimmedInput('title', $_POST);
         $department = $this->getTrimmedInput('department', $_POST);
         $reportsTo  = $this->getTrimmedInput('reportsTo', $_POST);
+        $skypeId    = $this->getTrimmedInput('skypeId', $_POST);
         $email1     = $this->getTrimmedInput('email1', $_POST);
         $email2     = $this->getTrimmedInput('email2', $_POST);
         $address    = $this->getTrimmedInput('address', $_POST);
@@ -556,9 +557,9 @@ class ContactsUI extends UserInterface
 
         $contacts = new Contacts($this->_siteID);
         $contactID = $contacts->add(
-            $companyID, $firstName, $lastName, $title, $department, $reportsTo,
+            $companyID, $firstName, $lastName, $title, $department, $reportsTo, 
             $email1, $email2, $phoneWork, $phoneCell, $phoneOther, $address,
-            $city, $state, $zip, $isHot, $notes, $this->_userID, $this->_userID
+            $city, $state, $zip, $isHot, $notes, $this->_userID, $this->_userID, $skypeId
         );
 
         if ($contactID <= 0)
@@ -812,6 +813,7 @@ class ContactsUI extends UserInterface
         $title      = $this->getTrimmedInput('title', $_POST);
         $department = $this->getTrimmedInput('department', $_POST);
         $reportsTo  = $this->getTrimmedInput('reportsTo', $_POST);
+        $skypeId    = $this->getTrimmedInput('skypeId', $_POST);
         $email1     = $this->getTrimmedInput('email1', $_POST);
         $email2     = $this->getTrimmedInput('email2', $_POST);
         $address    = $this->getTrimmedInput('address', $_POST);
@@ -845,7 +847,7 @@ class ContactsUI extends UserInterface
         if (!$contacts->update($contactID, $companyID, $firstName, $lastName,
             $title, $department, $reportsTo, $email1, $email2, $phoneWork, $phoneCell,
             $phoneOther, $address, $city, $state, $zip, $isHot,
-            $leftCompany, $notes, $owner, $email, $emailAddress))
+            $leftCompany, $notes, $owner, $email, $emailAddress, $skypeId))
         {
             CommonErrors::fatal(COMMONERROR_RECORDERROR, $this, 'Failed to update contact.');
         }

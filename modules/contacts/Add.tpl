@@ -101,7 +101,7 @@
                                         <label id="skypeLabel" for="skype">Skype Id:</label>
                                     </td>
                                     <td class="tdData">
-                                        <input type="text" id="skype" name="skype" class="inputbox" style="width: 150px"/>&nbsp;
+                                        <input type="text" id="skypeId" name="skypeId" class="inputbox" style="width: 150px"/>&nbsp;
                                     </td>
                                 </tr>
                                 

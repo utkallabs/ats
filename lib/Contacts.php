@@ -80,7 +80,7 @@ class Contacts
      */
     public function add($companyID, $firstName, $lastName, $title, $department,
         $reportsTo, $email1, $email2, $phoneWork, $phoneCell, $phoneOther, $address,
-        $city, $state, $zip, $isHot, $notes, $enteredBy, $owner)
+        $city, $state, $zip, $isHot, $notes, $enteredBy, $owner, $skypeId)
     {
         /* Get the department ID of the selected department. */
         $departmentID = $this->getDepartmentIDByName(
@@ -93,6 +93,7 @@ class Contacts
                 first_name,
                 last_name,
                 title,
+                skype_id,
                 company_department_id,
                 reports_to,
                 email1,
@@ -130,6 +131,7 @@ class Contacts
                 %s,
                 %s,
                 %s,
+                %s,
                 0,
                 %s,
                 %s,
@@ -142,6 +144,7 @@ class Contacts
             $this->_db->makeQueryString($firstName),
             $this->_db->makeQueryString($lastName),
             $this->_db->makeQueryString($title),
+            $this->_db->makeQueryString($skypeId),
             $this->_db->makeQueryInteger($departmentID),
             $this->_db->makeQueryInteger($reportsTo),
             $this->_db->makeQueryString($email1),
@@ -204,7 +207,7 @@ class Contacts
     public function update($contactID, $companyID, $firstName, $lastName,
         $title, $department, $reportsTo, $email1, $email2, $phoneWork, $phoneCell,
         $phoneOther, $address, $city, $state, $zip, $isHot,
-        $leftCompany, $notes, $owner, $email, $emailAddress)
+        $leftCompany, $notes, $owner, $email, $emailAddress, $skypeId)
     {
         /* Get the department ID of the selected department. */
         $departmentID = $this->getDepartmentIDByName(
@@ -221,6 +224,7 @@ class Contacts
                 contact.title         = %s,
                 contact.company_department_id = %s,
                 contact.reports_to    = %s,
+                contact.skype_id      = %s,
                 contact.email1        = %s,
                 contact.email2        = %s,
                 contact.phone_work    = %s,
@@ -245,6 +249,7 @@ class Contacts
             $this->_db->makeQueryString($title),
             $this->_db->makeQueryInteger($departmentID),
             $this->_db->makeQueryInteger($reportsTo),
+            $this->_db->makeQueryString($skypeId),
             $this->_db->makeQueryString($email1),
             $this->_db->makeQueryString($email2),
             $this->_db->makeQueryString($phoneWork),
@@ -431,6 +436,7 @@ class Contacts
                 contact.last_name AS lastName,
                 contact.first_name AS firstName,
                 contact.title AS title,
+                contact.skype_id AS skypeId,
                 contact.email1 AS email1,
                 contact.email2 AS email2,
                 contact.phone_work AS phoneWork,
@@ -506,6 +512,7 @@ class Contacts
                 contact.last_name AS lastName,
                 contact.first_name AS firstName,
                 contact.title AS title,
+                contact.skype_id AS skypeId,
                 contact.email1 AS email1,
                 contact.email2 AS email2,
                 contact.phone_work AS phoneWork,
