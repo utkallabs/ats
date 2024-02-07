@@ -64,6 +64,12 @@
                                 <label id="passwordLabel" for="password">Password</label><br />
                                 <input type="password" name="password" id="password" class="login-input-box" />
                                 <br />
+                                 
+                                 <input type="checkbox" name="checkbox" id="checkbox"/>
+                                 <label for="checkbox">Remember me</label>
+                                 <br/>
+                        
+                        
 
                                 <input type="submit" class="button" value="Login" />
                                 <input type="reset"  id="reset" name="reset"  class="button" value="Reset" /></br><br>

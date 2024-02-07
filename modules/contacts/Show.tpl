@@ -64,6 +64,12 @@ use OpenCATS\UI\QuickActionMenu;
                             <tr>
                                 <td class="vertical">Department:</td>
                                 <td class="data"><?php $this->_($this->data['department']); ?></td>
+                
+                            </tr>
+                            
+                            <tr> 
+                            <td class="vertical">Skype Id:</td>
+                            <td class="data"><?php $this->_($this->data['skypeId']); ?></td>
                             </tr>
 
                             <tr>

@@ -1,0 +1,99 @@
+# version: '3'
+# services: 
+#   ats-mysql-db:
+#     container_name: ats-mysql-db
+#     image: mysql:8.1.0
+#     environment: 
+#       MYSQL_DATABASE: ats-docker
+#       MYSQL_USER: docker-user
+#       MYSQL_PASSWORD: password
+#       MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#     networks:
+#       - php73-ats-network
+  
+#   ats-php73: 
+#     depends_on:
+#       - ats-mysql-db
+#     image: php73
+#     volumes: 
+#       -  "./:/var/www/html"
+#     ports:
+#       - 8080:80
+#     networks:
+#       - php73-ats-network
+  
+#   ats-phpMyAdmin:
+#     depends_on:
+#       - ats-mysql-db
+#     image:  phpmyadmin/phpmyadmin
+#     ports:
+#       - 8081:80
+#     environment:
+#       PMA_HOST: ats-mysql-db
+#       PMA_PORT: 3306
+#     networks:
+#       - php73-ats-network
+
+# networks:
+#   php73-ats-network:
+#     driver: bridge
+
+
+# version: '3'
+# services: 
+#   ats-lampp: 
+#     container_name: ats-lampp
+#     image: php74
+#     volumes: 
+#       -  "./:/var/www/html"
+#     ports:
+#       - 8080:80
+
+# networks:
+#   php72-ats-network:
+#     driver: bridge
+
+
+version: '3'
+services: 
+  ats-mysql-db:
+    container_name: ats-mysql-db
+    image: mysql:8.1.0
+    volumes:
+      -  "./:/var/www/html"
+    networks:
+      - php74-ats-network
+    ports:
+      - 3306:3306
+    environment: 
+      MYSQL_DATABASE: ats-docker
+      MYSQL_USER: docker-user
+      MYSQL_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+  
+  ats-php74: 
+    depends_on:
+      - ats-mysql-db
+    image: php74
+    volumes: 
+      -  "./:/var/www/html"
+    ports:
+      - 8080:80
+    networks:
+      - php74-ats-network
+  
+  ats-phpMyAdmin:
+    depends_on:
+      - ats-mysql-db
+    image:  phpmyadmin/phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: ats-mysql-db
+      PMA_PORT: 3306
+    networks:
+      - php74-ats-network
+
+networks:
+  php74-ats-network:
+    driver: bridge

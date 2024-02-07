@@ -31,10 +31,10 @@
 define('LICENSE_KEY','3163GQ-54ISGW-14E4SHD-ES9ICL-X02DTG-GYRSQ6');
 
 /* Database configuration. */
-define('DATABASE_USER', 'cats');
-define('DATABASE_PASS', 'yourpass');
+define('DATABASE_USER', 'root');
+define('DATABASE_PASS', '1234567');
 define('DATABASE_HOST', 'localhost');
-define('DATABASE_NAME', 'cats');
+define('DATABASE_NAME', 'ats');
 
 /* Resfly.com Resume Import Services ensure this is disabled. */
 
